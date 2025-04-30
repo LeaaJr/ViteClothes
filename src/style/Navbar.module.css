@@ -1,0 +1,63 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: white;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .navLeft {
+    display: flex;
+    gap: 2rem;
+    background-color: white;
+  }
+  .navCenter {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+    font-size: 1.25rem;
+    background-color: white;
+  }
+  .navRight {
+    display: flex;
+    gap: 1rem;
+  }
+  .navLink {
+    color: #6b7280;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    background-color: white;
+  }
+  .navLink:hover {
+    color: #111827;
+  }
+  .active {
+    color: #505151;
+  }
+  .signInButton {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: #2f2f2f;
+    border: 1px solid #2f2f2f;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .signInButton:hover {
+    background-color: #f3f4f6;
+  }
+  .signUpButton {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    background-color: #2f2f2f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .signUpButton:hover {
+    background-color: rgb(38, 38, 38);;
+  }

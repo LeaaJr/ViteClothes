@@ -1,0 +1,156 @@
+/* Header.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 662px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+ 
+.Left {
+  flex: 1;
+  color: #333;
+}
+
+.Left h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+/* Contenedor que envuelve el texto para controlar el ancho */
+.typingContainer {
+  width: 20rem;
+  /* Quitamos overflow: hidden y white-space: nowrap */
+}
+
+.typingText {
+  font-size: 1.9rem;
+  font-family: 'Great Vibes', cursive;
+  position: relative;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.typingText::after {
+  content: "|";
+  position: absolute;
+  animation: blink 0.75s step-end infinite;
+}
+
+/* Efecto de escritura para múltiples líneas */
+@keyframes typing {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.typingText {
+  animation: typing 5s steps(50) 1s forwards;
+}
+
+/* Efecto de parpadeo del cursor */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+
+.Center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.ImageContainer {
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ImageWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.Image {
+  width: auto;
+  height: 100%;
+  position: absolute;
+  left: 10rem;
+  top: 1rem;
+  transition: opacity 0.5s ease;
+}
+
+/* Estados de la animación */
+.ImageWrapper.visible {
+  animation: none;
+}
+
+.ImageWrapper.hiding {
+  animation: hideDown 1s forwards;
+}
+
+.ImageWrapper.showing {
+  animation: showDown 1s forwards;
+}
+
+@keyframes hideDown {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes showDown {
+  0% {
+    clip-path: inset(100% 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.Right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.BtnComprar {
+  padding: 10px 20px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 7rem;
+}
+
+.BtnComprar:hover {
+  background-color: #000000;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
