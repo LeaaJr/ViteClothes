@@ -1,11 +1,8 @@
-*{
-    background-color: #f2f2f2;
-}
-
 .container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
+    box-sizing: border-box;
   }
   
   .loading, .error {
@@ -32,4 +29,4 @@
   .categoriesSection {
     padding: 2rem 0 8rem;
     background: #f2f2f2;
-  }
+  } 

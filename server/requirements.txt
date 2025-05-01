@@ -1,0 +1,23 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# Crear instancia de FastAPI
+app = FastAPI()
+
+# Configuración de CORS (Cross-Origin Resource Sharing)
+origins = [
+    "http://localhost:3000",  # Permitir solicitudes de React en localhost:3000
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Solo permitir localhost:3000 para peticiones de origen cruzado
+    allow_credentials=True,
+    allow_methods=["*"],  # Permitir todos los métodos HTTP
+    allow_headers=["*"],  # Permitir todos los encabezados
+)
+
+# Endpoint de prueba
+@app.get("/api/productos")
+async def get_productos():
+    return {"message": "Hello, World!"}  # Verifica que esta ruta esté funcionando
