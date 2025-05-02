@@ -1,0 +1,127 @@
+.container {
+    background-color: #f2f2f2;
+    width: 100%;
+    padding: 40px 0;
+  }
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 12px;
+    color: #000000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.10);
+  }
+  .leftSection {
+    padding: 20px 0;
+    margin-bottom: 40px;
+    background-color: #ffffff;
+  }
+  .heading {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+    color: #000000;
+    background-color: #ffffff;
+  }
+  .subheading {
+    font-size: 18px;
+    color: #666666;
+    margin: 0 0 32px 0;
+    max-width: 600px;
+    line-height: 1.5;
+    background-color: #ffffff;
+
+  }
+  .downloadButtons {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+  }
+  
+  .appStoreButton, .googlePlayButton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #dbdbdb;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #000000; /* Color de texto predeterminado */
+    transition: background-color 0.3s, color 0.3s; /* Animaciones de fondo y color del texto */
+  }
+   
+  .buttonIcon {
+    width: 24px;
+    height: 24px;
+    background-color: #dbdbdb;
+    transition: background-color 0.3s; /* Para la animación suave del cambio de color */
+  }
+  
+  .buttonText {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    background-color: #dbdbdb;
+  }
+
+  .buttonText:hover, .buttonLargeText, .buttonSmallText{
+    background-color: #dbdbdb; /* Fondo del botón al hacer hover */
+  }
+  
+  .buttonLargeText, .buttonSmallText {
+    transition: color 0.3s; /* Animación suave para el cambio de color del texto */
+
+  }
+  
+  .buttonLargeText {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000; /* Color del texto grande por defecto */
+    background-color: #dbdbdb;
+  }
+  
+  .buttonSmallText {
+    font-size: 12px;
+    color: #666666; /* Color del texto pequeño por defecto */
+    background-color: #dbdbdb;
+  }
+  
+  .featureGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    background-color: #ffffff;
+  }
+  
+  /* Responsive styles */
+  @media (min-width: 1024px) {
+    .content {
+      flex-direction: row;
+      gap: 48px;
+    }
+    .leftSection {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .rightSection {
+      flex: 1;
+    }
+  }
+  @media (max-width: 768px) {
+    .featureGrid {
+      grid-template-columns: 1fr;
+    }
+    .heading {
+      font-size: 28px;
+    }
+    .content {
+      padding: 24px;
+    }
+  }

@@ -3,6 +3,9 @@ import styles from "../style/Home.module.css"
 import Header from "../components/Header";
 import FeaturedProducts from "../sections/FeaturedProducts";
 import { getProductos } from "../api/Productos";
+import { MobileApp } from "../sections/MobileApp";
+import { GridGen } from "../productgrid/GridGen";
+import { Footer } from "../components/Footer";
 
 const Home = () => {
 
@@ -39,15 +42,15 @@ const Home = () => {
         <FeaturedProducts productos={productos.filter(p => p.destacado)} />
       </section>
 
-{/*       <section className={styles.appPromoSection}>
-        <MobileAppPromo /> 
+       <section className={styles.appPromoSection}>
+        <MobileApp /> 
       </section>
 
       <section id="categories" className={styles.categoriesSection}>
         <GridGen />
       </section>
 
-         <Footer /> */}
+         <Footer /> 
     </div>
         </>
     )

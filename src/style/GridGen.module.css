@@ -1,0 +1,80 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  .wrapper {
+    max-width: 940px;
+    height: 600px; /* altura total fija */
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr); /* ahora sí usás 5 filas */
+    gap: 10px;
+  }
+  
+  
+  /* Estilo común para cada celda dentro del grid */
+  .wrapper > div {
+    background-color: rgb(233, 171, 88 / 50%);
+    padding: 1px;
+    overflow: hidden; /* Evitar que la imagen se desborde fuera del contenedor */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrar la imagen dentro del contenedor */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
+  
+  /* La primera celda ocupará 1 columna y 5 filas */
+  .one {
+    grid-column: 1 / 2;
+    grid-row: 1 / 6;
+    filter: brightness(0.5);
+    cursor: pointer;
+  }
+  
+  /* La segunda celda ocupará 1 columna y 3 filas */
+  .two {
+    grid-column: 2 / 3;
+    grid-row: 1 / 4;
+    filter: brightness(0.5);
+    cursor: pointer;
+  }
+  
+  /* La tercera celda ocupará 1 columna y 3 filas */
+  .four {
+    grid-column: 3 / 4;
+    grid-row: 1 / 4;
+    filter: brightness(0.5);
+    cursor: pointer;
+  }
+  
+  /* La cuarta celda ocupará 1 columna y 2 filas */
+  .five {
+    grid-column: 2 / 4;
+    grid-row: 4 / 6;
+    filter: brightness(0.5);
+    cursor: pointer;
+  }
+  
+  /* Estilo de las imágenes */
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .one:hover, .two:hover, .four:hover, .five:hover {
+    filter: brightness(0.8);
+  }
+
+  .hachetres {
+    position: absolute; /* Cambia a absolute para que se posicione encima de la imagen */
+    z-index: 9999; /* Asegura que esté por encima */
+    color: white;
+    top: 50%; /* Acomoda el texto al centro vertical */
+    left: 50%; /* Acomoda el texto al centro horizontal */
+    transform: translate(-50%, -50%); /* Centra perfectamente el texto */
+    background-color: transparent;
+  }
+  
