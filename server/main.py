@@ -4,6 +4,8 @@ from database import get_connection
 from typing import Optional
 from models import Producto
 from fastapi import Request
+from auth.register import router as register_router
+
 
 
 app = FastAPI()
@@ -22,9 +24,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ruta de registro(signUp):
+app.include_router(register_router, prefix="/auth")
+
 # Endpoint real para obtener productos
-
-
 @app.get("/productos")
 def obtener_productos(categoria: str = None, subcategoria: str = None):
     conn = get_connection()

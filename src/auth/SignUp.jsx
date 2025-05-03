@@ -20,11 +20,40 @@ export function SignUp () {
       [name]: type === 'checkbox' ? checked : value
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Aquí iría la lógica para enviar el formulario
+  
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+  
+    try {
+      const response = await fetch('http://localhost:8000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert("User created successfully");
+        // Redirigir a login o limpiar el formulario
+      } else {
+        alert(data.detail || "Registration failed");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert("An error occurred during registration");
+    }
   };
+  
   return (
     <div className={styles.wrapper}>
         <div className={styles.background} />
