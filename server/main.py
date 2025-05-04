@@ -5,6 +5,7 @@ from typing import Optional
 from models import Producto
 from fastapi import Request
 from auth.register import router as register_router
+from auth.login import router as login_router
 
 
 
@@ -26,6 +27,7 @@ app.add_middleware(
 
 # ruta de registro(signUp):
 app.include_router(register_router, prefix="/auth")
+app.include_router(login_router)
 
 # Endpoint real para obtener productos
 @app.get("/productos")
