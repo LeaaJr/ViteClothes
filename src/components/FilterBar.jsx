@@ -1,61 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from '../style/FilterBar.module.css';
 
-export const FilterBar = () => {
-  const [priceRange, setPriceRange] = useState({
-    min: 300,
-    max: 3500,
-  });
-  const [salesRange, setSalesRange] = useState({
-    min: 1,
-    max: 100,
-  });
-  const [selectedCategories, setSelectedCategories] = useState([
-    'Gaming',
-    'Electronics',
-  ]);
+export const FilterBar = ({ onFilterChange, subcategorias = [] }) => {
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [state, setState] = useState('All');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handlePriceChange = (type, value) => {
-    setPriceRange((prev) => ({
-      ...prev,
-      [type]: parseInt(value) || 0,
-    }));
-  };
+  useEffect(() => {
+    onFilterChange({ priceRange, selectedCategories, state });
+  }, [priceRange, selectedCategories, state]);
 
-  const handleSalesChange = (type, value) => {
-    setSalesRange((prev) => ({
+  const handlePriceChange = (type, value) => {
+    setPriceRange(prev => ({
       ...prev,
       [type]: parseInt(value) || 0,
     }));
   };
 
   const toggleCategory = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
   };
 
-  const handleReset = () => {
-    setPriceRange({
-      min: 300,
-      max: 3500,
-    });
-    setSalesRange({
-      min: 1,
-      max: 100,
-    });
-    setSelectedCategories(['Gaming', 'Electronics']);
-    setState('All');
-  };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
     <>
@@ -74,31 +46,9 @@ export const FilterBar = () => {
         <div className={styles.filterPanel}>
           <h2 className={styles.filterTitle}>Filter</h2>
           
+          {/* Price Range */}
           <div className={styles.filterSection}>
             <h3 className={styles.sectionTitle}>Price Range</h3>
-            <div className={styles.sliderContainer}>
-              <div className={styles.sliderTrack}>
-                <div
-                  className={styles.sliderFill}
-                  style={{
-                    left: `${(priceRange.min / 5000) * 100}%`,
-                    width: `${((priceRange.max - priceRange.min) / 5000) * 100}%`,
-                  }}
-                ></div>
-                <div
-                  className={styles.sliderHandle}
-                  style={{
-                    left: `${(priceRange.min / 5000) * 100}%`,
-                  }}
-                ></div>
-                <div
-                  className={styles.sliderHandle}
-                  style={{
-                    left: `${(priceRange.max / 5000) * 100}%`,
-                  }}
-                ></div>
-              </div>
-            </div>
             <div className={styles.rangeInputs}>
               <div className={styles.rangeInput}>
                 <label>From</label>
@@ -118,18 +68,12 @@ export const FilterBar = () => {
               </div>
             </div>
           </div>
-          
+
+          {/* Category */}
           <div className={styles.filterSection}>
             <h3 className={styles.sectionTitle}>Category</h3>
             <div className={styles.categoryGrid}>
-              {[
-                'Jackets',
-                'Shirts',
-                'T-shirts',
-                'Pants',
-                'Sneakers',
-                'Accessories',
-              ].map((category) => (
+            {subcategorias?.map((category) => (
                 <button
                   key={category}
                   className={`${styles.categoryButton} ${selectedCategories.includes(category) ? styles.selected : ''}`}
@@ -140,7 +84,8 @@ export const FilterBar = () => {
               ))}
             </div>
           </div>
-          
+
+          {/* State */}
           <div className={styles.filterSection}>
             <h3 className={styles.sectionTitle}>State</h3>
             <div className={styles.radioGroup}>
@@ -157,18 +102,6 @@ export const FilterBar = () => {
                 </label>
               ))}
             </div>
-          </div>
-          
-          <div className={styles.actionButtons}>
-            <button className={styles.showResultsButton}>
-              Show 32 Results
-            </button>
-            <button 
-            className={styles.sidebarToggle} 
-            onClick={toggleSidebar}
-          >
-            {isSidebarOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
-          </button>
           </div>
         </div>
       </div>

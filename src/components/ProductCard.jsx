@@ -7,11 +7,13 @@ const ProductCard = ({
   imagen1,
   nombre,
   categoria,
+  subcategoria,
   precio,
   descripcion,
   stock,
   currency = 'EUR',
 }) => {
+
   // validacion de precio
   const validPrice = precio && !isNaN(precio) ? Number(precio) : 0;
 

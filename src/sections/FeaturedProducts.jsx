@@ -43,7 +43,7 @@ const FeaturedProductCard = ({ product }) => {
 };
 
 const FeaturedProducts = () => {
-    const [products, setProducts] = useState([]);
+    const [productos, setProductos] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -52,8 +52,8 @@ const FeaturedProducts = () => {
       const fetchFeaturedProducts = async () => {
         try {
           const data = await getProductosDestacados();
-          console.log('Productos destacados recibidos:', data); // Para debug
-          setProducts(data);
+          console.log('Productos destacados recibidos:', data);
+          setProductos(data);
         } catch (err) {
           console.error('Error completo:', err);
           setError('Error al cargar productos destacados');
@@ -70,20 +70,20 @@ const FeaturedProducts = () => {
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === Math.ceil(products.length / 4) - 1 ? 0 : prevIndex + 1
+      prevIndex === Math.ceil(productos.length / 4) - 1 ? 0 : prevIndex + 1
     );
   };
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? Math.ceil(products.length / 4) - 1 : prevIndex - 1
+      prevIndex === 0 ? Math.ceil(productos.length / 4) - 1 : prevIndex - 1
     );
   };
 
   if (loading) return <div className={styles.loading}>Cargando productos destacados...</div>;
-  if (products.length === 0) return <div className={styles.empty}>No hay productos destacados</div>;
+  if (productos.length === 0) return <div className={styles.empty}>No hay productos destacados</div>;
 
-  const visibleProducts = products.slice(currentIndex * 4, (currentIndex + 1) * 4);
+  const visibleProductos = productos.slice(currentIndex * 4, (currentIndex + 1) * 4);
 
   return (
     <section className={styles.featuredSection}>
@@ -93,7 +93,7 @@ const FeaturedProducts = () => {
           <MoveLeft size={30} style={{background:"none"}} />
         </button>
         <div className={styles.carousel}>
-          {visibleProducts.map(product => (
+          {visibleProductos.map(product => (
             <FeaturedProductCard key={product.id} product={product} />
           ))}
         </div>
