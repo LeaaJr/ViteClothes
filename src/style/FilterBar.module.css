@@ -1,0 +1,276 @@
+.sidebar {
+  position: fixed;
+  top: 100px;
+  left: -300px; /* Oculto por defecto */
+  width: 300px;
+  height: 100vh;
+  background-color: #f2f2f2;
+  z-index: 1000;
+  transition: left 0.3s ease-in-out;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estado abierto del sidebar */
+.sidebar.open {
+  left: 0;
+}
+
+/* Botón de toggle para abrir/cerrar */
+.sidebarToggle {
+  position: fixed; /* Cambiado de absolute a fixed */
+  left: 0; /* Posicionado en el borde izquierdo */
+  top: 70px;
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  z-index: 1001;
+}
+
+/* Cuando el sidebar está abierto, movemos el botón */
+.sidebar.open + .sidebarToggle {
+  left: 300px; /* Se mueve junto con el sidebar */
+}
+
+.sidebarToggle:hover {
+  background-color: #444;
+}
+
+/* Versión del botón cuando el sidebar está cerrado */
+.sidebarToggle.hidden {
+  left: 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Panel de filtros dentro del sidebar */
+.filterPanel {
+  padding: 20px;
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+/* Ajustamos el contenedor original para el sidebar */
+.filterContainer {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Aseguramos que el contenido principal no se solape con el sidebar */
+body {
+  margin-left: 0;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+body.sidebar-open {
+  margin-left: 300px;
+}
+
+/* El resto de tus estilos existentes se mantienen igual */
+.advancedFilterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+  transition: background-color 0.2s;
+}
+.advancedFilterButton:hover {
+  background-color: #444;
+}
+.filterPanel {
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.filterTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+  color: black;
+}
+.filterSection {
+  margin-bottom: 20px;
+}
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+  color: black;
+}
+.sliderContainer {
+  padding: 10px 0;
+  position: relative;
+}
+.sliderTrack {
+  height: 4px;
+  background-color: #ddd;
+  position: relative;
+  border-radius: 2px;
+}
+.sliderFill {
+  height: 4px;
+  background-color: #222222;
+  position: absolute;
+  top: 0;
+}
+.sliderHandle {
+  width: 16px;
+  height: 16px;
+  background-color: #222222;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+.rangeInputs {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.rangeInput {
+  flex: 1;
+}
+.rangeInput label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: black;
+}
+.rangeInput input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  font-size: 14px;
+}
+.categoryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.categoryButton {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.categoryButton:hover {
+  background-color: #eee;
+}
+.categoryButton.selected {
+  background-color: #222222;
+  color: white;
+  border-color: #0066ff;
+}
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.radioLabel input {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+.radioLabel input:checked {
+  border-color: #222222;
+}
+.radioLabel input:checked::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #222222;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.radioText {
+  font-size: 14px;
+  color: black;
+}
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+.showResultsButton {
+  flex: 1;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.showResultsButton:hover {
+  background-color: #333;
+}
+.resetButton {
+  padding: 10px;
+  background-color: transparent;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.resetButton:hover {
+  background-color: #eee;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+.sidebar-open .sidebar-overlay {
+  display: block;
+}

@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './page/Home';
 import { SignIn } from './auth/SignIn';
 import { SignUp } from './auth/SignUp';
+import ProductsPage from './page/ProductPage';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/SignIn" element={<SignIn/>} />
           <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/productos/:category" element={<ProductsPage />} />
         </Routes>
     </Router>
     </>

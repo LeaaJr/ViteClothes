@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from database import get_connection  # ✅ asegurate que 'database.py' esté en el mismo nivel que main.py
+from database import get_connection
 from pydantic import BaseModel, EmailStr
 from passlib.context import CryptContext
 
