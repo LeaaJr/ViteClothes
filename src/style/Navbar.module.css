@@ -62,3 +62,34 @@
   .signUpButton:hover {
     background-color: rgb(38, 38, 38);;
   }
+
+  .userMenu {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .userName:hover + .dropdown,
+  .dropdown:hover {
+    display: block;
+  }
+  
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+  }
+  
+  .dropdownItem {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .dropdownItem:hover {
+    background-color: #f0f0f0;
+  }

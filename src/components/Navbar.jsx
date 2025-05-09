@@ -1,31 +1,45 @@
-import React from 'react'
+import React from 'react';
 import styles from '../style/Navbar.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navLeft}>
-        <Link to="/" className={`${styles.navLink} ${styles.active}`}>
-          Home
-        </Link>
-        <Link to="#" className={styles.navLink}>
-         About
-        </Link>
-        <Link to="/productos" className={styles.navLink}>
-          All Products
-        </Link>
-        <Link to="#" className={styles.navLink}>
-          Contact
-        </Link>
+        <Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link>
+        <Link to="#" className={styles.navLink}>About</Link>
+        <Link to="/productos" className={styles.navLink}>All Products</Link>
+        <Link to="#" className={styles.navLink}>Contact</Link>
       </div>
       <div className={styles.navCenter}>Website</div>
       <div className={styles.navRight}>
-        <Link to={"/SignIn"}><button className={styles.signInButton}>Sign in</button></Link>
-        <Link to={"/SignUp"}><button className={styles.signUpButton}>Sign up</button></Link>
+        {user ? (
+          <div className={styles.userMenu}>
+            <span className={styles.userName}>👤 {user.email}</span>
+            <div className={styles.dropdown}>
+              <Link to="/wallet" className={styles.dropdownItem}>My wallet</Link>
+              <Link to="/orders" className={styles.dropdownItem}>My orders</Link>
+              <button onClick={handleLogout} className={styles.dropdownItem}>Cerrar sesión</button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <Link to="/SignIn"><button className={styles.signInButton}>Sign in</button></Link>
+            <Link to="/SignUp"><button className={styles.signUpButton}>Sign up</button></Link>
+          </>
+        )}
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

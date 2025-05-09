@@ -1,9 +1,14 @@
+// SignIn.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../style/SignIn.module.css';
+import { useAuth } from '../auth/AuthContext';
 
 export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +26,11 @@ export const SignIn = () => {
 
       if (res.ok) {
         alert(`✅ ${data.message}`);
+        login({ email: data.user });
+        // Guardar sesión en localStorage
+        localStorage.setItem('user', JSON.stringify({ email: data.user }));
+        // Redirigir al home
+        navigate('/');
       } else {
         alert(`❌ ${data.detail}`);
       }
