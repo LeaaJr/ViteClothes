@@ -13,21 +13,15 @@ export const getProductos = async () => {
     }
 };
 
-export const getProductosByCategoryAndSubcategory = async (category, subcategory) => {
-    try {
-        // Si tu backend acepta filtros por query params, este es el patrón:
-        const response = await axios.get(`${API_URL}?categoria=${category}&subcategoria=${subcategory}`);
-        return response.data;
-        
-        // Opción 2: Si prefieres hacerlo en el frontend (una vez que ya tienes todos los productos):
-        // const allProducts = await getProductos();
-        // return allProducts.filter(p => p.categoria.toLowerCase() === category.toLowerCase() && 
-        //                               p.subcategoria.toLowerCase() === subcategory.toLowerCase());
-    } catch (error) {
-        console.error('Error al obtener productos por categoría y subcategoría:', error);
-        throw error;
-    }
+export const getProductosByCategoryAndSubcategory = async (categoria, subcategoria = null) => {
+  const params = new URLSearchParams();
+  if (categoria) params.append('categoria', categoria);
+  if (subcategoria) params.append('subcategoria', subcategoria);
+
+  const response = await axios.get(`${API_URL}?${params.toString()}`); // ✅ CORRECTO
+  return response.data;
 };
+
 
 export const updateProducto = async (id, updatedData) => {
     try {

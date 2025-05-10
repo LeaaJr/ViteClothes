@@ -35,7 +35,7 @@ export const FilterBar = ({ onFilterChange, subcategorias = [] }) => {
         className={`${styles.sidebarToggle} ${isSidebarOpen ? styles.hidden : ''}`}
         onClick={toggleSidebar}
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={24} style={{backgroundColor:"#333"}} />
       </button>
 
       <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ''}`}>

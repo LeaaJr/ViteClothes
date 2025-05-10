@@ -77,3 +77,18 @@ export const SignIn = () => {
     </div>
   );
 };
+
+
+//Datos de prueba:
+
+/* {
+  "email": "test@example.com",
+  "password": "password123",
+  "confirm_password": "password123",
+  "day": 15,
+  "month": 5,
+  "year": 1990,
+  "acceptTerms": true
+}
+
+ */

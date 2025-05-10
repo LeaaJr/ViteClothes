@@ -20,7 +20,7 @@ const ProductPage = () => {
       const matchesPrice = product.precio >= priceRange.min && product.precio <= priceRange.max;
   
       const matchesCategory = selectedCategories.length === 0 || 
-        selectedCategories.includes(product.subcategoria); // o categoria, según el campo
+        selectedCategories.includes(product.subcategoria);
   
       const matchesState = state === 'All' || product.estado === state;
   
@@ -62,31 +62,31 @@ const ProductPage = () => {
 
   return (
     <>
-  <FilterBar onFilterChange={applyFilters} subcategorias={subcategoriasDisponibles} />
+      <FilterBar onFilterChange={applyFilters} subcategorias={subcategoriasDisponibles} />
 
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          {category 
+            ? `${category.charAt(0).toUpperCase() + category.slice(1)}`
+            : 'Todos los productos'}
+        </h1>
 
-  <div className={styles.container}>
-    <h1 className={styles.title}>
-      {category 
-        ? `${category.charAt(0).toUpperCase() + category.slice(1)}`
-        : 'Todos los productos'}
-    </h1>
-
-    <div className={styles.productosGrid}>
-      {filteredProductos.length > 0 ? (
-        filteredProductos.map(product => (
-          <ProductCard
-            key={product.id}
-            {...product}
-            currency="EUR"
-          />
-        ))
-      ) : (
-        <p className={styles.empty}>No se encontraron productos</p>
-      )}
-    </div>
-  </div>
-</>
+        {/* Contenedor con grid para las cards */}
+        <div className={styles.productosGrid}>
+          {filteredProductos.length > 0 ? (
+            filteredProductos.map(product => (
+              <ProductCard
+                key={product.id}
+                {...product}
+                currency="EUR"
+              />
+            ))
+          ) : (
+            <p className={styles.empty}>No se encontraron productos</p>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 
