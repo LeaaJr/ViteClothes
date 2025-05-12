@@ -9,11 +9,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-*{
-  max-width: 100%;
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #f2f2f2; /* Fondo global */
+}
+
+body {
+  background-color: #f2f2f2;
 }
 
