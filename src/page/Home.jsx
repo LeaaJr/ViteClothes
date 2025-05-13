@@ -52,7 +52,12 @@
             <ParallaxSection />
           </section>
 
-          <Footer /> 
+          <section className={styles.featuredSection}>
+            <h2 className={styles.sectionTitle}>New summer trend</h2>
+              <FeaturedProducts productos={productos.filter(p => p.tendencia)} />
+          </section>
+
+          <Footer id="footer" /> 
         </div>
       </>
     )

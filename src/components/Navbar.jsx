@@ -12,13 +12,20 @@ const Navbar = () => {
     navigate('/');
   };
 
+    const scrollToSection = () => {
+    const section = document.getElementById("footer");
+    section.scrollIntoView({ behavior: "smooth", block: "center" });
+  }; 
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navLeft}>
         <Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link>
         <Link to="#" className={styles.navLink}>About</Link>
         <Link to="/productos" className={styles.navLink}>All Products</Link>
-        <Link to="#" className={styles.navLink}>Contact</Link>
+        <a onClick={scrollToSection} className={styles.navLink} style={{ cursor: 'pointer' }}>
+          Contact
+        </a>
       </div>
       <div className={styles.navCenter}>Website</div>
       <div className={styles.navRight}>

@@ -30,12 +30,22 @@
   background: #f2f2f2;
 }
 
+/* ESTA PARTE ES DEL PARALELAX */ 
+
 .container {
-  /* Asegúrate de que no haya overflow oculto en el contenedor padre */
   overflow: visible;
 }
 
 .parallaxWrapper {
   /* Elimina cualquier restricción de altura */
   height: auto;
+}
+
+/* SECTION DE TENDENCIA */
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
 }
