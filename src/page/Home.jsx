@@ -18,7 +18,8 @@
         try {
           const data = await getProductos();
           setProductos(data);
-        } catch (error) {
+          console.log(productos);
+        } catch (error) { 
           setError("Error al cargar productos");
         } finally {
           setLoading(false);
@@ -36,7 +37,7 @@
           <Header />
           
           <section id="FeaturedProducts" className={styles.featuredSection}>
-            <FeaturedProducts productos={productos.filter(p => p.destacado)} />
+            <FeaturedProducts productos={productos.filter(p => p.destacado === true)} />
           </section>
 
           <section className={styles.appPromoSection}>
@@ -54,7 +55,7 @@
 
           <section className={styles.featuredSection}>
             <h2 className={styles.sectionTitle}>New summer trend</h2>
-              <FeaturedProducts productos={productos.filter(p => p.tendencia)} />
+              <FeaturedProducts productos={productos.filter(p => p.tendencia === true)} />
           </section>
 
           <Footer id="footer" /> 
