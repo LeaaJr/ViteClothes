@@ -18,7 +18,7 @@
         try {
           const data = await getProductos();
           setProductos(data);
-          console.log(productos);
+          console.log('Productos cargados:', productos);
         } catch (error) { 
           setError("Error al cargar productos");
         } finally {
