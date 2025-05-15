@@ -29,6 +29,19 @@ export const FilterBar = ({ onFilterChange, subcategorias = [] }) => {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+    const resetFilters = () => {
+    const defaultFilters = {
+      priceRange: { min: 0, max: 500 },
+      selectedCategories: [],
+      state: 'All',
+    };
+    setPriceRange(defaultFilters.priceRange);
+    setSelectedCategories(defaultFilters.selectedCategories);
+    setState(defaultFilters.state);
+    onFilterChange(defaultFilters);
+  };
+   
+
   return (
     <>
       <button 
@@ -89,7 +102,7 @@ export const FilterBar = ({ onFilterChange, subcategorias = [] }) => {
           <div className={styles.filterSection}>
             <h3 className={styles.sectionTitle}>State</h3>
             <div className={styles.radioGroup}>
-              {['All', 'New', 'Refurbished'].map((option) => (
+              {['All', 'Trend'].map((option) => (
                 <label key={option} className={styles.radioLabel}>
                   <input
                     type="radio"
@@ -102,6 +115,11 @@ export const FilterBar = ({ onFilterChange, subcategorias = [] }) => {
                 </label>
               ))}
             </div>
+          </div>
+          <div className={styles.filterSection}>
+            <button className={styles.clearButton} onClick={resetFilters}>
+              Limpiar Filtros
+            </button>
           </div>
         </div>
       </div>

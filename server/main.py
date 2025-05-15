@@ -64,6 +64,7 @@ def obtener_productos(categoria: str = None, subcategoria: str = None):
             "img2": row[8],
             "img3": row[9],
             "destacado": row[10],
+            "tendencia": row[11],
         })
     conn.close()
     return productos
@@ -90,6 +91,7 @@ def obtener_productos_destacados():
             "img2": row[8],
             "img3": row[9],
             "destacado": row[10],
+            "tendencia": row[11],
         })
     conn.close()
     return productos
@@ -103,8 +105,8 @@ def agregar_producto(producto: Producto):
     cur = conn.cursor()
     try:
         cur.execute("""
-            INSERT INTO productos (nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO productos (nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado, tendencia)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             producto.nombre,
             producto.categoria,
@@ -115,7 +117,8 @@ def agregar_producto(producto: Producto):
             producto.img1,
             producto.img2,
             producto.img3,
-            producto.destacado
+            producto.destacado,
+            producto.tendencia
         ))
         conn.commit()
     except Exception as e:
@@ -137,9 +140,10 @@ def actualizar_producto(id: int, producto: Producto):
         cur.execute("""
             UPDATE productos
             SET nombre = %s, categoria = %s, subcategoria = %s, precio = %s,
-                stock = %s, descripcion = %s, img1 = %s, img2 = %s, img3 = %s, destacado = %s
-            WHERE id = %s
-        """, (
+                stock = %s, descripcion = %s, img1 = %s, img2 = %s, img3 = %s,
+                destacado = %s, tendencia = %s
+                WHERE id = %s
+            """, (
             producto.nombre,
             producto.categoria,
             producto.subcategoria,
@@ -150,6 +154,7 @@ def actualizar_producto(id: int, producto: Producto):
             producto.img2,
             producto.img3,
             producto.destacado,
+            producto.tendencia,
             id
         ))
         if cur.rowcount == 0:
@@ -183,3 +188,30 @@ def eliminar_producto(id: int):
         conn.close()
 
     return {"message": "Producto eliminado correctamente"}
+
+#Endpoint de tendencia
+
+@app.get("/productos/tendencia")
+def obtener_productos_tendencia():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM productos WHERE tendencia = TRUE;")
+    rows = cursor.fetchall()
+    productos = []
+    for row in rows:
+        productos.append({
+            "id": row[0],
+            "nombre": row[1],
+            "categoria": row[2],
+            "subcategoria": row[3],
+            "precio": row[4],
+            "stock": row[5],
+            "descripcion": row[6],
+            "img1": row[7],
+            "img2": row[8],
+            "img3": row[9],
+            "destacado": row[10],
+            "tendencia": row[11],
+        })
+    conn.close()
+    return productos

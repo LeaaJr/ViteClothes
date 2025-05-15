@@ -1,0 +1,44 @@
+/* Contenedor principal */
+.parallaxSection {
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch; /* Para suavizar scroll en iOS */
+}
+
+/* Slide individual */
+.slide {
+  width: 100%;
+  height: 100vh;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Media (imagen/video) */
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Estilos para el slide activo */
+.slide.active {
+  /* Puedes añadir estilos especiales para el slide activo */
+}
+
+/* Mejoras para el scroll en dispositivos móviles */
+@media (max-width: 768px) {
+  .parallaxSection {
+    scroll-snap-type: y mandatory;
+  }
+  
+  .slide {
+    scroll-snap-stop: always; /* Fuerza parada en cada slide */
+  }
+}

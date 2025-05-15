@@ -11,3 +11,4 @@ class Producto(BaseModel):
     img2: str
     img3: str
     destacado: bool
+    tendencia: bool

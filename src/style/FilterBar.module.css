@@ -274,3 +274,18 @@ body.sidebar-open {
 .sidebar-open .sidebar-overlay {
   display: block;
 }
+
+.clearButton {
+  padding: 0.5rem 1rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.clearButton:hover {
+  background-color: #c0392b;
+}

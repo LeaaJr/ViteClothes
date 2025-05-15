@@ -1,32 +1,51 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    box-sizing: border-box;
-  }
-  
-  .loading, .error {
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
-  }
-  
-  .error {
-    color: #ff3333;
-  }
-  
-  .featuredSection {
-    padding: 2rem 0;
-    background: #f2f2f2;
-  }
-  
-  .appPromoSection {
-    background-color: #f2f2f2;
-    padding: 4rem 0;
-    width: 100%;
-  }
-  
-  .categoriesSection {
-    padding: 2rem 0 8rem;
-    background: #f2f2f2;
-  } 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #ff3333;
+}
+
+.featuredSection {
+  padding: 2rem 0;
+  background: #f2f2f2;
+}
+
+.appPromoSection {
+  background-color: #f2f2f2;
+  padding: 4rem 0;
+  width: 100%;
+}
+
+.categoriesSection {
+  padding: 2rem 0 8rem;
+  background: #f2f2f2;
+}
+
+/* ESTA PARTE ES DEL PARALELAX */ 
+
+.container {
+  overflow: visible;
+}
+
+.parallaxWrapper {
+  /* Elimina cualquier restricción de altura */
+  height: auto;
+}
+
+/* SECTION DE TENDENCIA */
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
