@@ -19,7 +19,7 @@ const ProductCard = ({
     <div className={styles.card}>
       <div className={styles.imageContainer}>
         <img
-          src={img1 || 'placeholder.jpg'} // aquí ahora usas correctamente img1
+          src={img1 || 'placeholder.jpg'}
           alt={nombre}
           className={styles.image}
         />
