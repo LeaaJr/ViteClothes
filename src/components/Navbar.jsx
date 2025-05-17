@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '../style/Navbar.module.css';
+import { ShoppingCart } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
@@ -42,6 +43,7 @@ const Navbar = () => {
           <>
             <Link to="/SignIn"><button className={styles.signInButton}>Sign in</button></Link>
             <Link to="/SignUp"><button className={styles.signUpButton}>Sign up</button></Link>
+            <Link to="/SignIn"><ShoppingCart size={28} strokeWidth={1.5} className={styles.cart} /></Link>
           </>
         )}
       </div>

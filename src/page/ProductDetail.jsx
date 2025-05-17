@@ -1,131 +1,183 @@
-import React, { useState } from 'react'
-import { HeartIcon, ShoppingCartIcon, MapPinIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
-import styles from '../style/ProductDetail.module.css'
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getProductoById } from '../api/Productos';
+import styles from '../style/ProductDetail.module.css'; // Asegúrate de tener este archivo
+import { 
+  HeartIcon, 
+  ShoppingCartIcon, 
+  ChevronUpIcon, 
+  ChevronDownIcon 
+} from 'lucide-react';
+import axios from 'axios';
 
+const ProductDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [producto, setProducto] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [imagenes, setImagenes] = useState(['placeholder.jpg']);
+  const [productosRelacionados, setProductosRelacionados] = useState([]);
 
-export function ProductDetail() {
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [quantity, setQuantity] = useState(1)
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
-  // Mock product images
-  const productImages = [
-    'https://uploadthingy.s3.us-west-1.amazonaws.com/x7ZPgMEbroMiJwvf55KEBX/Sin_titulo.png',
-    'https://uploadthingy.s3.us-west-1.amazonaws.com/x7ZPgMEbroMiJwvf55KEBX/Sin_titulo.png',
-    'https://uploadthingy.s3.us-west-1.amazonaws.com/x7ZPgMEbroMiJwvf55KEBX/Sin_titulo.png',
-    'https://uploadthingy.s3.us-west-1.amazonaws.com/x7ZPgMEbroMiJwvf55KEBX/Sin_titulo.png',
-  ]
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        const data = await getProductoById(id);
+        
+        if (!data) {
+          throw new Error('No se recibieron datos del producto');
+        }
+
+        // Procesar imágenes
+        const imagenesFiltradas = [
+          data.img1,
+          data.img2,
+          data.img3
+        ].filter(img => img != null && img.trim() !== '');
+
+        setImagenes(imagenesFiltradas.length > 0 ? imagenesFiltradas : ['placeholder.jpg']);
+        setProducto(data);
+        setError('');
+        
+      } catch (err) {
+        console.error('Error al cargar producto:', err);
+        setError(err.message || 'Error al cargar el producto');
+        setTimeout(() => navigate('/productos'), 3000);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [id, navigate]);
+
+  useEffect(() => {
+    const fetchRelacionados = async () => {
+      try {
+        const response = await axios.get(`/productos?subcategoria=${producto.subcategoria}`);
+        console.log("Respuesta de la API:", response.data); // Para inspeccionar la respuesta
+
+        // Verifica si la respuesta es un array
+        if (Array.isArray(response.data)) {
+          const relacionados = response.data.filter(p => p.id !== producto.id);
+          setProductosRelacionados(relacionados);
+        } else if (response.data.productos && Array.isArray(response.data.productos)) {
+          // Si los productos están dentro de una propiedad "productos"
+          const relacionados = response.data.productos.filter(p => p.id !== producto.id);
+          setProductosRelacionados(relacionados);
+        } else {
+          console.error("La respuesta no contiene un array de productos.");
+        }
+      } catch (error) {
+        console.error("Error al cargar productos relacionados:", error);
+      }
+    };
+
+    // Solo hacer la solicitud si el producto tiene subcategoría
+    if (producto?.subcategoria) {
+      fetchRelacionados();
+    }
+  }, [producto]);
+
+  if (loading) return <div className={styles.loading}>Cargando producto...</div>;
+  if (error) return <div className={styles.error}>{error}</div>;
+  if (!producto) return <div className={styles.error}>No se encontró el producto</div>;
+
   return (
     <div className={styles.container}>
       <div className={styles.gallery}>
-        <div className={styles.thumbnails}>
-          {productImages.map((image, index) => (
-            <div
-              key={index}
-              className={`${styles.thumbnail} ${selectedImage === index ? styles.thumbnailActive : ''}`}
-              onClick={() => setSelectedImage(index)}
-            >
-              <img
-                src={image}
-                alt={`Product thumbnail ${index + 1}`}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-            </div>
-          ))}
-        </div>
+        {imagenes.length > 1 && (
+          <div className={styles.thumbnails}>
+            {imagenes.map((img, index) => (
+              <div
+                key={index}
+                className={`${styles.thumbnail} ${selectedImage === index ? styles.thumbnailActive : ''}`}
+                onClick={() => setSelectedImage(index)}
+              >
+                <img 
+                  src={img} 
+                  alt={`Thumbnail ${index}`} 
+                  onError={(e) => {
+                    e.target.src = 'placeholder.jpg';
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+        
         <div className={styles.mainImage}>
-          <img src={productImages[selectedImage]} alt="Apple iMac 24 inch" />
+          <img 
+            src={imagenes[selectedImage]} 
+            alt={producto.nombre}
+            onError={(e) => {
+              e.target.src = 'placeholder.jpg';
+            }}
+          />
         </div>
       </div>
+
       <div className={styles.details}>
-        <h1 className={styles.title}>
-          Apple iMac 24" All-In-One Computer, Apple M1, 8GB RAM
-        </h1>
-        <div className={styles.badge}>the last 2 products</div>
-        <div className={styles.reviews}>
-          <div className={styles.stars}>★★★★★</div>
-          <div className={styles.reviewCount}>345 Reviews</div>
-        </div>
-        <div className={styles.location}>
-          <MapPinIcon
-            size={16}
-            style={{
-              marginRight: '0.5rem',
-            }}
-          />
-          Deliver to Bonnie Green- Sacramento 23647
-        </div>
-        <div className={styles.price}>$1,249.99</div>
-        <div className={styles.quantitySelector}>
-          <span className={styles.quantityLabel}>Quantity</span>
-          <select
-            className={styles.quantitySelect}
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-          >
-            {[1, 2, 3, 4, 5].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button className={`${styles.button} ${styles.favoriteButton}`}>
-          <HeartIcon
-            size={18}
-            style={{
-              marginRight: '0.5rem',
-            }}
-          />
-          Add to favorites
-        </button>
-        <button className={`${styles.button} ${styles.cartButton}`}>
-          <ShoppingCartIcon
-            size={18}
-            style={{
-              marginRight: '0.5rem',
-            }}
-          />
-          Add to cart
-        </button>
-        <p className={styles.infoText}>
-          Also available at competitive prices from{' '}
-          <span className={styles.link}>authorized retailers</span>, with
-          optional Premium delivery for expedited shipping.
-        </p>
-        
+        <h1 className={styles.title}>{producto.nombre}</h1>
+
+        {producto.stock <= 2 && (
+          <div className={styles.badge}>¡Últimos {producto.stock} disponibles!</div>
+        )}
+
+        <div className={styles.price}>€ {producto.precio?.toFixed(2) || '0.00'}</div>
+
         <div className={styles.accordion}>
           <div
             className={styles.accordionHeader}
             onClick={() => setIsDetailsOpen(!isDetailsOpen)}
           >
-            <span>Product Details</span>
-            {isDetailsOpen ? (
-              <ChevronUpIcon size={20} />
-            ) : (
-              <ChevronDownIcon size={20} />
-            )}
+            <span>Detalles del Producto</span>
+            {isDetailsOpen ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
           </div>
+
           {isDetailsOpen && (
             <div className={styles.accordionContent}>
-              <p>
-                The product is a high-quality, durable solution designed to meet
-                the needs of modern consumers. It features advanced technology
-                and ergonomic design for optimal performance and comfort.
-              </p>
-              <br />
-              <p>
-                Key features include a sleek interface, customizable settings,
-                and compatibility with various devices. It is ideal for
-                professionals and enthusiasts alike.
-              </p>
+              <p>{producto.descripcion || 'No hay descripción disponible'}</p>
+              <p><strong>Categoría:</strong> {producto.categoria || 'N/A'}</p>
+              {producto.subcategoria && (
+                <p><strong>Subcategoría:</strong> {producto.subcategoria}</p>
+              )}
+              <p><strong>Stock disponible:</strong> {producto.stock || 0}</p>
             </div>
           )}
         </div>
+
+        <div className={styles.accordion} />
+
+        <button className={`${styles.button} ${styles.favoriteButton}`}>
+          <HeartIcon size={18} /> Agregar a Favoritos
+        </button>
+
+        <button className={`${styles.button} ${styles.cartButton}`}>
+          <ShoppingCartIcon size={18} /> Agregar al Carrito
+        </button>
+
       </div>
+
+      {productosRelacionados.length > 0 && (
+        <div className={styles.relacionadosSection}>
+          <h2>Productos Relacionados</h2>
+          <div className={styles.relacionadosGrid}>
+            {productosRelacionados.map((p) => (
+              <div key={p.id} className={styles.relacionadoCard}>
+                <img src={p.imagenes?.[0]} alt={p.nombre} />
+                <p>{p.nombre}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
     </div>
-  )
-}
+  );
+};
+
+export default ProductDetail;

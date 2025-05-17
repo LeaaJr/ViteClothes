@@ -1,6 +1,7 @@
-import React from 'react'
-import styles from '../style/ProductCard.module.css'
-import { PlusIcon, BookmarkIcon } from 'lucide-react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from '../style/ProductCard.module.css';
+import { PlusIcon, BookmarkIcon } from 'lucide-react';
 
 const ProductCard = ({
   id,
@@ -13,15 +14,35 @@ const ProductCard = ({
   stock,
   currency = 'EUR',
 }) => {
+  const navigate = useNavigate();
   const validPrice = precio && !isNaN(precio) ? Number(precio) : 0;
 
+  const handleClick = () => {
+    console.log('Navegando a producto ID:', id); // Debug
+    navigate(`/productos/${id}`, {
+      state: { from: window.location.pathname }
+    });
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = 'placeholder.jpg';
+  };
+
   return (
-    <div className={styles.card}>
+    <div 
+      className={styles.card} 
+      onClick={handleClick} 
+      style={{ cursor: 'pointer' }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Ver detalles de ${nombre}`}
+    >
       <div className={styles.imageContainer}>
         <img
           src={img1 || 'placeholder.jpg'}
           alt={nombre}
           className={styles.image}
+          onError={handleImageError}
         />
         <div className={styles.addButton}>
           <PlusIcon size={20} />
@@ -46,5 +67,6 @@ const ProductCard = ({
     </div>
   );
 };
+
 
 export default ProductCard;
