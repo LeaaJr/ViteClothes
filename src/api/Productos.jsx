@@ -8,14 +8,20 @@ const API_URL = 'http://localhost:8000/productos';
 //probado y funcionando
 
 export const getProductos = async () => {
-    try {
-        const response = await axios.get(API_URL);
-        return response.data;
-    } catch (error) {   
-        console.error('Error al obtener los productos:', error);
-        throw error;
-    }
-};
+  try {
+    console.log('Intentando conectar a:', API_URL); // Debug
+    const response = await axios.get(API_URL);
+    console.log('Respuesta recibida:', response); // Debug
+    return response.data;
+  } catch (error) {
+    console.error('Error detallado:', {
+      message: error.message,
+      response: error.response?.data,
+      config: error.config
+    });
+    throw error;
+  }
+};  
 
 
 //camibo de categoria y subcategoria xd 
@@ -63,4 +69,36 @@ export const getProductosDestacados = async () => {
       });
       throw error;
     }
-  };  
+  }; 
+
+//este Endpoint es para el route ProductDetail.jsx
+
+export const getProductoById = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/${id}`, {
+      timeout: 5000, // 5 segundos de timeout
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
+
+    // Validación adicional de datos
+    if (!response.data || !response.data.id) {
+      throw new Error('La respuesta no contiene datos válidos');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener producto:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      url: error.config?.url
+    });
+    
+    if (error.response?.status === 404) {
+      throw new Error('Producto no encontrado');
+    }
+    
+    throw new Error('Error al cargar el producto. Intente nuevamente.');
+  }
+};

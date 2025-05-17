@@ -215,3 +215,39 @@ def obtener_productos_tendencia():
         })
     conn.close()
     return productos
+
+# Endpoint para obtener un producto específico por ID (GET /productos/{id})
+@app.get("/productos/{id}")
+def obtener_producto_por_id(id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT * FROM productos WHERE id = %s", (id,))
+        row = cursor.fetchone()
+        
+        if not row:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+            
+        producto = {
+            "id": row[0],
+            "nombre": row[1],
+            "categoria": row[2],
+            "subcategoria": row[3],
+            "precio": float(row[4]),  # Convertir a float por si acaso
+            "stock": row[5],
+            "descripcion": row[6],
+            "img1": row[7],
+            "img2": row[8],
+            "img3": row[9],
+            "destacado": row[10],
+            "tendencia": row[11],
+        }
+        
+        return producto
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener producto: {str(e)}")
+    finally:
+        cursor.close()
+        conn.close()
