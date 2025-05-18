@@ -35,7 +35,7 @@ export const GridGen = () => {
       {categories.map((category) => (
         <Link 
           key={category.name}
-          to={`/productos/${category.name}`}
+          to={`/productos?categoria=${encodeURIComponent(category.name)}`}
           className={category.className}
         >
           <div className={styles.overlay}></div>
