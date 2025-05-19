@@ -83,7 +83,7 @@ const FeaturedProducts = ({ productos: productosExternos }) => {
     <section className={styles.featuredSection}>
       <div className={styles.carouselContainer}>
         <button onClick={prevSlide} className={styles.navButton} aria-label="Anterior">
-          <MoveLeft size={30} />
+          {/* <MoveLeft size={30} /> */}
         </button>
         <div className={styles.carousel}>
           {visibleProductos.map((product) => (
@@ -91,7 +91,7 @@ const FeaturedProducts = ({ productos: productosExternos }) => {
           ))}
         </div>
         <button onClick={nextSlide} className={styles.navButton} aria-label="Siguiente">
-          <MoveRight size={30} />
+          {/* <MoveRight size={30} /> */}
         </button>
       </div>
     </section>

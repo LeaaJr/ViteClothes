@@ -6,6 +6,8 @@ import { SignIn } from './auth/SignIn';
 import { SignUp } from './auth/SignUp';
 import ProductsPage from './page/ProductPage';
 import ProductDetail  from './page/ProductDetail';
+import SavedProducts from './page/SavedProducts';
+import { Footer } from './components/Footer';
 
 function App() {
 
@@ -20,8 +22,10 @@ function App() {
               <Route path="/productos/:id" element={<ProductDetail />} />
               <Route path="/productos/:category" element={<ProductsPage />} />
               <Route path="/productos" element={<ProductsPage />} />
+              <Route path="/SavedProducts" element={<SavedProducts />} />
           </Routes>
-    </Router>
+          <Footer id="footer" /> 
+    </Router>   
     </>
   )
 }

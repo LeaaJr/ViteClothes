@@ -1,44 +1,80 @@
-/* Contenedor principal */
-.parallaxSection {
-  height: 100vh;
+.container {
   width: 100%;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-  -webkit-overflow-scrolling: touch; /* Para suavizar scroll en iOS */
+  background-color: #f2f2f2;
+  color: #333;
+  padding: 4rem 0;
 }
-
-/* Slide individual */
-.slide {
-  width: 100%;
-  height: 100vh;
-  scroll-snap-align: start;
-  position: relative;
+.section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+.section:nth-child(even) {
+  flex-direction: row-reverse;
+}
+.content {
+  flex: 1;
+  padding: 0 2rem;
+}
+.heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+.featureItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.featureIcon {
+  margin-right: 0.75rem;
+  color: black;
+  opacity: 0.9;
+}
+.mediaContainer {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-/* Media (imagen/video) */
 .media {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.video {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  max-width: 560px;
+  height: auto;
+  border-radius: 8px;
 }
-
-/* Estilos para el slide activo */
-.slide.active {
-  /* Puedes añadir estilos especiales para el slide activo */
-}
-
-/* Mejoras para el scroll en dispositivos móviles */
 @media (max-width: 768px) {
-  .parallaxSection {
-    scroll-snap-type: y mandatory;
+  .section, .section:nth-child(even) {
+    flex-direction: column;
+    padding: 2rem 1rem;
   }
-  
-  .slide {
-    scroll-snap-stop: always; /* Fuerza parada en cada slide */
+  .content {
+    padding: 0 1rem 2rem;
+  }
+  .mediaContainer {
+    width: 100%;
+    margin-top: 2rem;
+  }
+  .heading {
+    font-size: 2rem;
   }
 }

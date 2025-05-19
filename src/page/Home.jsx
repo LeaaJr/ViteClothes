@@ -6,7 +6,7 @@
   import { MobileApp } from "../sections/MobileApp";
   import { GridGen } from "../productgrid/GridGen";
   import { Footer } from "../components/Footer";
-  import ParallaxSection from "../sections/ParallaxSection";
+  import { ParallaxSection } from "../sections/ParallaxSection";
 
   const Home = () => {
     const [productos, setProductos] = useState([]);
@@ -58,7 +58,6 @@
               <FeaturedProducts productos={productos.filter(p => p.tendencia === true)} />
           </section>
 
-          <Footer id="footer" /> 
         </div>
       </>
     )

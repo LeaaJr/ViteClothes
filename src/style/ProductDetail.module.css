@@ -2,7 +2,7 @@
     display: flex;
     min-height: 100vh;
     background-color: #f2f2f2;
-    color: rgb(0, 0, 0);
+    color: #333;
     padding: 2rem;
   }
   .gallery {
@@ -215,6 +215,7 @@
   border-top: 1px solid #eee;
   width: 100%;
   grid-column: 1 / -1;
+  padding-bottom: 3rem;
 }
 
 /* linea */
@@ -228,7 +229,7 @@
 .relacionadosTitle {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #606060;
+  color: #333;
   
 }
 
@@ -273,7 +274,7 @@
 .paymentMethods {
   margin-top: 1.5rem;
   background-color: #f2f2f2;
-  padding: 1rem;
+  padding: 1rem;    
   text-align: center;
 }
 

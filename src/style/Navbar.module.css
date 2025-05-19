@@ -73,6 +73,17 @@
     display: block;
   }
 
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 13px;
+    z-index: 1000;
+  }
+
   
   .dropdownItem {
     display: block;
