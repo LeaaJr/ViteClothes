@@ -298,3 +298,53 @@
   height: auto;
   object-fit: contain;
 }
+
+/* Estilos para el selector de talles */
+.sizeSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.sizeOption {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+}
+
+.sizeOption:hover {
+  border-color: #333;
+}
+
+.selectedSize {
+  background-color: #000;
+  color: white;
+  border-color: #000;
+}
+
+.sizeStock {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 2px;
+}
+
+.addToCartButton {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.addToCartButton:hover {
+  opacity: 0.9;
+}

@@ -21,6 +21,8 @@ const ProductDetail = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [imagenes, setImagenes] = useState(['placeholder.jpg']);
   const [productosRelacionados, setProductosRelacionados] = useState([]);
+  const [isSizesOpen, setIsSizesOpen] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -143,7 +145,7 @@ useEffect(() => {
             className={styles.accordionHeader}
             onClick={() => setIsDetailsOpen(!isDetailsOpen)}
           >
-            <span>Detalles del Producto</span>
+            <span>Product Details</span>
             {isDetailsOpen ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
           </div>
 
@@ -155,6 +157,46 @@ useEffect(() => {
                 <p><strong>Subcategory:</strong> {producto.subcategoria}</p>
               )}
               <p><strong>Current Stock:</strong> {producto.stock || 0}</p>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.accordion}>
+        <div
+          className={styles.accordionHeader}
+          onClick={() => setIsSizesOpen(!isSizesOpen)}
+        >
+          <span>Available Sizes</span>
+          {isSizesOpen ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
+        </div>
+
+          {isSizesOpen && (
+            <div className={styles.accordionContent}>
+              {producto.talles && Object.keys(producto.talles).length > 0 ? (
+                <div className={styles.sizeSelector}>
+                  {Object.entries(producto.talles).map(([size, stock]) => (
+                    <div 
+                      key={size}
+                      className={`${styles.sizeOption} ${selectedSize === size ? styles.selectedSize : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      <span>{size}</span>
+                      <span className={styles.sizeStock}>({stock} available)</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No hay talles disponibles para este producto</p>
+              )}
+              
+              {selectedSize && (
+                <button 
+                  className={styles.addToCartButton}
+                  onClick={handleAddToCart}
+                >
+                  Agregar al carrito (Talle: {selectedSize})
+                </button>
+              )}
             </div>
           )}
         </div>

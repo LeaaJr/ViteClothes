@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from models import Producto
+from fastapi import FastAPI, HTTPException  # Asegúrate de tener HTTPException importado
 from fastapi.middleware.cors import CORSMiddleware
 from database import get_connection
-from typing import Optional
-from models import Producto
+from typing import Optional, Dict
+from pydantic import BaseModel
 from fastapi import Request
 from auth.register import router as register_router
 from auth.login import router as login_router
-
+from psycopg2.extras import Json
 
 
 app = FastAPI()
@@ -24,6 +25,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Modelo para los talles (agrégalo al principio)
+class Talle(BaseModel):
+    talle: str
+    stock: int
 
 # ruta de registro(signUp):
 app.include_router(register_router, prefix="/auth")
@@ -65,6 +71,7 @@ def obtener_productos(categoria: str = None, subcategoria: str = None):
             "img3": row[9],
             "destacado": row[10],
             "tendencia": row[11],
+            "talles": row[12] if row[12] is not None else {}  # Agrega esta línea
         })
     conn.close()
     return productos
@@ -92,6 +99,7 @@ def obtener_productos_destacados():
             "img3": row[9],
             "destacado": row[10],
             "tendencia": row[11],
+            "talles": row[12] if row[12] is not None else {}  # Agrega esta línea
         })
     conn.close()
     return productos
@@ -137,13 +145,23 @@ def actualizar_producto(id: int, producto: Producto):
     conn = get_connection()
     cur = conn.cursor()
     try:
+        # Versión limpia sin comentarios en la consulta SQL
         cur.execute("""
             UPDATE productos
-            SET nombre = %s, categoria = %s, subcategoria = %s, precio = %s,
-                stock = %s, descripcion = %s, img1 = %s, img2 = %s, img3 = %s,
-                destacado = %s, tendencia = %s
-                WHERE id = %s
-            """, (
+            SET nombre = %s, 
+                categoria = %s, 
+                subcategoria = %s, 
+                precio = %s,
+                stock = %s, 
+                descripcion = %s, 
+                img1 = %s, 
+                img2 = %s, 
+                img3 = %s,
+                destacado = %s, 
+                tendencia = %s,
+                talles = %s
+            WHERE id = %s
+        """, (
             producto.nombre,
             producto.categoria,
             producto.subcategoria,
@@ -155,6 +173,7 @@ def actualizar_producto(id: int, producto: Producto):
             producto.img3,
             producto.destacado,
             producto.tendencia,
+            Json(producto.talles),  # Usamos Json() de psycopg2
             id
         ))
         if cur.rowcount == 0:
@@ -212,6 +231,7 @@ def obtener_productos_tendencia():
             "img3": row[9],
             "destacado": row[10],
             "tendencia": row[11],
+            "talles": row[12] if row[12] is not None else {}  # Agrega esta línea
         })
     conn.close()
     return productos
@@ -223,7 +243,16 @@ def obtener_producto_por_id(id: int):
     cursor = conn.cursor()
     
     try:
-        cursor.execute("SELECT * FROM productos WHERE id = %s", (id,))
+        # Consulta modificada para seleccionar explícitamente talles
+        cursor.execute("""
+            SELECT 
+                id, nombre, categoria, subcategoria, precio, stock,
+                descripcion, img1, img2, img3, destacado, tendencia,
+                talles
+            FROM productos 
+            WHERE id = %s
+        """, (id,))
+        
         row = cursor.fetchone()
         
         if not row:
@@ -234,7 +263,7 @@ def obtener_producto_por_id(id: int):
             "nombre": row[1],
             "categoria": row[2],
             "subcategoria": row[3],
-            "precio": float(row[4]),  # Convertir a float por si acaso
+            "precio": float(row[4]),
             "stock": row[5],
             "descripcion": row[6],
             "img1": row[7],
@@ -242,6 +271,7 @@ def obtener_producto_por_id(id: int):
             "img3": row[9],
             "destacado": row[10],
             "tendencia": row[11],
+            "talles": row[12] if row[12] is not None else {}
         }
         
         return producto
@@ -250,4 +280,77 @@ def obtener_producto_por_id(id: int):
         raise HTTPException(status_code=500, detail=f"Error al obtener producto: {str(e)}")
     finally:
         cursor.close()
+        conn.close()
+
+# Nuevos endpoints para talles
+
+@app.post("/productos/{producto_id}/talles")
+def agregar_talle(producto_id: int, talle: Talle):
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        # Verificacion si el producto existe
+        cur.execute("SELECT id FROM productos WHERE id = %s", (producto_id,))
+        if not cur.fetchone():
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+        
+        # Agrega el talle (usando JSON en PostgreSQL)
+        cur.execute("""
+            UPDATE productos 
+            SET talles = COALESCE(talles, '{}'::jsonb) || jsonb_build_object(%s, %s)
+            WHERE id = %s
+            RETURNING talles
+        """, (talle.talle, talle.stock, producto_id))
+        
+        updated_talles = cur.fetchone()[0]
+        conn.commit()
+        return {"talles": updated_talles}
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al agregar talle: {e}")
+    finally:
+        cur.close()
+        conn.close()
+
+@app.get("/productos/{producto_id}/talles")
+def obtener_talles(producto_id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT talles FROM productos WHERE id = %s", (producto_id,))
+        result = cur.fetchone()
+        if not result:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+        
+        talles = result[0] if result[0] is not None else {}
+        return {"talles": talles}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener talles: {e}")
+    finally:
+        cur.close()
+        conn.close()
+
+@app.delete("/productos/{producto_id}/talles/{talle}")
+def eliminar_talle(producto_id: int, talle: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            UPDATE productos 
+            SET talles = talles - %s
+            WHERE id = %s
+            RETURNING talles
+        """, (talle, producto_id))
+        
+        result = cur.fetchone()
+        if not result:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+        
+        conn.commit()
+        return {"talles": result[0]}
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al eliminar talle: {e}")
+    finally:
+        cur.close()
         conn.close()
