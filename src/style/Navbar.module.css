@@ -100,3 +100,73 @@
   .cart{
     color: black;
   }
+
+  /* Contenedor principal del carrito */
+.cartContainer {
+  position: relative;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Botón del carrito */
+.cartButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.cartButton:hover {
+  transform: scale(1.05);
+}
+
+/* Icono del carrito */
+.cartIcon {
+  width: 28px;
+  height: 28px;
+  color: #333; /* Color del icono */
+  stroke-width: 1.5;
+  transition: color 0.2s ease;
+}
+
+.cartButton:hover .cartIcon {
+  color: #e74c3c;; /* Color al hacer hover */
+}
+
+/* Badge de contador */
+.cartBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #e74c3c; /* Color de fondo */
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+@media (max-width: 768px) {
+  .cartIcon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .cartBadge {
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+  }
+}
