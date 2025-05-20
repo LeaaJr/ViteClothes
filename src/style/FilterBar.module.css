@@ -187,7 +187,7 @@ body.sidebar-open {
 .categoryButton.selected {
   background-color: #222222;
   color: white;
-  border-color: #0066ff;
+  border-color: #e74c3c;
 }
 .radioGroup {
   display: flex;

@@ -4,7 +4,7 @@
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: 1px solid rgba(200, 200, 200, 0.5); /* Menos visible */
-  background-color: white;
+  background-color: transparent;
   width: 100%;
   box-sizing: border-box;
 }
@@ -12,7 +12,7 @@
   .navLeft {
     display: flex;
     gap: 2rem;
-    background-color: white;
+    background-color: transparent;
   }
   .navCenter {
     position: absolute;
@@ -20,7 +20,7 @@
     transform: translateX(-50%);
     font-weight: bold;
     font-size: 1.25rem;
-    background-color: white;
+    background-color: transparent;
   }
   .navRight {
     display: flex;
@@ -30,7 +30,7 @@
     color: #6b7280;
     text-decoration: none;
     transition: color 0.2s ease;
-    background-color: white;
+    background-color: transparent;
   }
   .navLink:hover {
     color: #111827;
@@ -41,14 +41,14 @@
   .signInButton {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
-    background-color: white;
+    background-color: transparent;
     color: #2f2f2f;
     border: 1px solid #2f2f2f;
     cursor: pointer;
     transition: all 0.2s ease;
   }
   .signInButton:hover {
-    background-color: #f3f4f6;
+    background-color: white;
   }
   .signUpButton {
     padding: 0.5rem 1rem;
@@ -72,17 +72,18 @@
   .dropdown:hover {
     display: block;
   }
-  
+
   .dropdown {
     display: none;
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: #f2f2f2;
     border: 1px solid #ccc;
     border-radius: 13px;
     z-index: 1000;
   }
+
   
   .dropdownItem {
     display: block;

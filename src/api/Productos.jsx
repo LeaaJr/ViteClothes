@@ -28,12 +28,31 @@ export const getProductos = async () => {
 //Entendiendo que deberia de funcionar
 
 export const getProductosByCategoryAndSubcategory = async (categoria, subcategoria = null) => {
-  const params = new URLSearchParams();
-  if (categoria) params.append('categoria', categoria);
-  if (subcategoria) params.append('subcategoria', subcategoria);
+  try {
+    const params = new URLSearchParams();
+    if (categoria) params.append('categoria', categoria);
+    if (subcategoria) params.append('subcategoria', subcategoria);
 
-  const response = await axios.get(`${API_URL}?${params.toString()}`);
-  return response.data;
+    const response = await axios.get(`${API_URL}?${params.toString()}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Asegúrate que la respuesta sea un array
+    if (!Array.isArray(response.data)) {
+      throw new Error('La respuesta no es un array de productos');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error en getProductosByCategoryAndSubcategory:', {
+      message: error.message,
+      response: error.response?.data,
+      config: error.config
+    });
+    throw error;
+  }
 };
 
 //para hacer el put en postman
@@ -74,17 +93,22 @@ export const getProductosDestacados = async () => {
 //este Endpoint es para el route ProductDetail.jsx
 
 export const getProductoById = async (id) => {
+  // Verifica si el id es numérico
+  if (isNaN(id)) {
+    throw new Error('ID de producto inválido');
+  }
+
   try {
     const response = await axios.get(`${API_URL}/${id}`, {
-      timeout: 5000, // 5 segundos de timeout
+      timeout: 5000,
       headers: {
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json'
       }
     });
 
-    // Validación adicional de datos
     if (!response.data || !response.data.id) {
-      throw new Error('La respuesta no contiene datos válidos');
+      throw new Error('Producto no encontrado');
     }
 
     return response.data;
@@ -99,6 +123,6 @@ export const getProductoById = async (id) => {
       throw new Error('Producto no encontrado');
     }
     
-    throw new Error('Error al cargar el producto. Intente nuevamente.');
+    throw new Error(error.response?.data?.message || 'Error al cargar el producto');
   }
 };

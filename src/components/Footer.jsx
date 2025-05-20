@@ -38,7 +38,7 @@ export const Footer = ({ id }) => {
         <div className={styles.bottom}>
           <div className={styles.logo}> (LOGO) </div>
           <div className={styles.copyright}>
-            © 2021-2022 Flowbite™. All Rights Reserved.
+            © 2021-2025 LM™. All Rights Reserved.
           </div>
           <div className={styles.language}>🇺🇸 English (US)</div>
         </div>

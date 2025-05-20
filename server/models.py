@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from fastapi import HTTPException  # Asegúrate de importar HTTPException
+from typing import Dict, Optional
 
 class Producto(BaseModel):
     nombre: str
@@ -12,3 +14,4 @@ class Producto(BaseModel):
     img3: str
     destacado: bool
     tendencia: bool
+    talles: Optional[Dict[str, int]] = None  # Campo para los talles

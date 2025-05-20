@@ -2,7 +2,7 @@
     display: flex;
     min-height: 100vh;
     background-color: #f2f2f2;
-    color: rgb(0, 0, 0);
+    color: #333;
     padding: 2rem;
   }
   .gallery {
@@ -39,19 +39,22 @@
   .mainImage {
     flex-grow: 1;
     display: flex;
-    align-items: center;
+    align-items: center;  
     justify-content: center;
     background-color: #f2f2f2;
     border-radius: 8px;
-    border: 1px solid #30363d;
+    /* border: 1px solid #30363d; */ /* este borde particularmente queda muy estetico el problema es el lo que contiene dentro es decir la img a veces no cuadra con los colores */
     padding: 1rem;
-    height: 600px; /* Asegura altura fija */
+    height: 600px;
+    overflow: hidden; /* Impide que sobresalga */
   }
 
   .mainImage img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* O usa 'cover' si querés que llene incluso recortando */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
   }
   .details {
     width: 50%;
@@ -206,28 +209,142 @@
 /*   Productos relacionados */
 
 .relacionadosSection {
+  padding-left: 7.5rem;
   margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
   width: 100%;
+  grid-column: 1 / -1;
+  padding-bottom: 3rem;
+}
+
+/* linea */
+
+.relacionadosDivider {
+  border-bottom: 1px solid #30363d;
+  margin-bottom: 1.5rem;
+  width: 30%;
+}
+
+.relacionadosTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  
 }
 
 .relacionadosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Antes 200px */
+  gap: 1rem; /* más compacto */
+}
+
+.relacionadoCard {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.relacionadoCard:hover {
+  transform: translateY(-5px);
+}
+
+.relacionadoImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.relacionadoNombre {
+  font-size: 1rem;
+  margin: 0.25rem 0;
+  color: #333;
+}
+
+.relacionadoPrecio {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
+
+/* Metodos de pago */
+
+.paymentMethods {
+  margin-top: 1.5rem;
+  background-color: #f2f2f2;
+  padding: 1rem;    
+  text-align: center;
+}
+
+.paymentTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.paymentIcons {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-.relacionadoCard {
-  width: 150px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 0.5rem;
-  text-align: center;
+.paymentIcons img {
+  width: 40px;
+  height: auto;
+  object-fit: contain;
 }
 
-.relacionadoCard img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
+/* Estilos para el selector de talles */
+.sizeSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.sizeOption {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  cursor: pointer;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+}
+
+.sizeOption:hover {
+  border-color: #333;
+}
+
+.selectedSize {
+  background-color: #000;
+  color: white;
+  border-color: #000;
+}
+
+.sizeStock {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 2px;
+}
+
+.addToCartButton {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.addToCartButton:hover {
+  opacity: 0.9;
 }

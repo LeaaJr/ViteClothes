@@ -21,6 +21,8 @@ const ProductDetail = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [imagenes, setImagenes] = useState(['placeholder.jpg']);
   const [productosRelacionados, setProductosRelacionados] = useState([]);
+  const [isSizesOpen, setIsSizesOpen] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -54,39 +56,48 @@ const ProductDetail = () => {
     loadProduct();
   }, [id, navigate]);
 
-  useEffect(() => {
-    const fetchRelacionados = async () => {
-      try {
-        const response = await axios.get(`/productos?subcategoria=${producto.subcategoria}`);
-        console.log("Respuesta de la API:", response.data); // Para inspeccionar la respuesta
-
-        // Verifica si la respuesta es un array
-        if (Array.isArray(response.data)) {
-          const relacionados = response.data.filter(p => p.id !== producto.id);
-          setProductosRelacionados(relacionados);
-        } else if (response.data.productos && Array.isArray(response.data.productos)) {
-          // Si los productos están dentro de una propiedad "productos"
-          const relacionados = response.data.productos.filter(p => p.id !== producto.id);
-          setProductosRelacionados(relacionados);
-        } else {
-          console.error("La respuesta no contiene un array de productos.");
+useEffect(() => {
+  const fetchRelacionados = async () => {
+    if (!producto?.subcategoria) return;
+    
+    try {
+      const response = await axios.get(`http://localhost:8000/productos`, {
+        params: {
+          subcategoria: producto.subcategoria
         }
-      } catch (error) {
-        console.error("Error al cargar productos relacionados:", error);
-      }
-    };
+      });
 
-    // Solo hacer la solicitud si el producto tiene subcategoría
-    if (producto?.subcategoria) {
-      fetchRelacionados();
+      console.log("Respuesta de productos relacionados:", response.data);
+
+      // Asegúrate de que la respuesta sea un array
+      const productosData = Array.isArray(response.data) ? response.data : 
+                          response.data.productos || [];
+      
+      const relacionados = productosData
+        .filter(p => p.id !== producto.id)
+        .slice(0, 4);
+      
+      setProductosRelacionados(relacionados);
+      
+    } catch (error) {
+      console.error("Error al cargar productos relacionados:", {
+        message: error.message,
+        response: error.response?.data,
+        config: error.config
+      });
+      setProductosRelacionados([]);
     }
-  }, [producto]);
+  };
+
+  fetchRelacionados();
+}, [producto]);
 
   if (loading) return <div className={styles.loading}>Cargando producto...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!producto) return <div className={styles.error}>No se encontró el producto</div>;
 
   return (
+    <>
     <div className={styles.container}>
       <div className={styles.gallery}>
         {imagenes.length > 1 && (
@@ -134,18 +145,58 @@ const ProductDetail = () => {
             className={styles.accordionHeader}
             onClick={() => setIsDetailsOpen(!isDetailsOpen)}
           >
-            <span>Detalles del Producto</span>
+            <span>Product Details</span>
             {isDetailsOpen ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
           </div>
 
           {isDetailsOpen && (
             <div className={styles.accordionContent}>
               <p>{producto.descripcion || 'No hay descripción disponible'}</p>
-              <p><strong>Categoría:</strong> {producto.categoria || 'N/A'}</p>
+              <p><strong>Category:</strong> {producto.categoria || 'N/A'}</p>
               {producto.subcategoria && (
-                <p><strong>Subcategoría:</strong> {producto.subcategoria}</p>
+                <p><strong>Subcategory:</strong> {producto.subcategoria}</p>
               )}
-              <p><strong>Stock disponible:</strong> {producto.stock || 0}</p>
+              <p><strong>Current Stock:</strong> {producto.stock || 0}</p>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.accordion}>
+        <div
+          className={styles.accordionHeader}
+          onClick={() => setIsSizesOpen(!isSizesOpen)}
+        >
+          <span>Available Sizes</span>
+          {isSizesOpen ? <ChevronUpIcon size={20} /> : <ChevronDownIcon size={20} />}
+        </div>
+
+          {isSizesOpen && (
+            <div className={styles.accordionContent}>
+              {producto.talles && Object.keys(producto.talles).length > 0 ? (
+                <div className={styles.sizeSelector}>
+                  {Object.entries(producto.talles).map(([size, stock]) => (
+                    <div 
+                      key={size}
+                      className={`${styles.sizeOption} ${selectedSize === size ? styles.selectedSize : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      <span>{size}</span>
+                      <span className={styles.sizeStock}>({stock} available)</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No hay talles disponibles para este producto</p>
+              )}
+              
+              {selectedSize && (
+                <button 
+                  className={styles.addToCartButton}
+                  onClick={handleAddToCart}
+                >
+                  Agregar al carrito (Talle: {selectedSize})
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -153,30 +204,68 @@ const ProductDetail = () => {
         <div className={styles.accordion} />
 
         <button className={`${styles.button} ${styles.favoriteButton}`}>
-          <HeartIcon size={18} /> Agregar a Favoritos
+          <HeartIcon size={18} /> Add to Favorites
         </button>
 
         <button className={`${styles.button} ${styles.cartButton}`}>
-          <ShoppingCartIcon size={18} /> Agregar al Carrito
+          <ShoppingCartIcon size={18} /> Add to Cart
         </button>
 
+        <div className={styles.paymentMethods}>
+        <p className={styles.paymentTitle}>These are the currently accepted payment methods:</p>
+        <div className={styles.paymentIcons}>
+          <img src="https://static.vecteezy.com/system/resources/previews/020/975/576/large_2x/visa-logo-visa-icon-transparent-free-png.png" alt="Visa" />
+          <img src="https://salex.it/wp-content/uploads/MasterCard_Logo.svg_.png.webp" alt="MasterCard" />
+          <img src="https://www.citypng.com/public/uploads/preview/hd-amex-american-express-logo-png-701751694708970jttzjjyo6e.png" alt="American Express" />
+          <img src="https://static.vecteezy.com/system/resources/previews/019/909/676/large_2x/paypal-transparent-paypal-free-free-png.png" alt="PayPal" />
+        </div>
       </div>
 
-      {productosRelacionados.length > 0 && (
+      </div>
+    </div>
+    {productosRelacionados.length > 0 && (
         <div className={styles.relacionadosSection}>
-          <h2>Productos Relacionados</h2>
+          <h2 className={styles.relacionadosTitle}>Productos Relacionados</h2>
+          <div className={styles.relacionadosDivider}></div>
           <div className={styles.relacionadosGrid}>
-            {productosRelacionados.map((p) => (
-              <div key={p.id} className={styles.relacionadoCard}>
-                <img src={p.imagenes?.[0]} alt={p.nombre} />
-                <p>{p.nombre}</p>
-              </div>
-            ))}
+            {productosRelacionados.slice(0, 4).map((p) => {
+              const imagenesProducto = [
+                p.img1,
+                p.img2,
+                p.img3
+              ].filter(img => img != null && img.trim() !== '');
+              
+              const imagenPrincipal = imagenesProducto.length > 0 
+                ? imagenesProducto[0] 
+                : 'placeholder.jpg';
+
+              return (
+                <div 
+                  key={p.id} 
+                  className={styles.relacionadoCard}
+                  onClick={() => navigate(`/productos/${p.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && navigate(`/productos/${p.id}`)}
+                >
+                  <img 
+                    src={imagenPrincipal} 
+                    alt={p.nombre}
+                    onError={(e) => {
+                      e.target.src = 'placeholder.jpg';
+                    }}
+                    className={styles.relacionadoImage}
+                    loading="lazy"
+                  />
+                  <h3 className={styles.relacionadoNombre}>{p.nombre}</h3>
+                  <p className={styles.relacionadoPrecio}>€ {p.precio?.toFixed(2) || '0.00'}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
-
-    </div>
+      </>
   );
 };
 

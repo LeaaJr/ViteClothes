@@ -1,16 +1,27 @@
-import React from 'react';
 import styles from '../style/Navbar.module.css';
 import { ShoppingCart } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { useState } from 'react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen) setQuery('');
+  };
+
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+    setQuery('');
   };
 
     const scrollToSection = () => {
@@ -34,7 +45,7 @@ const Navbar = () => {
           <div className={styles.userMenu}>
             <span className={styles.userName}>👤 {user.email}</span>
             <div className={styles.dropdown}>
-              <Link to="/wallet" className={styles.dropdownItem}>My wallet</Link>
+              <Link to="/SavedProducts" id='SavedProducts' className={styles.dropdownItem}>Saved</Link>
               <Link to="/orders" className={styles.dropdownItem}>My orders</Link>
               <button onClick={handleLogout} className={styles.dropdownItem}>Cerrar sesión</button>
             </div>
