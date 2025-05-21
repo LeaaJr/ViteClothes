@@ -1,13 +1,18 @@
 import styles from '../style/Navbar.module.css';
-import { ShoppingCart } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useState } from 'react';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import ShoppingCart from '../components/ShoppingCart';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { cartItems } = useCart(); // Obtenemos los items del carrito
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
 
   const handleLogout = () => {
     logout();
@@ -24,10 +29,12 @@ const Navbar = () => {
     setQuery('');
   };
 
-    const scrollToSection = () => {
+  const scrollToSection = () => {
     const section = document.getElementById("footer");
-    section.scrollIntoView({ behavior: "smooth", block: "center" });
-  }; 
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
 
   return (
     <nav className={styles.navbar}>
@@ -54,10 +61,21 @@ const Navbar = () => {
           <>
             <Link to="/SignIn"><button className={styles.signInButton}>Sign in</button></Link>
             <Link to="/SignUp"><button className={styles.signUpButton}>Sign up</button></Link>
-            <Link to="/SignIn"><ShoppingCart size={28} strokeWidth={1.5} className={styles.cart} /></Link>
           </>
         )}
+        {/* Botón del carrito con contador */}
+        <div className={styles.cartContainer}>
+          <button onClick={() => setIsCartOpen(true)} className={styles.cartButton}>
+          <ShoppingCartIcon className={styles.cartIcon} />
+          {cartItems.length > 0 && (
+            <span className={styles.cartBadge}>{cartItems.length}</span>
+          )}
+        </button>
+        </div>
       </div>
+      
+      {/* Modal del carrito */}
+      <ShoppingCart open={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   );
 };

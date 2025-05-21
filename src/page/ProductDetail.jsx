@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductoById } from '../api/Productos';
-import styles from '../style/ProductDetail.module.css'; // Asegúrate de tener este archivo
+import styles from '../style/ProductDetail.module.css';
+import { useCart } from '../context/CartContext';
 import { 
   HeartIcon, 
   ShoppingCartIcon, 
@@ -23,6 +24,8 @@ const ProductDetail = () => {
   const [productosRelacionados, setProductosRelacionados] = useState([]);
   const [isSizesOpen, setIsSizesOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
+  const { addToCart } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -92,6 +95,29 @@ useEffect(() => {
   fetchRelacionados();
 }, [producto]);
 
+const handleAddToCart = () => {
+    if (!selectedSize && producto.talles && Object.keys(producto.talles).length > 0) {
+      alert('Please select a size before adding to cart');
+      return;
+    }
+
+    const rawPrice = producto.precio?.toFixed(2) || '0.00';
+    const cleanPrice = rawPrice.toString().replace('$', '').trim();
+
+    addToCart({
+    id: producto.id,
+    name: producto.nombre,
+    price: `€${cleanPrice}`,
+    imageSrc: imagenes[0],
+    imageAlt: producto.nombre,
+    size: selectedSize,
+    quantity: quantity
+  });
+  
+  setIsAdded(true);
+  setTimeout(() => setIsAdded(false), 2000);
+};
+
   if (loading) return <div className={styles.loading}>Cargando producto...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!producto) return <div className={styles.error}>No se encontró el producto</div>;
@@ -130,7 +156,7 @@ useEffect(() => {
           />
         </div>
       </div>
-
+                         
       <div className={styles.details}>
         <h1 className={styles.title}>{producto.nombre}</h1>
 
@@ -207,9 +233,14 @@ useEffect(() => {
           <HeartIcon size={18} /> Add to Favorites
         </button>
 
-        <button className={`${styles.button} ${styles.cartButton}`}>
-          <ShoppingCartIcon size={18} /> Add to Cart
-        </button>
+        <button 
+        onClick={handleAddToCart}
+        className={`${styles.button} ${styles.cartButton} ${isAdded ? styles.added : ''}`}
+        disabled={isAdded}
+      >
+        <ShoppingCartIcon size={18} />
+        {isAdded ? 'Added to Cart!' : 'Add to Cart'}
+      </button>
 
         <div className={styles.paymentMethods}>
         <p className={styles.paymentTitle}>These are the currently accepted payment methods:</p>
