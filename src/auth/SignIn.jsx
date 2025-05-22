@@ -40,43 +40,56 @@ export const SignIn = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.background} />
-      <div className={styles.content}>
-        <div className={styles.loginCard}>
-          <h1 className={styles.title}>Sign in to your account</h1>
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.label}>Your email</label>
-              <input
-                type="email"
-                id="email"
-                className={styles.input}
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="password" className={styles.label}>Password</label>
-              <input
-                type="password"
-                id="password"
-                className={styles.input}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button type="submit" className={styles.loginButton}>
-              Log in to your account
-            </button>
-          </form>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.formSection}>
+        <div className={styles.logo}>(LOGO)</div>
+        <h2 className={styles.title}>LOG IN</h2>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>
+              E-MAIL
+            </label>
+            <input
+              type="email"
+              id="email"
+              className={styles.input}
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.label}>
+              PASSWORD
+            </label>
+            <input
+              type="password"
+              id="password"
+              className={styles.input}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <a href="#" className={styles.forgotPassword}>
+            Forgot your password?
+          </a>
+          <button type="submit" className={styles.loginButton}>
+            LOG IN
+          </button>
+        </form>
+      </div>
+      <div className={styles.imageSection}>
+        <img
+          src="https://static.zara.net/assets/public/f4a2/db52/cce048cbbde5/d6ba2d463363/image-desktop-398a24e0-3e15-48a2-bfec-82a6211fb5ad-default/image-desktop-398a24e0-3e15-48a2-bfec-82a6211fb5ad-default.jpg?ts=1746186282702&w=736"
+          alt="ZARA fashion model"
+          className={styles.fashionImage}
+        />
       </div>
     </div>
-  );
-};
+  )
+}
+
 
 
 //Datos de prueba:

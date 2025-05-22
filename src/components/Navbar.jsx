@@ -1,33 +1,35 @@
 import styles from '../style/Navbar.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import ShoppingCart from '../components/ShoppingCart';
 import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { cartItems } = useCart(); // Obtenemos los items del carrito
+  const { cartItems } = useCart();
   const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);  // Estado nuevo para menú usuario
+  const menuRef = useRef(null);
 
   const handleLogout = () => {
     logout();
+    setIsMenuOpen(false);
     navigate('/');
   };
 
-  const handleSearchClick = () => {
-    setIsSearchOpen(!isSearchOpen);
-    if (!isSearchOpen) setQuery('');
-  };
-
-  const handleCloseSearch = () => {
-    setIsSearchOpen(false);
-    setQuery('');
-  };
+  // Para cerrar menú si se hace click fuera
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const scrollToSection = () => {
     const section = document.getElementById("footer");
@@ -46,16 +48,24 @@ const Navbar = () => {
           Contact
         </a>
       </div>
-      <div className={styles.navCenter}>Website</div>
+      {/* <div className={styles.navCenter}>Website</div> */}
       <div className={styles.navRight}>
         {user ? (
-          <div className={styles.userMenu}>
-            <span className={styles.userName}>👤 {user.email}</span>
-            <div className={styles.dropdown}>
-              <Link to="/SavedProducts" id='SavedProducts' className={styles.dropdownItem}>Saved</Link>
-              <Link to="/orders" className={styles.dropdownItem}>My orders</Link>
-              <button onClick={handleLogout} className={styles.dropdownItem}>Cerrar sesión</button>
-            </div>
+          <div className={styles.userMenu} ref={menuRef}>
+            <span
+              className={styles.userName}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              style={{ cursor: 'pointer', userSelect: 'none' }}
+            >
+              👤 {user.email} ▼
+            </span>
+            {isMenuOpen && (
+              <div className={styles.dropdown}>
+                <Link to="/SavedProducts" className={styles.dropdownItem} onClick={() => setIsMenuOpen(false)}>Saved</Link>
+                <Link to="/orders" className={styles.dropdownItem} onClick={() => setIsMenuOpen(false)}>My orders</Link>
+                <button onClick={handleLogout} className={styles.dropdownItem}>Cerrar sesión</button>
+              </div>
+            )}
           </div>
         ) : (
           <>
@@ -66,11 +76,11 @@ const Navbar = () => {
         {/* Botón del carrito con contador */}
         <div className={styles.cartContainer}>
           <button onClick={() => setIsCartOpen(true)} className={styles.cartButton}>
-          <ShoppingCartIcon className={styles.cartIcon} />
-          {cartItems.length > 0 && (
-            <span className={styles.cartBadge}>{cartItems.length}</span>
-          )}
-        </button>
+            <ShoppingCartIcon className={styles.cartIcon} />
+            {cartItems.length > 0 && (
+              <span className={styles.cartBadge}>{cartItems.length}</span>
+            )}
+          </button>
         </div>
       </div>
       

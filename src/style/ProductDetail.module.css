@@ -34,7 +34,7 @@
 }
 
   .thumbnail:hover, .thumbnailActive {
-    border-color: #58a6ff;
+    border-color: #e74c3c;
   }
   .mainImage {
     flex-grow: 1;

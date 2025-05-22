@@ -63,26 +63,28 @@
     background-color: rgb(38, 38, 38);;
   }
 
-  .userMenu {
-    position: relative;
-    cursor: pointer;
-  }
+.userMenu {
+  position: relative; /* Contenedor padre */
+  cursor: pointer;
+  display: inline-block; /* importante para que el ancho sea solo lo que ocupa el texto */
+}
   
-  .userName:hover + .dropdown,
+/*   .userName:hover + .dropdown,
   .dropdown:hover {
     display: block;
-  }
+  } */
 
   .dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: #f2f2f2;
-    border: 1px solid #ccc;
-    border-radius: 13px;
-    z-index: 1000;
-  }
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 13px;
+  z-index: 1000;
+  min-width: 100px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
 
   
   .dropdownItem {
