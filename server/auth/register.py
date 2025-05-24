@@ -1,12 +1,12 @@
 import psycopg2
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from passlib.context import CryptContext
 from typing import Optional
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # para leer variables del .env
+load_dotenv()
 
 router = APIRouter()
 
@@ -14,20 +14,22 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class SignUpModel(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=8)
     confirm_password: str
-    day: int
-    month: int
-    year: int
-    acceptTerms: bool
+    name: str = Field(..., min_length=2)
+    surname: str = Field(..., min_length=2)
+    privacyPolicy: bool = Field(..., alias="acceptTerms")  # Mapea acceptTerms a privacyPolicy
+
+    class Config:
+        allow_population_by_field_name = True
 
 @router.post("/signup")
 def signup(user: SignUpModel):
     if user.password != user.confirm_password:
         raise HTTPException(status_code=400, detail="Passwords do not match")
 
-    if not user.acceptTerms:
-        raise HTTPException(status_code=400, detail="You must accept the terms")
+    if not user.privacyPolicy:
+        raise HTTPException(status_code=400, detail="You must accept the privacy policy")
 
     hashed_password = pwd_context.hash(user.password)
 
@@ -46,17 +48,19 @@ def signup(user: SignUpModel):
         if cursor.fetchone():
             raise HTTPException(status_code=400, detail="Email already registered")
 
-        # Insertar el nuevo usuario
+        # Agrega un nuevo usuario
         cursor.execute("""
-            INSERT INTO usuarios (email, hashed_password, birth_day, birth_month, birth_year)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (user.email, hashed_password, user.day, user.month, user.year))
+            INSERT INTO usuarios (email, hashed_password, name, surname)
+            VALUES (%s, %s, %s, %s)
+        """, (user.email, hashed_password, user.name, user.surname))
         
         conn.commit()
         cursor.close()
         conn.close()
 
-        return {"message": "User registered successfully", "user": user.email}
+        return {"message": "User registered successfully", "user": user.name}
 
-    except Exception as e:
+    except psycopg2.Error as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")

@@ -1,5 +1,5 @@
 from models import Producto
-from fastapi import FastAPI, HTTPException  # Asegúrate de tener HTTPException importado
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from database import get_connection
 from typing import Optional, Dict
@@ -11,6 +11,7 @@ from psycopg2.extras import Json
 
 
 app = FastAPI()
+
 
 # Configurar CORS para permitir conexión con tu frontend
 origins = [
@@ -32,7 +33,7 @@ class Talle(BaseModel):
     stock: int
 
 # ruta de registro(signUp):
-app.include_router(register_router, prefix="/auth")
+app.include_router(register_router, prefix="/api/auth")
 app.include_router(login_router)
 
 # Endpoint real para obtener productos

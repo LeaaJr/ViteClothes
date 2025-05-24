@@ -57,7 +57,7 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               style={{ cursor: 'pointer', userSelect: 'none' }}
             >
-              👤 {user.email} ▼
+              👤 {user.name} ▼
             </span>
             {isMenuOpen && (
               <div className={styles.dropdown}>
