@@ -23,11 +23,22 @@ const CartProvider = ({ children }) => {
       }
       
       return [...prevItems, { 
-        ...product, 
+        ...product,
+        price: product.precio ?? product.price, // <- esta línea estandariza
         quantity: product.quantity || 1 
       }];
     });
   }, []);
+
+  const parsePrice = (price) => {
+  if (typeof price === 'number') return price;
+  if (typeof price === 'string') {
+    const cleaned = price.replace(/[^0-9.,]/g, '').replace(',', '.');
+    const parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return 0;
+};
 
   // Función para eliminar un producto del carrito
 const removeFromCart = useCallback((id, size = null) => {
@@ -40,17 +51,15 @@ const removeFromCart = useCallback((id, size = null) => {
 
 
   // Calcular el total del carrito
-  const getTotal = useCallback(() => {
-    return cartItems.reduce((total, item) => {
-      const priceString = item.price.toString()
-        .replace('€', '')
-        .replace('$', '')
-        .trim();
-      
-      const price = parseFloat(priceString) || 0;
-      return total + (price * item.quantity);
-    }, 0);
-  }, [cartItems]);
+const getTotal = useCallback(() => {
+  return cartItems.reduce((total, item) => {
+    const price = parsePrice(item.price);
+    const quantity = Number(item.quantity) || 1;
+    return total + (price * quantity);
+  }, 0);
+}, [cartItems]);
+
+
 
   // Memoizar el valor del contexto para optimización
   const contextValue = useMemo(() => ({

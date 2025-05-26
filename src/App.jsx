@@ -9,6 +9,7 @@ import ProductDetail  from './page/ProductDetail';
 import SavedProducts from './page/SavedProducts';
 import { Footer } from './components/Footer';
 import ShoppingCart from './components/ShoppingCart';
+import Checkout from './page/Checkout';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
               <Route path="/productos" element={<ProductsPage />} />
               <Route path="/SavedProducts" element={<SavedProducts />} />
               <Route path="/Shoppingcart" element={<ShoppingCart />} />
+              <Route path="/Checkout" element={<Checkout />} />
           </Routes>
           <Footer id="footer" /> 
     </Router>   

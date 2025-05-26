@@ -99,7 +99,7 @@ const ShoppingCart = ({ open, onClose }) => {
                       Shipping and taxes calculated at checkout.
                     </p>
                     <Link
-                      to="/checkout"
+                      to="/Checkout"
                       className={styles.checkoutButton}
                       onClick={onClose}
                     >
