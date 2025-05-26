@@ -24,8 +24,14 @@ const ProductDetail = () => {
   const [productosRelacionados, setProductosRelacionados] = useState([]);
   const [isSizesOpen, setIsSizesOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
-  const { addToCart } = useCart();
+  const {addToCart} = useCart();
   const [isAdded, setIsAdded] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const { img1, nombre, precio, descripcion } = producto || {};
+
+
+
+  
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -95,6 +101,14 @@ useEffect(() => {
   fetchRelacionados();
 }, [producto]);
 
+useEffect(() => {
+  const saved = localStorage.getItem('savedProducts');
+  const savedProducts = saved ? JSON.parse(saved) : [];
+  const isProductSaved = savedProducts.some(p => p.id === id);
+  setIsSaved(isProductSaved);
+}, [id]);
+
+
 const handleAddToCart = () => {
     if (!selectedSize && producto.talles && Object.keys(producto.talles).length > 0) {
       alert('Please select a size before adding to cart');
@@ -117,6 +131,36 @@ const handleAddToCart = () => {
   setIsAdded(true);
   setTimeout(() => setIsAdded(false), 2000);
 };
+
+ const handleSaveClick = (e) => {
+    e.stopPropagation();
+    
+const saved = localStorage.getItem('savedProducts');
+const savedProducts = saved ? JSON.parse(saved) : [];
+
+const productToSave = {
+  id,
+  img1: producto.img1,
+  nombre: producto.nombre,
+  precio: producto.precio,
+  descripcion: producto.descripcion,
+  savedAt: new Date().toISOString()
+};
+
+    let updatedProducts;
+    
+    if (isSaved) {
+      // Remover producto
+      updatedProducts = savedProducts.filter(p => p.id !== id);
+      setIsSaved(false);
+    } else {
+      // Agregar producto
+      updatedProducts = [...savedProducts, productToSave];
+      setIsSaved(true);
+    }
+
+    localStorage.setItem('savedProducts', JSON.stringify(updatedProducts));
+  };
 
   if (loading) return <div className={styles.loading}>Cargando producto...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
@@ -182,7 +226,7 @@ const handleAddToCart = () => {
               {producto.subcategoria && (
                 <p><strong>Subcategory:</strong> {producto.subcategoria}</p>
               )}
-              <p><strong>Current Stock:</strong> {producto.stock || 0}</p>
+             {/*  <p><strong>Current Stock:</strong> {producto.stock || 0}</p> */}
             </div>
           )}
         </div>
@@ -215,23 +259,31 @@ const handleAddToCart = () => {
                 <p>No hay talles disponibles para este producto</p>
               )}
               
-              {selectedSize && (
+{/*               {selectedSize && (
                 <button 
                   className={styles.addToCartButton}
                   onClick={handleAddToCart}
                 >
                   Agregar al carrito (Talle: {selectedSize})
                 </button>
-              )}
+              )} */}
+
+              {/* esta caracteristica es opcional y tiene funcionamiento logico en este caso la dejo comentada para un futuro */}
+
             </div>
           )}
         </div>
 
         <div className={styles.accordion} />
 
-        <button className={`${styles.button} ${styles.favoriteButton}`}>
-          <HeartIcon size={18} /> Add to Favorites
-        </button>
+          <button 
+            className={`${styles.button} ${styles.favoriteButton} ${isSaved ? styles.saved : ''}`}
+            onClick={handleSaveClick}
+            aria-label={isSaved ? 'Remove from favorites' : 'Add to favorites'}
+          >
+            <HeartIcon size={18} fill={isSaved ? 'currentColor' : 'none'} />
+            {isSaved ? 'Saved' : 'Add to favorites'}
+          </button>
 
         <button 
         onClick={handleAddToCart}

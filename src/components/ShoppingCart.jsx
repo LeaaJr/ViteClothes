@@ -10,6 +10,11 @@ const ShoppingCart = ({ open, onClose }) => {
   const subtotal = getTotal();
   const formattedTotal = isNaN(subtotal) ? '0.00' : subtotal.toFixed(2);
 
+  // Función para eliminar un ítem específico (considerando el talle)
+  const handleRemoveItem = (itemId, size) => {
+    removeFromCart(itemId, size);
+  };
+
   return (
     <Dialog open={open} onClose={onClose} className={styles.dialog}>
       <DialogBackdrop className={styles.dialogBackdrop} />
@@ -22,7 +27,7 @@ const ShoppingCart = ({ open, onClose }) => {
                 <div className={styles.content}>
                   <div className={styles.header}>
                     <DialogTitle className={styles.headerTitle}>
-                      Shopping Cart ({cartItems.length})
+                      Shopping Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
                     </DialogTitle>
                     <button
                       type="button"
@@ -54,17 +59,24 @@ const ShoppingCart = ({ open, onClose }) => {
                                   {item.name}
                                 </h3>
                                 <p className={styles.cartItemPrice}>
-                                {item.price.toString().includes('€') 
-                                  ? item.price 
-                                  : `€${item.price}`.replace('$', '')}
-                              </p>
+                                  {item.price.toString().includes('€') 
+                                    ? item.price 
+                                    : `€${item.price}`.replace('$', '')}
+                                </p>
                               </div>
-                              <p className={styles.cartItemQuantity}>
-                                Quantity: {item.quantity}
-                              </p>
+                              <div className={styles.itemDetails}>
+                                <p className={styles.cartItemQuantity}>
+                                  Quantity: {item.quantity}
+                                </p>
+                                {item.size && (
+                                  <p className={styles.cartItemSize}>
+                                    Size: {item.size}
+                                  </p>
+                                )}
+                              </div>
                               <button
                                 type="button"
-                                onClick={() => removeFromCart(item.id)}
+                                onClick={() => handleRemoveItem(item.id, item.size)}
                                 className={styles.removeButton}
                               >
                                 Remove
@@ -87,7 +99,7 @@ const ShoppingCart = ({ open, onClose }) => {
                       Shipping and taxes calculated at checkout.
                     </p>
                     <Link
-                      to="/checkout"
+                      to="/Checkout"
                       className={styles.checkoutButton}
                       onClick={onClose}
                     >

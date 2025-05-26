@@ -189,20 +189,6 @@
   font-size: 0.875rem;
 }
 
-.removeButton {
-  font-weight: 500;
-  color: #e74c3c; /* Indigo-600 */
-  transition: color 0.2s;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.removeButton:hover {
-  color: #e74c3c; /* Indigo-500 */
-}
-
 .subtotal {
   border-top: 1px solid #e5e7eb; /* Gray-200 */
   padding: 1.5rem 1rem;
@@ -247,3 +233,40 @@
   background-color: black; /* Indigo-700 */
 }
 
+/* Estilos para los detalles del ítem */
+.itemDetails {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.cartItemQuantity,
+.cartItemSize {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.cartItemSize {
+  background-color: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Ajustes para el botón Remove */
+.removeButton {
+  margin-top: 0.5rem;
+  font-weight: 500;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0.25rem 0;
+  text-align: left;
+}
+
+.removeButton:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
