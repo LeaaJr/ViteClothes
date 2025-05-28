@@ -37,12 +37,19 @@ const Navbar = () => {
       section.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
+  const scrollToSectionTwo = () => {
+  const section = document.getElementById("ParallaxSection");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
+
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.navLeft}>
         <Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link>
-        <Link to="#" className={styles.navLink}>About</Link>
+        <a onClick={scrollToSectionTwo} className={styles.navLink} style={{ cursor: 'pointer' }}>Trend </a>
         <Link to="/productos" className={styles.navLink}>All Products</Link>
         <a onClick={scrollToSection} className={styles.navLink} style={{ cursor: 'pointer' }}>
           Contact

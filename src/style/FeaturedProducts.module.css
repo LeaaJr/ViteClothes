@@ -50,34 +50,38 @@
   }
   
   .card {
-    background: #f2f2f2;
-    border-radius: 8px;
-    overflow: hidden;
-    /* box-shadow: 0 2px 8px rgba(0,0,0,0.1); */
-    transition: transform 0.3s ease;
-    min-width: 250px;
-    scroll-snap-align: start;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 460px; /* o el valor que te funcione */
+  background: #f2f2f2;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  min-width: 250px;
+  scroll-snap-align: start;
+}
+
   
   .card:hover {
     transform: translateY(-5px);
   }
   
   .imageContainer {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    overflow: hidden;
-    object-fit: cover;
-    cursor: pointer;
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  cursor: pointer;
   }
+
   
-  .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
   
   .card:hover .image {
     transform: scale(1.05);
