@@ -36,26 +36,54 @@
   .thumbnail:hover, .thumbnailActive {
     border-color: #e74c3c;
   }
-  .mainImage {
+.mainImage {
     flex-grow: 1;
     display: flex;
     align-items: center;  
     justify-content: center;
     background-color: #f2f2f2;
     border-radius: 8px;
-    /* border: 1px solid #30363d; */ /* este borde particularmente queda muy estetico el problema es el lo que contiene dentro es decir la img a veces no cuadra con los colores */
     padding: 1rem;
     height: 600px;
     overflow: hidden; /* Impide que sobresalga */
-  }
+    position: relative; /* Añadido para el lente de zoom */
+    cursor: zoom-in; /* Cambia el cursor al pasar sobre la imagen */
+}
 
-  .mainImage img {
+.mainImage img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
     object-position: center;
     display: block;
-  }
+    transition: transform 0.3s ease; /* Añadido para suavizar el zoom */
+    will-change: transform; /* Mejora el rendimiento de la animación */
+}
+
+.mainImage.zoomed img {
+    transform: scale(1.8);
+    cursor: zoom-out; /* Cambia el cursor cuando está zoom */
+}
+
+.zoomLens {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 2px solid;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.105);
+    /* backdrop-filter: blur(2px); */
+    display: none; /* Oculto por defecto */
+}
+
+.mainImage.zoomed .zoomLens {
+    display: block; /* Solo visible cuando hay zoom */
+}
+
   .details {
     width: 50%;
     padding: 0 2rem;
