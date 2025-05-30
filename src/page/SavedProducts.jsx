@@ -7,9 +7,9 @@ const SavedProducts = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Productos Guardados</h1>
+      <h1>Saved Products</h1>
       {savedProducts.length === 0 ? (
-        <p>No tienes productos guardados</p>
+        <p>You have no saved products</p>
       ) : (
         <div className={styles.productsGrid}>
           {savedProducts.map(product => (
@@ -17,7 +17,7 @@ const SavedProducts = () => {
               <img src={product.img1 || 'placeholder.jpg'} alt={product.nombre} />
               <h3>{product.nombre}</h3>
               <p>{product.precio.toFixed(2)} {product.currency}</p>
-              <Link to={`/productos/${product.id}`} style={{color:"black"}}>Ver detalles</Link>
+              <Link to={`/productos/${product.id}`} style={{color:"black"}}>See details</Link>
             </div>
           ))}
         </div>

@@ -16,15 +16,29 @@ def signin(user: SignInModel):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT hashed_password FROM usuarios WHERE email = %s", (user.email,))
+    # Modifica esta consulta para obtener más campos del usuario
+    cur.execute("""
+        SELECT id, email, name, surname, hashed_password 
+        FROM usuarios 
+        WHERE email = %s
+    """, (user.email,))
     result = cur.fetchone()
 
     if result is None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    hashed_password = result[0]
+    user_id, email, name, surname, hashed_password = result
 
     if not pwd_context.verify(user.password, hashed_password):
         raise HTTPException(status_code=401, detail="Incorrect password")
 
-    return {"message": "Login successful", "user": user.email}
+    # Devuelve todos los datos relevantes del usuario
+    return {
+        "message": "Login successful",
+        "user": {
+            "id": user_id,
+            "email": email,
+            "name": name,
+            "surname": surname
+        }
+    }

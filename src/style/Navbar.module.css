@@ -67,6 +67,7 @@
   position: relative; /* Contenedor padre */
   cursor: pointer;
   display: inline-block; /* importante para que el ancho sea solo lo que ocupa el texto */
+  padding-top: 8px;
 }
   
 /*   .userName:hover + .dropdown,
@@ -76,28 +77,61 @@
 
   .dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px); /* Pequeño espacio del elemento padre */
   right: 0;
-  background: #f2f2f2;
-  border: 1px solid #ccc;
-  border-radius: 13px;
+  background: white;
+  border-radius: 8px;
   z-index: 1000;
-  min-width: 100px; 
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+  min-width: 130px;
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.05),
+    0 4px 16px rgba(0,0,0,0.08); /* Sombra más suave y elegante */
+  padding: 4px 0;
+  border: 1px solid rgba(0,0,0,0.04); /* Borde casi imperceptible */
+  opacity: 0; /* Inicialmente invisible para animación */
+  transform: translateY(-10px);
+  transition: 
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
 }
 
-  
-  .dropdownItem {
-    display: block;
-    padding: 8px 12px;
-    text-decoration: none;
-    color: black;
-    border-radius: 13px;
-  }
-  
-  .dropdownItem:hover {
-    background-color: #f0f0f0;
-  }
+/* Clase para cuando el dropdown está visible */
+.dropdown.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdownItem {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin: 0 4px;
+  border-radius: 4px;
+}
+
+.dropdownItem:hover {
+  background-color: rgba(0,0,0,0.03); /* Fondo muy sutil */
+  color: #000;
+}
+
+/* Separador entre items (opcional) */
+.dropdownDivider {
+  height: 1px;
+  background: rgba(0,0,0,0.05);
+  margin: 4px 0;
+}
+
+/* Para el botón de cerrar sesión */
+.dropdownItem.logout {
+  color: #e74c3c;
+}
+
+.dropdownItem.logout:hover {
+  background-color: rgba(231, 76, 60, 0.08);
+}
 
   .cart{
     color: black;

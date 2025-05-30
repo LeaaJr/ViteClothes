@@ -64,10 +64,10 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               style={{ cursor: 'pointer', userSelect: 'none' }}
             >
-              👤 {user.name} ▼
+              👤 {user.name}
             </span>
             {isMenuOpen && (
-              <div className={styles.dropdown}>
+            <div className={`${styles.dropdown} ${isMenuOpen ? styles.visible : ''}`}>
                 <Link to="/SavedProducts" className={styles.dropdownItem} onClick={() => setIsMenuOpen(false)}>Saved</Link>
                 <Link to="/orders" className={styles.dropdownItem} onClick={() => setIsMenuOpen(false)}>My orders</Link>
                 <button onClick={handleLogout} className={styles.dropdownItem}>Cerrar sesión</button>

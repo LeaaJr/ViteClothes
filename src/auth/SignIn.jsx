@@ -1,4 +1,3 @@
-// SignIn.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../style/SignIn.module.css';
@@ -26,16 +25,15 @@ export const SignIn = () => {
 
       if (res.ok) {
         alert(`✅ ${data.message}`);
-        login({ email: data.user });
-        // Guardar sesión en localStorage
-        localStorage.setItem('user', JSON.stringify({ email: data.user }));
-        // Redirigir al home
+        // Aquí usamos los datos completos del usuario que ahora viene del backend
+        login(data.user); // Pasamos el objeto user completo al contexto
         navigate('/');
       } else {
         alert(`❌ ${data.detail}`);
       }
     } catch (error) {
       console.error('Error logging in:', error);
+      alert('❌ Error al conectar con el servidor');
     }
   };
 
@@ -87,21 +85,5 @@ export const SignIn = () => {
         />
       </div>
     </div>
-  )
-}
-
-
-
-//Datos de prueba:
-
-/* {
-  "email": "test@example.com",
-  "password": "password123",
-  "confirm_password": "password123",
-  "day": 15,
-  "month": 5,
-  "year": 1990,
-  "acceptTerms": true
-}
-
- */
+  );
+};
