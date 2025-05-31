@@ -3,11 +3,13 @@ import { CheckCircleIcon } from 'lucide-react'
 import styles from '../style/SlidingParallax.module.css';
 
 
-export function ParallaxSection() {
+export function ParallaxSection({ id = "ParallaxSection" }) {
+
+
   return (
-    <div className={styles.container}>
+    <div  className={styles.container}>
       {/* First Section with Video */}
-      <section className={styles.section}>
+      <section id={id} className={styles.section}>
         <div className={styles.content}>
           <h2 className={styles.heading}>New Summer Trend: Work in Style</h2>
           <p className={styles.description}>

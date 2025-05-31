@@ -1,145 +1,175 @@
-.container {
-  display: flex;
-  width: 100%;
-  height: 100%; /* <- Esto ocupa el 100% de la altura de la ventana, ignorando el navbar y el footer */
-  background-color: white;
-}
-
-.formSection {
-  flex: 1;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 500px;
-}
-
-.logo {
-  font-size: 3.5rem;
-  font-weight: bold;
-  margin-bottom: 2.5rem;
-  font-family: 'Times New Roman', serif;
-  letter-spacing: -1px;
-}
-
-.title {
-  font-size: 0.9rem;
-  font-weight: 400;
-  margin-bottom: 2rem;
-  letter-spacing: 1px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.inputGroup {
-  margin-bottom: 1.5rem;
-  position: relative;
-}
-
-.label {
-  font-size: 0.7rem;
-  color: #999;
-  margin-bottom: 0.25rem;
-  display: block;
-}
-
-.input {
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 0.5rem 0;
-  font-size: 0.9rem;
-  outline: none;
-  background-color: transparent;
-}
-
-.input:focus {
-  border-bottom: 1px solid #000;
-}
-
-.error {
-  color: #ff3860;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-
-.summary {
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 18rem;
-}
-
-.submitButton {
-  background: #000;
-  color: white;
-  border: none;
-  padding: 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: opacity 0.3s;
-  width: 100%;
-  margin-top: 1rem;
-  border-radius: 7px;
-}
-
-.submitButton:hover {
-  opacity: 0.9;
-  background-color: #e74c3c;
-}
-
-.submitButton:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-}
-
-@media (min-width: 768px) {
-  .formSection {
-    padding: 4rem;
+  .container {
+    display: flex;
+    width: 100%;
+    height: 100%; /* <- Esto ocupa el 100% de la altura de la ventana, ignorando el navbar y el footer */
+    background-color: #f2f2f2;
   }
+
+  .formSection {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 500px;
+  }
+
+  .logo {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+    font-family: 'Times New Roman', serif;
+    letter-spacing: -1px;
+  }
+
+  .title {
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .inputGroup {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    color: #999;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  .input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    outline: none;
+    background-color: transparent;
+  }
+
+  .input:focus {
+    border-bottom: 1px solid #000;
+  }
+
+  .error {
+    color: #ff3860;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .summary {
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 18rem;
+  }
+
+  .submitButton {
+    background: #000;
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 7px;
+  }
+
+  .submitButton:hover {
+    opacity: 0.9;
+    background-color: #e74c3c;
+  }
+
+  .submitButton:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+
+  @media (min-width: 768px) {
+    .formSection {
+      padding: 4rem;
+    }
+  }
+
+  .cardElement {
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .successMessage {
+    text-align: center;
+    padding: 2rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .successMessage h2 {
+    color: #4BB543;
+    margin-bottom: 1rem;
+  }
+
+  .summaryItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .summaryTotal {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ddd;
+  }
+
+  .summaryList {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  .imageSection {
+    flex: 1;
+    overflow: hidden;
+    display: block; /* debe estar visible */
+    background-size: cover;
+    height: 100%;
+  }
+
+  .fashionImage {
+  object-fit: cover;  /* La imagen cubrirá el contenedor sin distorsión */
+  width: 100%;
+  height: 100%;
+  object-position: center; /* Asegura que la imagen esté centrada */
+  filter: brightness(70%);  /* Puedes ajustar la luminosidad de la imagen */
+  transition: filter 0.3s ease;  /* Para un efecto suave si la imagen cambia */
 }
 
-.cardElement {
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+.imageSection:hover .fashionImage {
+  filter: brightness(50%); /* Puedes ajustar el filtro al pasar el mouse */
 }
 
-.successMessage {
-  text-align: center;
-  padding: 2rem;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.successMessage h2 {
-  color: #4BB543;
-  margin-bottom: 1rem;
-}
-
-.summaryItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.summaryTotal {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-top: 1rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid #ddd;
-}
-
-.summaryList {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
+@media (max-width: 768px) {
+  .imageSection {
+    height: auto;  /* En pantallas pequeñas, ajustamos la altura */
+  }
+  .fashionImage {
+    object-position: top;  /* Puedes cambiar la posición de la imagen para que se enfoque en la parte superior */
+  }
 }

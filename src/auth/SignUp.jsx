@@ -115,7 +115,7 @@ export function SignUp() {
     <div className={styles.container}>
       <div className={styles.formSection}>
         <div className={styles.logo}>LOGO</div>
-        <h2 className={styles.title}>DATI PERSONALI</h2>
+        <h2 className={styles.title}>PERSONAL DATA</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>E-MAIL</label>
@@ -193,7 +193,7 @@ export function SignUp() {
               required
             />
             <label htmlFor="privacyPolicy" className={styles.checkboxLabel}>
-              Ho letto e compreso la <span className={styles.link}>Privacy and Cookie Policy</span>
+              I have read and understood the <span className={styles.link}>Privacy and Cookie Policy</span>
             </label>
           </div>
 

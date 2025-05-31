@@ -118,7 +118,7 @@ export const FilterBar = ({ onFilterChange, subcategorias = [] }) => {
           </div>
           <div className={styles.filterSection}>
             <button className={styles.clearButton} onClick={resetFilters}>
-              Limpiar Filtros
+              Clean filters
             </button>
           </div>
         </div>

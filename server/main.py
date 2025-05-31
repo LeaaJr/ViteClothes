@@ -106,7 +106,7 @@ def obtener_productos_destacados():
     return productos
 
 
-# Para hacer un put:
+# Para hacer un post:
 
 @app.post("/productos")
 def agregar_producto(producto: Producto):
@@ -114,8 +114,8 @@ def agregar_producto(producto: Producto):
     cur = conn.cursor()
     try:
         cur.execute("""
-            INSERT INTO productos (nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado, tendencia)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO productos (nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado, tendencia, talles)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             producto.nombre,
             producto.categoria,
@@ -127,7 +127,8 @@ def agregar_producto(producto: Producto):
             producto.img2,
             producto.img3,
             producto.destacado,
-            producto.tendencia
+            producto.tendencia,
+            Json(producto.talles)  # ✅ Esto es lo que faltaba
         ))
         conn.commit()
     except Exception as e:

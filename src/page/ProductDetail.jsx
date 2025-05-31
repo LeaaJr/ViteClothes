@@ -28,8 +28,8 @@ const ProductDetail = () => {
   const [isAdded, setIsAdded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const { img1, nombre, precio, descripcion } = producto || {};
-
-
+  const [zoom, setZoom] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   
 
@@ -162,6 +162,13 @@ const productToSave = {
     localStorage.setItem('savedProducts', JSON.stringify(updatedProducts));
   };
 
+   const handleMouseMove = (e) => {
+  const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+  const x = ((e.clientX - left) / width) * 100;
+  const y = ((e.clientY - top) / height) * 100;
+  setPosition({ x, y });
+};
+
   if (loading) return <div className={styles.loading}>Cargando producto...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!producto) return <div className={styles.error}>No se encontró el producto</div>;
@@ -190,14 +197,21 @@ const productToSave = {
           </div>
         )}
         
-        <div className={styles.mainImage}>
+        <div 
+          className={`${styles.mainImage} ${zoom ? styles.zoomed : ''}`}
+          onMouseEnter={() => setZoom(true)}
+          onMouseLeave={() => setZoom(false)}
+          onMouseMove={handleMouseMove}
+        >
           <img 
             src={imagenes[selectedImage]} 
             alt={producto.nombre}
             onError={(e) => {
               e.target.src = 'placeholder.jpg';
             }}
+            style={{ transformOrigin: `${position.x}% ${position.y}%` }}
           />
+          {zoom && <div className={styles.zoomLens} style={{ left: `${position.x}%`, top: `${position.y}%` }}></div>}
         </div>
       </div>
                          

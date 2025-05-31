@@ -10,6 +10,7 @@ import SavedProducts from './page/SavedProducts';
 import { Footer } from './components/Footer';
 import ShoppingCart from './components/ShoppingCart';
 import Checkout from './page/Checkout';
+/* import StripeProvider from '../components/StripeProvider'; */
 
 function App() {
 

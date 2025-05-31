@@ -37,12 +37,19 @@ const Navbar = () => {
       section.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
+  const scrollToSectionTwo = () => {
+  const section = document.getElementById("ParallaxSection");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
+
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.navLeft}>
         <Link to="/" className={`${styles.navLink} ${styles.active}`}>Home</Link>
-        <Link to="#" className={styles.navLink}>About</Link>
+        <a onClick={scrollToSectionTwo} className={styles.navLink} style={{ cursor: 'pointer' }}>Trend </a>
         <Link to="/productos" className={styles.navLink}>All Products</Link>
         <a onClick={scrollToSection} className={styles.navLink} style={{ cursor: 'pointer' }}>
           Contact
@@ -57,10 +64,10 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               style={{ cursor: 'pointer', userSelect: 'none' }}
             >
-              👤 {user.name} ▼
+              👤 {user.name}
             </span>
             {isMenuOpen && (
-              <div className={styles.dropdown}>
+            <div className={`${styles.dropdown} ${isMenuOpen ? styles.visible : ''}`}>
                 <Link to="/SavedProducts" className={styles.dropdownItem} onClick={() => setIsMenuOpen(false)}>Saved</Link>
                 <Link to="/orders" className={styles.dropdownItem} onClick={() => setIsMenuOpen(false)}>My orders</Link>
                 <button onClick={handleLogout} className={styles.dropdownItem}>Cerrar sesión</button>

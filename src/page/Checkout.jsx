@@ -143,8 +143,8 @@ const Checkout = () => {
   if (paymentSuccess) {
     return (
       <div className={styles.successMessage}>
-        <h2>¡Pago exitoso!</h2>
-        <p>Gracias por tu compra. Hemos enviado un recibo a {formData.email}.</p>
+        <h2>Payment successful!</h2>
+        <p>Thank you for your purchase. We have sent a receipt to {formData.email}.</p>
       </div>
     );
   }
@@ -283,6 +283,13 @@ const Checkout = () => {
           </button>
         </div>
       </form>
+      <div className={styles.imageSection}>
+              <img
+                src="https://static.zara.net/assets/public/0556/08f6/62cb48a19e46/ddf4a0cf3ef3/T0070628101-p/T0070628101-p.jpg?ts=1745585444830&w=628"
+                alt="ZARA fashion model"
+                className={styles.fashionImage}
+              />
+            </div>
     </section>
   );
 };
