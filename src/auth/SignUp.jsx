@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from '../style/SignUp.module.css';
 import { ChevronDownIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Alert, Snackbar } from '@mui/material';
 
 export function SignUp() {
   const navigate = useNavigate();
@@ -14,7 +15,11 @@ export function SignUp() {
     privacyPolicy: false,
   });
 
-  const [error, setError] = useState('');
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    severity: 'error', // 'error', 'warning', 'info', 'success'
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -25,28 +30,50 @@ export function SignUp() {
     });
   };
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlert({...alert, open: false});
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
+    
     // Validaciones
     if (formData.password !== formData.confirmPassword) {
-      setError("Las contraseñas no coinciden");
+      setAlert({
+        open: true,
+        message: "Las contraseñas no coinciden",
+        severity: 'error'
+      });
       return;
     }
 
     if (!formData.privacyPolicy) {
-      setError("Debes aceptar la política de privacidad");
+      setAlert({
+        open: true,
+        message: "Debes aceptar la política de privacidad",
+        severity: 'error'
+      });
       return;
     }
 
     if (!formData.name || !formData.surname || !formData.email || !formData.password) {
-      setError("Por favor, completa todos los campos obligatorios");
+      setAlert({
+        open: true,
+        message: "Por favor, completa todos los campos obligatorios",
+        severity: 'error'
+      });
       return;
     }
 
     if (formData.password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres");
+      setAlert({
+        open: true,
+        message: "La contraseña debe tener al menos 8 caracteres",
+        severity: 'error'
+      });
       return;
     }
 
@@ -74,11 +101,12 @@ export function SignUp() {
         throw new Error(data.detail || "Error en el registro");
       }
 
-      alert("Usuario creado exitosamente");
-      // Redirigir a Home después de 1 segundo (para que se vea el alert)
-      setTimeout(() => {
-        navigate('/'); // Asumiendo que '/' es la ruta de Home
-      }, 1000);
+      // Mostrar alerta de éxito
+      setAlert({
+        open: true,
+        message: "Usuario creado exitosamente",
+        severity: 'success'
+      });
 
       // Limpiar el formulario
       setFormData({
@@ -90,33 +118,48 @@ export function SignUp() {
         privacyPolicy: false,
       });
 
-      alert("Usuario creado exitosamente");
-      // Redirigir o limpiar el formulario
-      setFormData({
-        email: '',
-        password: '',
-        confirmPassword: '',
-        name: '',
-        surname: '',
-        privacyPolicy: false,
-      });
+      // Redirigir a Home después de 2 segundos
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
 
     } catch (error) {
       console.error("Error en el registro:", error);
-      setError(error.message || "Ocurrió un error durante el registro");
+      setAlert({
+        open: true,
+        message: error.message || "Ocurrió un error durante el registro",
+        severity: 'error'
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
-  
-
 
   return (
     <div className={styles.container}>
       <div className={styles.formSection}>
         <div className={styles.logo}>LOGO</div>
         <h2 className={styles.title}>PERSONAL DATA</h2>
+        
+        {/* Snackbar para mostrar alertas */}
+        <Snackbar
+          open={alert.open}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert 
+            onClose={handleCloseAlert} 
+            severity={alert.severity}
+            sx={{ width: '100%' }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
+        
         <form onSubmit={handleSubmit}>
+          {/* ... (tus inputs actuales se mantienen igual) ... */}
+          
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>E-MAIL</label>
             <input

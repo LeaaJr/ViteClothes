@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../style/SignIn.module.css';
 import { useAuth } from '../auth/AuthContext';
+import { Alert } from '@mui/material';
 
 export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [alert, setAlert] = useState({ show: false, message: '', severity: 'info' });
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -24,16 +26,19 @@ export const SignIn = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert(`✅ ${data.message}`);
-        // Aquí usamos los datos completos del usuario que ahora viene del backend
-        login(data.user); // Pasamos el objeto user completo al contexto
-        navigate('/');
+        setAlert({ show: true, message: `✅ ${data.message}`, severity: 'success' });
+        login(data.user); // Guardar usuario en contexto
+
+        // Opcional: Espera un segundo para mostrar la alerta antes de navegar
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
       } else {
-        alert(`❌ ${data.detail}`);
+        setAlert({ show: true, message: `❌ ${data.detail}`, severity: 'error' });
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      alert('❌ Error al conectar con el servidor');
+      setAlert({ show: true, message: '❌ Error al conectar con el servidor', severity: 'error' });
     }
   };
 
@@ -42,11 +47,21 @@ export const SignIn = () => {
       <div className={styles.formSection}>
         <div className={styles.logo}>(LOGO)</div>
         <h2 className={styles.title}>LOG IN</h2>
+
+        {/* Alerta condicional */}
+        {alert.show && (
+          <Alert
+            severity={alert.severity}
+            onClose={() => setAlert({ ...alert, show: false })}
+            sx={{ mb: 2 }}
+          >
+            {alert.message}
+          </Alert>
+        )}
+
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>
-              E-MAIL
-            </label>
+            <label htmlFor="email" className={styles.label}>E-MAIL</label>
             <input
               type="email"
               id="email"
@@ -57,9 +72,7 @@ export const SignIn = () => {
             />
           </div>
           <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>
-              PASSWORD
-            </label>
+            <label htmlFor="password" className={styles.label}>PASSWORD</label>
             <input
               type="password"
               id="password"
@@ -69,12 +82,8 @@ export const SignIn = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <a href="#" className={styles.forgotPassword}>
-            Forgot your password?
-          </a>
-          <button type="submit" className={styles.loginButton}>
-            LOG IN
-          </button>
+          <a href="#" className={styles.forgotPassword}>Forgot your password?</a>
+          <button type="submit" className={styles.loginButton}>LOG IN</button>
         </form>
       </div>
       <div className={styles.imageSection}>
