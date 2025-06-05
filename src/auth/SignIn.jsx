@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../style/SignIn.module.css';
+import logolm from '../style/logos/lmw.png'
 import { useAuth } from '../auth/AuthContext';
 import { Alert } from '@mui/material';
 
@@ -29,7 +30,7 @@ export const SignIn = () => {
         setAlert({ show: true, message: `✅ ${data.message}`, severity: 'success' });
         login(data.user); // Guardar usuario en contexto
 
-        // Opcional: Espera un segundo para mostrar la alerta antes de navegar
+        // Opcional: esto hace esperar un segundo msa para mostrar la alerta antes de navegar
         setTimeout(() => {
           navigate('/');
         }, 1000);
@@ -45,7 +46,9 @@ export const SignIn = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formSection}>
-        <div className={styles.logo}>(LOGO)</div>
+        <div className={styles.logo}>
+           <img src={logolm} alt="Logo" />
+        </div>
         <h2 className={styles.title}>LOG IN</h2>
 
         {/* Alerta condicional */}

@@ -56,10 +56,20 @@
     padding-top: 2rem;
     border-top: 1px solid #e5e7eb;
   }
-  .logo {
-    font-weight: 600;
-    font-size: 1.25rem;
-  }
+.logo {
+  font-weight: 600;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 50px; /* Ajusta según el tamaño deseado */
+}
+
   .copyright {
     color: #4b5563;
   }

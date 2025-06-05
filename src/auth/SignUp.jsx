@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../style/SignUp.module.css';
+import logolm from '../style/logos/lmw.png'
 import { ChevronDownIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Snackbar } from '@mui/material';
@@ -138,7 +139,9 @@ export function SignUp() {
   return (
     <div className={styles.container}>
       <div className={styles.formSection}>
-        <div className={styles.logo}>LOGO</div>
+        <div className={styles.logo}>
+          <img src={logolm} alt="Logo" />
+        </div>
         <h2 className={styles.title}>PERSONAL DATA</h2>
         
         {/* Snackbar para mostrar alertas */}

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import styles from '../style/Checkout.module.css';
+import logolm from '../style/logos/lm.png'
 import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
@@ -152,7 +153,9 @@ const Checkout = () => {
   return (
     <section className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.formSection}>
-        <div className={styles.logo}>Logo</div>
+        <div className={styles.logo}>
+          <img src={logolm} alt="Logo" />
+        </div>
         <h1 className={styles.title}>Shipping and payment details</h1>
         
         <div className={styles.form}>

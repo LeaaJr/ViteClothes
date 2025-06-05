@@ -3,13 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getProductoById } from '../api/Productos';
 import styles from '../style/ProductDetail.module.css';
 import { useCart } from '../context/CartContext';
-import { 
-  HeartIcon, 
-  ShoppingCartIcon, 
-  ChevronUpIcon, 
-  ChevronDownIcon 
-} from 'lucide-react';
+import { HeartIcon, ShoppingCartIcon, ChevronUpIcon, ChevronDownIcon } from 'lucide-react';
 import axios from 'axios';
+import { Snackbar, Alert } from '@mui/material';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -24,25 +20,24 @@ const ProductDetail = () => {
   const [productosRelacionados, setProductosRelacionados] = useState([]);
   const [isSizesOpen, setIsSizesOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
-  const {addToCart} = useCart();
+  const { addToCart } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const { img1, nombre, precio, descripcion } = producto || {};
   const [zoom, setZoom] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  
+  // Estado para el alert
+  const [openAlert, setOpenAlert] = useState(false);
 
   useEffect(() => {
     const loadProduct = async () => {
       try {
         const data = await getProductoById(id);
-        
         if (!data) {
           throw new Error('No se recibieron datos del producto');
         }
 
-        // Procesar imágenes
         const imagenesFiltradas = [
           data.img1,
           data.img2,
@@ -52,7 +47,6 @@ const ProductDetail = () => {
         setImagenes(imagenesFiltradas.length > 0 ? imagenesFiltradas : ['placeholder.jpg']);
         setProducto(data);
         setError('');
-        
       } catch (err) {
         console.error('Error al cargar producto:', err);
         setError(err.message || 'Error al cargar el producto');
@@ -65,53 +59,47 @@ const ProductDetail = () => {
     loadProduct();
   }, [id, navigate]);
 
-useEffect(() => {
-  const fetchRelacionados = async () => {
-    if (!producto?.subcategoria) return;
-    
-    try {
-      const response = await axios.get(`http://localhost:8000/productos`, {
-        params: {
-          subcategoria: producto.subcategoria
-        }
-      });
+  useEffect(() => {
+    const fetchRelacionados = async () => {
+      if (!producto?.subcategoria) return;
 
-      console.log("Respuesta de productos relacionados:", response.data);
+      try {
+        const response = await axios.get(`http://localhost:8000/productos`, {
+          params: {
+            subcategoria: producto.subcategoria
+          }
+        });
 
-      // Asegúrate de que la respuesta sea un array
-      const productosData = Array.isArray(response.data) ? response.data : 
-                          response.data.productos || [];
-      
-      const relacionados = productosData
-        .filter(p => p.id !== producto.id)
-        .slice(0, 4);
-      
-      setProductosRelacionados(relacionados);
-      
-    } catch (error) {
-      console.error("Error al cargar productos relacionados:", {
-        message: error.message,
-        response: error.response?.data,
-        config: error.config
-      });
-      setProductosRelacionados([]);
-    }
-  };
+        console.log("Respuesta de productos relacionados:", response.data);
 
-  fetchRelacionados();
-}, [producto]);
+        const productosData = Array.isArray(response.data) ? response.data : response.data.productos || [];
+        const relacionados = productosData.filter(p => p.id !== producto.id).slice(0, 4);
 
-useEffect(() => {
-  const saved = localStorage.getItem('savedProducts');
-  const savedProducts = saved ? JSON.parse(saved) : [];
-  const isProductSaved = savedProducts.some(p => p.id === id);
-  setIsSaved(isProductSaved);
-}, [id]);
+        setProductosRelacionados(relacionados);
 
+      } catch (error) {
+        console.error("Error al cargar productos relacionados:", {
+          message: error.message,
+          response: error.response?.data,
+          config: error.config
+        });
+        setProductosRelacionados([]);
+      }
+    };
 
-const handleAddToCart = () => {
+    fetchRelacionados();
+  }, [producto]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('savedProducts');
+    const savedProducts = saved ? JSON.parse(saved) : [];
+    const isProductSaved = savedProducts.some(p => p.id === id);
+    setIsSaved(isProductSaved);
+  }, [id]);
+
+  const handleAddToCart = () => {
     if (!selectedSize && producto.talles && Object.keys(producto.talles).length > 0) {
-      alert('Please select a size before adding to cart');
+      setOpenAlert(true); // Mostrar el alert
       return;
     }
 
@@ -119,42 +107,40 @@ const handleAddToCart = () => {
     const cleanPrice = rawPrice.toString().replace('$', '').trim();
 
     addToCart({
-    id: producto.id,
-    name: producto.nombre,
-    price: `€${cleanPrice}`,
-    imageSrc: imagenes[0],
-    imageAlt: producto.nombre,
-    size: selectedSize,
-    quantity: quantity
-  });
-  
-  setIsAdded(true);
-  setTimeout(() => setIsAdded(false), 2000);
-};
+      id: producto.id,
+      name: producto.nombre,
+      price: `€${cleanPrice}`,
+      imageSrc: imagenes[0],
+      imageAlt: producto.nombre,
+      size: selectedSize,
+      quantity: quantity
+    });
 
- const handleSaveClick = (e) => {
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
+  };
+
+  const handleSaveClick = (e) => {
     e.stopPropagation();
-    
-const saved = localStorage.getItem('savedProducts');
-const savedProducts = saved ? JSON.parse(saved) : [];
 
-const productToSave = {
-  id,
-  img1: producto.img1,
-  nombre: producto.nombre,
-  precio: producto.precio,
-  descripcion: producto.descripcion,
-  savedAt: new Date().toISOString()
-};
+    const saved = localStorage.getItem('savedProducts');
+    const savedProducts = saved ? JSON.parse(saved) : [];
+
+    const productToSave = {
+      id,
+      img1: producto.img1,
+      nombre: producto.nombre,
+      precio: producto.precio,
+      descripcion: producto.descripcion,
+      savedAt: new Date().toISOString()
+    };
 
     let updatedProducts;
-    
+
     if (isSaved) {
-      // Remover producto
       updatedProducts = savedProducts.filter(p => p.id !== id);
       setIsSaved(false);
     } else {
-      // Agregar producto
       updatedProducts = [...savedProducts, productToSave];
       setIsSaved(true);
     }
@@ -162,12 +148,12 @@ const productToSave = {
     localStorage.setItem('savedProducts', JSON.stringify(updatedProducts));
   };
 
-   const handleMouseMove = (e) => {
-  const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
-  const x = ((e.clientX - left) / width) * 100;
-  const y = ((e.clientY - top) / height) * 100;
-  setPosition({ x, y });
-};
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setPosition({ x, y });
+  };
 
   if (loading) return <div className={styles.loading}>Cargando producto...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
@@ -308,6 +294,13 @@ const productToSave = {
         {isAdded ? 'Added to Cart!' : 'Add to Cart'}
       </button>
 
+            <Snackbar open={openAlert} autoHideDuration={3000} onClose={() => setOpenAlert(false)}>
+            <Alert onClose={() => setOpenAlert(false)} severity="error">
+              Please select a size before adding to cart
+            </Alert>
+          </Snackbar>
+      
+
         <div className={styles.paymentMethods}>
         <p className={styles.paymentTitle}>These are the currently accepted payment methods:</p>
         <div className={styles.paymentIcons}>
@@ -315,6 +308,10 @@ const productToSave = {
           <img src="https://salex.it/wp-content/uploads/MasterCard_Logo.svg_.png.webp" alt="MasterCard" />
           <img src="https://www.citypng.com/public/uploads/preview/hd-amex-american-express-logo-png-701751694708970jttzjjyo6e.png" alt="American Express" />
           <img src="https://static.vecteezy.com/system/resources/previews/019/909/676/large_2x/paypal-transparent-paypal-free-free-png.png" alt="PayPal" />
+          <img src="https://js.stripe.com/v3/fingerprinted/img/unionpay-8a10aefc7295216c338ba4e1224627a1.svg" alt="UniinPay" />
+          <img src="https://js.stripe.com/v3/fingerprinted/img/jcb-271fd06e6e7a2c52692ffa91a95fb64f.svg" alt="JCB" />
+          <img src="https://js.stripe.com/v3/fingerprinted/img/diners-fbcbd3360f8e3f629cdaa80e93abdb8b.svg" alt="Dinners" />
+          <img src="https://js.stripe.com/v3/fingerprinted/img/discover-ac52cd46f89fa40a29a0bfb954e33173.svg" alt="Discover" />
         </div>
       </div>
 
