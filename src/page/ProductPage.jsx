@@ -79,7 +79,7 @@ const ProductPage = () => {
     fetchProductos();
   }, [category]);
 
-  if (loading) return <div className={styles.loading}>Cargando productos...</div>;
+  if (loading) return <div className={styles.loading}>Loading products...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
 
   return (
@@ -94,7 +94,7 @@ const ProductPage = () => {
         <h1 className={styles.title}>
           {category 
             ? `${category.charAt(0).toUpperCase() + category.slice(1)}`
-            : 'Todos los productos'}
+            : 'All products'}
         </h1>
 
         <div className={styles.productosGrid}>

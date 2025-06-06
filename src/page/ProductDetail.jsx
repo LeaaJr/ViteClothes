@@ -155,9 +155,9 @@ const ProductDetail = () => {
     setPosition({ x, y });
   };
 
-  if (loading) return <div className={styles.loading}>Cargando producto...</div>;
+  if (loading) return <div className={styles.loading}>Loading products...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
-  if (!producto) return <div className={styles.error}>No se encontró el producto</div>;
+  if (!producto) return <div className={styles.error}>The product was not found</div>;
 
   return (
     <>
@@ -319,7 +319,7 @@ const ProductDetail = () => {
     </div>
     {productosRelacionados.length > 0 && (
         <div className={styles.relacionadosSection}>
-          <h2 className={styles.relacionadosTitle}>Productos Relacionados</h2>
+          <h2 className={styles.relacionadosTitle}>Related Products</h2>
           <div className={styles.relacionadosDivider}></div>
           <div className={styles.relacionadosGrid}>
             {productosRelacionados.slice(0, 4).map((p) => {

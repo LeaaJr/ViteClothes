@@ -123,8 +123,8 @@ const FeaturedProducts = ({ productos: productosExternos }) => {
     }
   }, [productosExternos]);
 
-  if (loading) return <div className={styles.loading}>Cargando productos...</div>;
-  if (productos.length === 0) return <div className={styles.empty}>No hay productos para mostrar</div>;
+  if (loading) return <div className={styles.loading}>Loading products...</div>;
+  if (productos.length === 0) return <div className={styles.empty}>There are no products to show</div>;
 
   const visibleProductos = productos.slice(currentIndex * 4, (currentIndex + 1) * 4);
 
