@@ -94,7 +94,6 @@
   font-size: 0.9rem; /* Ajuste en tamaño para que sea un poco más grande */
 }
 
-/* Nueva clase para un logo opcional si lo necesitas */
 .logo {
   font-size: 3.5rem;
   font-weight: bold;
@@ -103,7 +102,12 @@
   letter-spacing: -1px;
 }
 
-/* Responsividad para pantallas pequeñas */
+.logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 120px;
+}
+
 @media (max-width: 768px) {
   .formSection {
     width: 100%;

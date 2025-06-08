@@ -79,7 +79,7 @@
   position: absolute;
   top: calc(100% + 8px); /* Pequeño espacio del elemento padre */
   right: 0;
-  background: white;
+  background: #f2f2f2;
   border-radius: 8px;
   z-index: 1000;
   min-width: 130px;

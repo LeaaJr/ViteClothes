@@ -22,6 +22,12 @@
     letter-spacing: -1px;
   }
 
+  .logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 120px;
+}
+
   .title {
     font-size: 0.9rem;
     font-weight: 400;
