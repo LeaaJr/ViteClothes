@@ -1,7 +1,15 @@
 // Productos.jsx
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/productos';
+// Esto Define la base URL de la API.
+// En producción (Vercel), VITE_API_BASE es la URL de Render.
+// En desarrollo (localhost), VITE_API_BASE será undefined o se puede configurar en .env.development.
+// Por eso, uso un fallback a localhost para el desarrollo.
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+// A partir de ahora, construye tus URLs usando API_BASE_URL.
+// Por ejemplo, para /productos
+const PRODUCTOS_API_URL = `${API_BASE_URL}/productos`;
 
 
 //esperando a que funcione en postman supuestamente
@@ -9,11 +17,11 @@ const API_URL = 'http://localhost:8000/productos';
 
 export const getProductos = async () => {
   try {
-    console.log('Intentando conectar a:', API_URL); // Debug
-    const response = await axios.get(API_URL);
-    console.log('Respuesta recibida:', response); // Debug
-    return response.data;
-  } catch (error) {
+        console.log('Intentando conectar a:', PRODUCTOS_API_URL); // Debug
+        const response = await axios.get(PRODUCTOS_API_URL);
+        console.log('Respuesta recibida:', response); // Debug
+        return response.data;
+    } catch (error) {
     console.error('Error detallado:', {
       message: error.message,
       response: error.response?.data,
@@ -28,16 +36,18 @@ export const getProductos = async () => {
 //Entendiendo que deberia de funcionar
 
 export const getProductosByCategoryAndSubcategory = async (categoria, subcategoria = null) => {
-  try {
-    const params = new URLSearchParams();
-    if (categoria) params.append('categoria', categoria);
-    if (subcategoria) params.append('subcategoria', subcategoria);
+    try {
+        const params = new URLSearchParams();
+        if (categoria) params.append('categoria', categoria);
+        if (subcategoria) params.append('subcategoria', subcategoria);
 
-    const response = await axios.get(`${API_URL}?${params.toString()}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+        // Asegúrar de usar API_BASE_URL aquí, no PRODUCTOS_API_URL si estás construyendo el path con parámetros
+        const url = `<span class="math-inline">\{API\_BASE\_URL\}/productos?</span>{params.toString()}`;
+        const response = await axios.get(url, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
     // Asegúrate que la respuesta sea un array
     if (!Array.isArray(response.data)) {
@@ -60,7 +70,7 @@ export const getProductosByCategoryAndSubcategory = async (categoria, subcategor
 
 export const updateProducto = async (id, updatedData) => {
     try {
-        const response = await axios.put(`${API_URL}/${id}`, updatedData);
+        const response = await axios.put(`<span class="math-inline">\{PRODUCTOS\_API\_URL\}/</span>{id}`, updatedData);
         return response.data;
     } catch (error) {
         console.error('Error al actualizar los productos:', error);
@@ -70,7 +80,7 @@ export const updateProducto = async (id, updatedData) => {
 
 export const addProducto = async (producto) => {
     try {
-        const response = await axios.post(API_URL, producto);
+        const response = await axios.post(PRODUCTOS_API_URL, producto);
         return response.data;
     } catch (error) {
         console.error('Error al agregar los productos:', error);
@@ -80,8 +90,9 @@ export const addProducto = async (producto) => {
 
 export const getProductosDestacados = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/productos/destacados`);
-      return response.data;
+  
+        const response = await axios.get(`${API_BASE_URL}/productos/destacados`);
+        return response.data;
     } catch (error) {
       console.error('Error en getProductosDestacados:', {
         error: error.response?.data || error.message
@@ -99,13 +110,14 @@ export const getProductoById = async (id) => {
   }
 
   try {
-    const response = await axios.get(`${API_URL}/${id}`, {
-      timeout: 5000,
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Content-Type': 'application/json'
-      }
-    });
+        // Cambia API_URL por PRODUCTOS_API_URL
+        const response = await axios.get(`<span class="math-inline">\{PRODUCTOS\_API\_URL\}/</span>{id}`, {
+            timeout: 5000,
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Content-Type': 'application/json'
+            }
+        });
 
     if (!response.data || !response.data.id) {
       throw new Error('Producto no encontrado');
