@@ -13,101 +13,142 @@ from psycopg2.extras import Json
 app = FastAPI()
 
 
-# Configurar CORS para permitir conexión con tu frontend
-origins = [
-    "http://localhost:3000",  # React en Vite suele correr en este puerto
-]
-
-# Habilitar CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # o ["*"] para permitir todo (no recomendado en producción)
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Modelo para los talles (agrégalo al principio)
+# Modelo para los talles (colócalo aquí, cerca de tus otros modelos o en models.py)
 class Talle(BaseModel):
     talle: str
     stock: int
 
-# ruta de registro(signUp):
-app.include_router(register_router, prefix="/api/auth")
-app.include_router(login_router)
+# =========================================================================
+# CONFIGURACIÓN CRÍTICA DE CORS (AQUÍ ES DONDE DEBE ESTAR)
+# =========================================================================
+origins = [
+    "http://localhost:5173",          # Tu frontend Vite en desarrollo
+    "https://tu-frontend-real.vercel.app", # ¡NO OLVIDES CAMBIAR ESTO POR LA URL REAL DE TU VERCEL CUANDO DESPLIEGUES!
+    "http://localhost:8000"           # Si tu backend también se sirve desde 8000
+]
 
-# Endpoint real para obtener productos
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# =========================================================================
+# FIN DE LA CONFIGURACIÓN CRÍTICA DE CORS
+# =========================================================================
+
+
+# =========================================================================
+# INCLUSIÓN DE ROUTERS (UNA SOLA VEZ Y CON PREFIJOS CLAROS)
+# =========================================================================
+app.include_router(register_router, prefix="/api/auth") # Asegúrate que este sea el prefijo correcto
+app.include_router(login_router) # Si login no tiene prefijo o lo tiene definido internamente
+# =========================================================================
+# FIN DE INCLUSIÓN DE ROUTERS
+# =========================================================================
+
+
+# =========================================================================
+# RUTAS DE PRODUCTOS (Asegúrate de que no haya duplicados)
+# =========================================================================
+
+# Endpoint real para obtener productos (filtrado por categoría/subcategoría)
 @app.get("/productos")
 def obtener_productos(categoria: str = None, subcategoria: str = None):
     conn = get_connection()
     cursor = conn.cursor()
+    try:
+        query = "SELECT id, nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado, tendencia, talles FROM productos"
+        params = []
+        
+        if categoria and subcategoria:
+            query += " WHERE categoria = %s AND subcategoria = %s"
+            params = [categoria, subcategoria]
+        elif categoria:
+            query += " WHERE categoria = %s"
+            params = [categoria]
+        elif subcategoria:
+            query += " WHERE subcategoria = %s"
+            params = [subcategoria]
 
-    query = "SELECT * FROM productos"
-    params = []
-
-    if categoria and subcategoria:
-        query += " WHERE categoria = %s AND subcategoria = %s"
-        params = [categoria, subcategoria]
-    elif categoria:
-        query += " WHERE categoria = %s"
-        params = [categoria]
-    elif subcategoria:
-        query += " WHERE subcategoria = %s"
-        params = [subcategoria]
-
-    cursor.execute(query, params)
-    rows = cursor.fetchall()
-    productos = []
-    for row in rows:
-        productos.append({
-            "id": row[0],
-            "nombre": row[1],
-            "categoria": row[2],
-            "subcategoria": row[3],
-            "precio": row[4],
-            "stock": row[5],
-            "descripcion": row[6],
-            "img1": row[7],
-            "img2": row[8],
-            "img3": row[9],
-            "destacado": row[10],
-            "tendencia": row[11],
-            "talles": row[12] if row[12] is not None else {}  # Agrega esta línea
-        })
-    conn.close()
-    return productos
-
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+        productos = []
+        for row in rows:
+            productos.append({
+                "id": row[0],
+                "nombre": row[1],
+                "categoria": row[2],
+                "subcategoria": row[3],
+                "precio": float(row[4]), # Asegúrate de que el tipo de precio sea compatible en tu frontend (float)
+                "stock": row[5],
+                "descripcion": row[6],
+                "img1": row[7],
+                "img2": row[8],
+                "img3": row[9],
+                "destacado": row[10],
+                "tendencia": row[11],
+                "talles": row[12] if row[12] is not None else {}
+            })
+        return productos
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener productos: {str(e)}")
+    finally:
+        cursor.close()
+        conn.close()
 
 # Endpoint de productos destacados
 @app.get("/productos/destacados")
 def obtener_productos_destacados():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM productos WHERE destacado = TRUE;")
-    rows = cursor.fetchall()
-    productos = []
-    for row in rows:
-        productos.append({
-            "id": row[0],
-            "nombre": row[1],
-            "categoria": row[2],
-            "subcategoria": row[3],
-            "precio": row[4],
-            "stock": row[5],
-            "descripcion": row[6],
-            "img1": row[7],
-            "img2": row[8],
-            "img3": row[9],
-            "destacado": row[10],
-            "tendencia": row[11],
-            "talles": row[12] if row[12] is not None else {}  # Agrega esta línea
-        })
-    conn.close()
-    return productos
+    try:
+        cursor.execute("SELECT id, nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado, tendencia, talles FROM productos WHERE destacado = TRUE;")
+        rows = cursor.fetchall()
+        productos = []
+        for row in rows:
+            productos.append({
+                "id": row[0],
+                "nombre": row[1],
+                "categoria": row[2],
+                "subcategoria": row[3],
+                "precio": float(row[4]),
+                "stock": row[5],
+                "descripcion": row[6],
+                "img1": row[7],
+                "img2": row[8],
+                "img3": row[9],
+                "destacado": row[10],
+                "tendencia": row[11],
+                "talles": row[12] if row[12] is not None else {}
+            })
+        return productos
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener productos destacados: {str(e)}")
+    finally:
+        cursor.close()
+        conn.close()
 
+# Endpoint DELETE:
+@app.delete("/productos/{id}")
+def eliminar_producto(id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("DELETE FROM productos WHERE id = %s", (id,))
+        if cur.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al eliminar producto: {e}")
+    finally:
+        cur.close()
+        conn.close()
+    return {"message": "Producto eliminado correctamente"}
 
-# Para hacer un post:
-
+# Endpoint para agregar un producto
 @app.post("/productos")
 def agregar_producto(producto: Producto):
     conn = get_connection()
@@ -128,7 +169,7 @@ def agregar_producto(producto: Producto):
             producto.img3,
             producto.destacado,
             producto.tendencia,
-            Json(producto.talles)  # ✅ Esto es lo que faltaba
+            Json(producto.talles)
         ))
         conn.commit()
     except Exception as e:
@@ -137,29 +178,27 @@ def agregar_producto(producto: Producto):
     finally:
         cur.close()
         conn.close()
-
     return {"message": "Producto agregado correctamente"}
 
-# Endopint para hacer el put (edit):
 
+# Endopint para hacer el put (edit):
 @app.put("/productos/{id}")
 def actualizar_producto(id: int, producto: Producto):
     conn = get_connection()
     cur = conn.cursor()
     try:
-        # Versión limpia sin comentarios en la consulta SQL
         cur.execute("""
             UPDATE productos
-            SET nombre = %s, 
-                categoria = %s, 
-                subcategoria = %s, 
+            SET nombre = %s,
+                categoria = %s,
+                subcategoria = %s,
                 precio = %s,
-                stock = %s, 
-                descripcion = %s, 
-                img1 = %s, 
-                img2 = %s, 
+                stock = %s,
+                descripcion = %s,
+                img1 = %s,
+                img2 = %s,
                 img3 = %s,
-                destacado = %s, 
+                destacado = %s,
                 tendencia = %s,
                 talles = %s
             WHERE id = %s
@@ -175,7 +214,7 @@ def actualizar_producto(id: int, producto: Producto):
             producto.img3,
             producto.destacado,
             producto.tendencia,
-            Json(producto.talles),  # Usamos Json() de psycopg2
+            Json(producto.talles),
             id
         ))
         if cur.rowcount == 0:
@@ -187,79 +226,29 @@ def actualizar_producto(id: int, producto: Producto):
     finally:
         cur.close()
         conn.close()
-
     return {"message": "Producto actualizado correctamente"}
 
-# Endpoint DELETE:
-
-@app.delete("/productos/{id}")
-def eliminar_producto(id: int):
-    conn = get_connection()
-    cur = conn.cursor()
-    try:
-        cur.execute("DELETE FROM productos WHERE id = %s", (id,))
-        if cur.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Producto no encontrado")
-        conn.commit()
-    except Exception as e:
-        conn.rollback()
-        raise HTTPException(status_code=500, detail=f"Error al eliminar producto: {e}")
-    finally:
-        cur.close()
-        conn.close()
-
-    return {"message": "Producto eliminado correctamente"}
-
-#Endpoint de tendencia
-
-@app.get("/productos/tendencia")
-def obtener_productos_tendencia():
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM productos WHERE tendencia = TRUE;")
-    rows = cursor.fetchall()
-    productos = []
-    for row in rows:
-        productos.append({
-            "id": row[0],
-            "nombre": row[1],
-            "categoria": row[2],
-            "subcategoria": row[3],
-            "precio": row[4],
-            "stock": row[5],
-            "descripcion": row[6],
-            "img1": row[7],
-            "img2": row[8],
-            "img3": row[9],
-            "destacado": row[10],
-            "tendencia": row[11],
-            "talles": row[12] if row[12] is not None else {}  # Agrega esta línea
-        })
-    conn.close()
-    return productos
 
 # Endpoint para obtener un producto específico por ID (GET /productos/{id})
-@app.get("/productos/{id}")
+@app.get("/productos/{id}") # ¡Esta es la que debes mantener y es la REAL!
 def obtener_producto_por_id(id: int):
     conn = get_connection()
     cursor = conn.cursor()
-    
     try:
-        # Consulta modificada para seleccionar explícitamente talles
         cursor.execute("""
-            SELECT 
+            SELECT
                 id, nombre, categoria, subcategoria, precio, stock,
                 descripcion, img1, img2, img3, destacado, tendencia,
                 talles
-            FROM productos 
+            FROM productos
             WHERE id = %s
         """, (id,))
-        
+
         row = cursor.fetchone()
-        
+
         if not row:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
-            
+
         producto = {
             "id": row[0],
             "nombre": row[1],
@@ -275,35 +264,66 @@ def obtener_producto_por_id(id: int):
             "tendencia": row[11],
             "talles": row[12] if row[12] is not None else {}
         }
-        
         return producto
-        
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener producto: {str(e)}")
     finally:
         cursor.close()
         conn.close()
 
-# Nuevos endpoints para talles
+# Endpoint de tendencia (estaba duplicado, lo mantengo una vez)
+@app.get("/productos/tendencia")
+def obtener_productos_tendencia():
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT id, nombre, categoria, subcategoria, precio, stock, descripcion, img1, img2, img3, destacado, tendencia, talles FROM productos WHERE tendencia = TRUE;")
+        rows = cursor.fetchall()
+        productos = []
+        for row in rows:
+            productos.append({
+                "id": row[0],
+                "nombre": row[1],
+                "categoria": row[2],
+                "subcategoria": row[3],
+                "precio": float(row[4]),
+                "stock": row[5],
+                "descripcion": row[6],
+                "img1": row[7],
+                "img2": row[8],
+                "img3": row[9],
+                "destacado": row[10],
+                "tendencia": row[11],
+                "talles": row[12] if row[12] is not None else {}
+            })
+        return productos
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener productos en tendencia: {str(e)}")
+    finally:
+        cursor.close()
+        conn.close()
+
+
+# =========================================================================
+# NUEVOS ENDPOINTS PARA TALLES
+# =========================================================================
 
 @app.post("/productos/{producto_id}/talles")
 def agregar_talle(producto_id: int, talle: Talle):
     conn = get_connection()
     cur = conn.cursor()
     try:
-        # Verificacion si el producto existe
         cur.execute("SELECT id FROM productos WHERE id = %s", (producto_id,))
         if not cur.fetchone():
             raise HTTPException(status_code=404, detail="Producto no encontrado")
-        
-        # Agrega el talle (usando JSON en PostgreSQL)
+
         cur.execute("""
-            UPDATE productos 
+            UPDATE productos
             SET talles = COALESCE(talles, '{}'::jsonb) || jsonb_build_object(%s, %s)
             WHERE id = %s
             RETURNING talles
         """, (talle.talle, talle.stock, producto_id))
-        
+
         updated_talles = cur.fetchone()[0]
         conn.commit()
         return {"talles": updated_talles}
@@ -323,7 +343,7 @@ def obtener_talles(producto_id: int):
         result = cur.fetchone()
         if not result:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
-        
+
         talles = result[0] if result[0] is not None else {}
         return {"talles": talles}
     except Exception as e:
@@ -338,16 +358,16 @@ def eliminar_talle(producto_id: int, talle: str):
     cur = conn.cursor()
     try:
         cur.execute("""
-            UPDATE productos 
+            UPDATE productos
             SET talles = talles - %s
             WHERE id = %s
             RETURNING talles
         """, (talle, producto_id))
-        
+
         result = cur.fetchone()
         if not result:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
-        
+
         conn.commit()
         return {"talles": result[0]}
     except Exception as e:

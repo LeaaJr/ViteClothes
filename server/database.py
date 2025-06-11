@@ -1,20 +1,16 @@
+# database.py
 import psycopg2
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_NAME = os.getenv("DB_NAME")
+DATABASE_URL = os.getenv("DATABASE_URL") # Esta sería la variable de entorno principal
+
+print(f"DEBUG: DATABASE_URL cargada: {DATABASE_URL}") # ¡¡¡Añade esta línea!!!
 
 def get_connection():
-    return psycopg2.connect(
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT
-    )
+    # psycopg2.connect puede tomar una URL completa
+    if DATABASE_URL is None:
+        raise ValueError("DATABASE_URL no está configurada. Por favor, verifica tu archivo .env o variables de entorno.")
+    return psycopg2.connect(DATABASE_URL)
