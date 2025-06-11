@@ -7,6 +7,8 @@ import { HeartIcon, ShoppingCartIcon, ChevronUpIcon, ChevronDownIcon } from 'luc
 import axios from 'axios';
 import { Snackbar, Alert } from '@mui/material';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -64,11 +66,11 @@ const ProductDetail = () => {
       if (!producto?.subcategoria) return;
 
       try {
-        const response = await axios.get(`http://localhost:8000/productos`, {
-          params: {
-            subcategoria: producto.subcategoria
-          }
-        });
+        const response = await axios.get(`${API_BASE_URL}/productos`, {
+                    params: {
+                        subcategoria: producto.subcategoria
+                    }
+                });
 
         console.log("Respuesta de productos relacionados:", response.data);
 
