@@ -5,6 +5,8 @@ import { ChevronDownIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Snackbar } from '@mui/material';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export function SignUp() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -81,20 +83,21 @@ export function SignUp() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/signup', {
+    // CAMBIO AQUÍ: Usa API_BASE_URL. Cuidado con el '/api/auth/signup' si tu backend lo usa.
+    const response = await fetch(`${API_BASE_URL}/api/auth/signup`, { // Asegúrate que el endpoint es /api/auth/signup
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          confirm_password: formData.confirmPassword,
-          name: formData.name,
-          surname: formData.surname,
-          acceptTerms: formData.privacyPolicy
+            email: formData.email,
+            password: formData.password,
+            confirm_password: formData.confirmPassword,
+            name: formData.name,
+            surname: formData.surname,
+            acceptTerms: formData.privacyPolicy
         }),
-      });
+    });
 
       const data = await response.json();
 
