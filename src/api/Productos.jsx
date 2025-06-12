@@ -42,7 +42,7 @@ export const getProductosByCategoryAndSubcategory = async (categoria, subcategor
         if (subcategoria) params.append('subcategoria', subcategoria);
 
         // Asegúrar de usar API_BASE_URL aquí, no PRODUCTOS_API_URL si estás construyendo el path con parámetros
-        const url = `<span class="math-inline">\{API\_BASE\_URL\}/productos?</span>{params.toString()}`;
+        const url = `${API_BASE_URL}/productos?${params.toString()}`;
         const response = await axios.get(url, {
             headers: {
                 'Content-Type': 'application/json'
@@ -106,12 +106,12 @@ export const getProductosDestacados = async () => {
 export const getProductoById = async (id) => {
   // Verifica si el id es numérico
   if (isNaN(id)) {
-    throw new Error('ID de producto inválido');
-  }
+        throw new Error('ID de producto inválido');
+    }
 
-  try {
-        // Cambia API_URL por PRODUCTOS_API_URL
-        const response = await axios.get(`<span class="math-inline">\{PRODUCTOS\_API\_URL\}/</span>{id}`, {
+    try {
+        // <<<<<<<<<<<< ESTA ES LA LÍNEA ES LA QUE ME DA PROBLEMAAAAS >>>>>>>>>>>>>
+        const response = await axios.get(`${API_BASE_URL}/productos/${id}`, { // Usa API_BASE_URL
             timeout: 5000,
             headers: {
                 'Cache-Control': 'no-cache',
@@ -119,22 +119,24 @@ export const getProductoById = async (id) => {
             }
         });
 
-    if (!response.data || !response.data.id) {
-      throw new Error('Producto no encontrado');
-    }
+        if (!response.data || !response.data.id) {
+            throw new Error('Producto no encontrado');
+        }
 
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener producto:', {
-      status: error.response?.status,
-      data: error.response?.data,
-      url: error.config?.url
-    });
-    
-    if (error.response?.status === 404) {
-      throw new Error('Producto no encontrado');
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener producto:', {
+            status: error.response?.status,
+            data: error.response?.data,
+            url: error.config?.url // Esto te dirá la URL exacta que Axios intentó
+        });
+
+        if (error.response?.status === 404) {
+            throw new Error('Producto no encontrado');
+        }
+
+        throw new Error(error.response?.data?.message || 'Error al cargar el producto');
     }
-    
-    throw new Error(error.response?.data?.message || 'Error al cargar el producto');
-  }
 };
+
+//Veremos el funcionamiento en caso de deploy
