@@ -10,7 +10,7 @@ import SavedProducts from './page/SavedProducts';
 import { Footer } from './components/Footer';
 import ShoppingCart from './components/ShoppingCart';
 import Checkout from './page/Checkout';
-/* import StripeProvider from '../components/StripeProvider'; */
+import AdminProductForm from './interface/AdminProductForm';
 
 function App() {
 
@@ -28,6 +28,7 @@ function App() {
               <Route path="/SavedProducts" element={<SavedProducts />} />
               <Route path="/Shoppingcart" element={<ShoppingCart />} />
               <Route path="/Checkout" element={<Checkout />} />
+              <Route path="/admin/add-product" element={<AdminProductForm />} />
           </Routes>
           <Footer id="footer" /> 
     </Router>   
