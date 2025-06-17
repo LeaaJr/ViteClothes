@@ -1,5 +1,6 @@
+# login.py
 from fastapi import APIRouter, HTTPException
-from database import get_connection
+from database import get_connection # Ensure this function correctly provides your psycopg2 connection
 from pydantic import BaseModel, EmailStr
 from passlib.context import CryptContext
 
@@ -11,34 +12,36 @@ class SignInModel(BaseModel):
     email: EmailStr
     password: str
 
-@router.post("/signin")
-def signin(user: SignInModel):
+@router.post("/users/login")
+def signin(user_credentials: SignInModel): # Renamed 'user' to 'user_credentials' for clarity
     conn = get_connection()
     cur = conn.cursor()
 
-    # Modifica esta consulta para obtener más campos del usuario
+    # MODIFIED: Select 'is_admin' column as well
     cur.execute("""
-        SELECT id, email, name, surname, hashed_password 
+        SELECT id, email, name, surname, hashed_password, is_admin
         FROM usuarios 
         WHERE email = %s
-    """, (user.email,))
+    """, (user_credentials.email,))
     result = cur.fetchone()
 
     if result is None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    user_id, email, name, surname, hashed_password = result
+    # Unpack the result, including the new is_admin field
+    user_id, email, name, surname, hashed_password, is_admin = result 
 
-    if not pwd_context.verify(user.password, hashed_password):
+    if not pwd_context.verify(user_credentials.password, hashed_password):
         raise HTTPException(status_code=401, detail="Incorrect password")
 
-    # Devuelve todos los datos relevantes del usuario
+    # MODIFIED: Include 'is_admin' in the returned user object
     return {
         "message": "Login successful",
         "user": {
             "id": user_id,
             "email": email,
             "name": name,
-            "surname": surname
+            "surname": surname,
+            "is_admin": is_admin # Include the admin status
         }
     }

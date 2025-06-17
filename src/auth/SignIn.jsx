@@ -5,43 +5,39 @@ import logolm from '../style/logos/lmw.png'
 import { useAuth } from '../auth/AuthContext';
 import { Alert } from '@mui/material';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [alert, setAlert] = useState({ show: false, message: '', severity: 'info' });
-  const navigate = useNavigate();
-  const { login } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [alert, setAlert] = useState({ show: false, severity: '', message: '' });
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
+        setLoading(true);
+        setAlert({ show: false, severity: '', message: '' });
 
-    try {
-      const res = await fetch('http://localhost:8000/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
+        try {
+            // Correctly call the new login function with email and password
+            const success = await login(email, password); 
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setAlert({ show: true, message: `✅ ${data.message}`, severity: 'success' });
-        login(data.user); // Guardar usuario en contexto
-
-        // Opcional: esto hace esperar un segundo msa para mostrar la alerta antes de navegar
-        setTimeout(() => {
-          navigate('/');
-        }, 1000);
-      } else {
-        setAlert({ show: true, message: `❌ ${data.detail}`, severity: 'error' });
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      setAlert({ show: true, message: '❌ Error al conectar con el servidor', severity: 'error' });
-    }
-  };
+            if (success) {
+                setAlert({ show: true, severity: 'success', message: 'Login successful!' });
+                navigate('/'); // Redirect to home or dashboard after successful login
+            } else {
+                // This 'else' might not be strictly necessary if login throws an error on failure
+                setAlert({ show: true, severity: 'error', message: 'Login failed. Please check your credentials.' });
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.detail || 'Error en el servidor. Inténtalo de nuevo.';
+            setAlert({ show: true, severity: 'error', message: errorMessage });
+        } finally {
+            setLoading(false);
+        }
+    };
 
   return (
     <div className={styles.container}>
