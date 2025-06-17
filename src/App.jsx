@@ -11,27 +11,49 @@ import { Footer } from './components/Footer';
 import ShoppingCart from './components/ShoppingCart';
 import Checkout from './page/Checkout';
 import AdminProductForm from './interface/AdminProductForm';
+import AdminLoginPage from './interface/AdminLoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './auth/AuthContext';
 
 function App() {
 
   return (
     <>
-    <Router>
+<Router>
+      
+      <AuthProvider>
         <Navbar />
-          <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/SignIn" element={<SignIn/>} />
-              <Route path="/SignUp" element={<SignUp />} />
-              <Route path="/productos/:id" element={<ProductDetail />} />
-              <Route path="/productos/:category" element={<ProductsPage />} />
-              <Route path="/productos" element={<ProductsPage />} />
-              <Route path="/SavedProducts" element={<SavedProducts />} />
-              <Route path="/Shoppingcart" element={<ShoppingCart />} />
-              <Route path="/Checkout" element={<Checkout />} />
-              <Route path="/admin/add-product" element={<AdminProductForm />} />
-          </Routes>
-          <Footer id="footer" /> 
-    </Router>   
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/SignIn" element={<SignIn/>} />
+          <Route path="/SignUp" element={<SignUp />} />
+
+          {/* Rutas públicas de productos */}
+          <Route path="/productos/:id" element={<ProductDetail />} /> 
+          <Route path="/productos/:category" element={<ProductsPage />} /> 
+          <Route path="/productos" element={<ProductsPage />} /> 
+          
+          <Route path="/SavedProducts" element={<SavedProducts />} />
+          <Route path="/Shoppingcart" element={<ShoppingCart />} />
+          <Route path="/Checkout" element={<Checkout />} />
+
+          {/* Ruta para el login de adm */}
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+
+          {/* Ruta protegida para agregar productos */}
+          <Route 
+            path="/admin/add-product" 
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminProductForm />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+        <Footer id="footer" /> 
+      </AuthProvider>
+
+    </Router>
     </>
   )
 }

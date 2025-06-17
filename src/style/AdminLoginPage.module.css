@@ -1,0 +1,105 @@
+
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: white;
+  /* Añadir estas líneas para centrar el contenido horizontal y verticalmente */
+  justify-content: center;
+  align-items: center;
+}
+
+.formSection {
+
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /*max-width: 500px; /* Se puede ajustar según lo necesite */
+  text-align: center;
+}
+
+/* Ocultar la sección de imagen para AdminLoginPage (si el AdminLoginPage no la renderiza, esto es opcional) */
+/* .imageSection {
+  display: none;
+} */
+
+.logo {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  font-family: 'Times New Roman', serif;
+  letter-spacing: -1px;
+  /* Centrar el logo */
+  text-align: center;
+}
+
+.logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 120px;
+  /* Centrar la imagen del logo */
+  display: block;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  text-align: center; /* Centrar el título */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+  position: relative;
+  width: 100%;
+  max-width: 300px; 
+}
+.label {
+  font-size: 0.7rem;
+  color: #999;
+  margin-bottom: 0.25rem;
+  display: block;
+  text-align: left;
+}
+.input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  outline: none;
+  background-color: transparent;
+  text-align: left; 
+}
+/* ... resto de tus estilos ... */
+.forgotPassword {
+  margin-left: auto;
+  margin-right: auto;
+}
+.loginButton {
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #000;
+  background-color: transparent;
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: fit-content;
+  letter-spacing: 1px;
+}
+
+.loginButton:hover {
+  background-color: #000;
+  color: white;
+}

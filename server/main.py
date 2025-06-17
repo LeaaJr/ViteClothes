@@ -13,18 +13,18 @@ from psycopg2.extras import Json
 app = FastAPI()
 
 
-# Modelo para los talles (colócalo aquí, cerca de tus otros modelos o en models.py)
+# Modelo para los talles (otros modelos o en models.py)
 class Talle(BaseModel):
     talle: str
     stock: int
 
 # =========================================================================
-# CONFIGURACIÓN CRÍTICA DE CORS (AQUÍ ES DONDE DEBE ESTAR)
+# CONFIGURACIÓN CRÍTICA DE CORS (ACA)
 # =========================================================================
 origins = [
-    "http://localhost:5173",          # Tu frontend Vite en desarrollo
-    "https://vite-clothes.vercel.app", # ¡NO OLVIDES CAMBIAR ESTO POR LA URL REAL DE TU VERCEL CUANDO DESPLIEGUES!
-    "http://localhost:8000"           # Si tu backend también se sirve desde 8000
+    "http://localhost:5173",          #frontend Vite en desarrollo
+    "https://vite-clothes.vercel.app", 
+    "http://localhost:8000"           #se sirve desde 8000
 ]
 
 app.add_middleware(
@@ -42,16 +42,12 @@ app.add_middleware(
 # =========================================================================
 # INCLUSIÓN DE ROUTERS (UNA SOLA VEZ Y CON PREFIJOS CLAROS)
 # =========================================================================
-app.include_router(register_router, prefix="/api/auth") # Asegúrate que este sea el prefijo correcto
-app.include_router(login_router) # Si login no tiene prefijo o lo tiene definido internamente
+app.include_router(register_router, prefix="/api/auth") # este es el prefijo correcto
+app.include_router(login_router)
 # =========================================================================
 # FIN DE INCLUSIÓN DE ROUTERS
 # =========================================================================
 
-
-# =========================================================================
-# RUTAS DE PRODUCTOS (Asegúrate de que no haya duplicados)
-# =========================================================================
 
 # Endpoint real para obtener productos (filtrado por categoría/subcategoría)
 @app.get("/productos")
@@ -230,7 +226,7 @@ def actualizar_producto(id: int, producto: Producto):
 
 
 # Endpoint para obtener un producto específico por ID (GET /productos/{id})
-@app.get("/productos/{id}") # ¡Esta es la que debes mantener y es la REAL!
+@app.get("/productos/{id}") # ¡Esta es la que debes mantener
 def obtener_producto_por_id(id: int):
     conn = get_connection()
     cursor = conn.cursor()
@@ -271,7 +267,7 @@ def obtener_producto_por_id(id: int):
         cursor.close()
         conn.close()
 
-# Endpoint de tendencia (estaba duplicado, lo mantengo una vez)
+# Endpoint de tendencia
 @app.get("/productos/tendencia")
 def obtener_productos_tendencia():
     conn = get_connection()

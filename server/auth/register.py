@@ -1,14 +1,19 @@
+# register.py
 import psycopg2
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr, Field
 from passlib.context import CryptContext
-from typing import Optional
+from typing import Optional # Keep if needed elsewhere, but not directly for this change
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 router = APIRouter()
+
+# Assuming 'app' is defined and imported in your main.py and register_router is included there.
+# If this line is actually in register.py, it's incorrect. It should be in your main FastAPI app file.
+# app.include_router(register_router, prefix="/api") 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -18,7 +23,7 @@ class SignUpModel(BaseModel):
     confirm_password: str
     name: str = Field(..., min_length=2)
     surname: str = Field(..., min_length=2)
-    privacyPolicy: bool = Field(..., alias="acceptTerms")  # Mapea acceptTerms a privacyPolicy
+    privacyPolicy: bool = Field(..., alias="acceptTerms")
 
     class Config:
         allow_population_by_field_name = True
@@ -48,10 +53,10 @@ def signup(user: SignUpModel):
         if cursor.fetchone():
             raise HTTPException(status_code=400, detail="Email already registered")
 
-        # Agrega un nuevo usuario
+        # Agrega un nuevo usuario, ahora incluyendo is_admin con valor por defecto FALSE
         cursor.execute("""
-            INSERT INTO usuarios (email, hashed_password, name, surname)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO usuarios (email, hashed_password, name, surname, is_admin)
+            VALUES (%s, %s, %s, %s, FALSE) -- Explicitly set is_admin to FALSE for new registrations
         """, (user.email, hashed_password, user.name, user.surname))
         
         conn.commit()
