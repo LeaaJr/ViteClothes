@@ -37,4 +37,7 @@ and on the other hand start the application normally
 
 ![image](https://github.com/user-attachments/assets/fc4f9bc3-58f8-42c4-833e-bb10d9eddb0d)
 
+## Interface
+
+![image](https://github.com/user-attachments/assets/9dc02369-5aa1-4818-89dc-9d4e603b79f0)
 
