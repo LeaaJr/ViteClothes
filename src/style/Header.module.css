@@ -1,156 +1,285 @@
 /* Header.module.css */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
-
 .Header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 662px;
-  background-color: #f2f2f2;
-  padding: 20px;
-  box-sizing: border-box;
-  position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 662px; /* This height will likely need adjustment for mobile */
+    background-color: #f2f2f2;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    /* transition: all 0.3s ease; /* Add for smooth resizing if height changes */
 }
- 
+
 .Left {
-  flex: 1;
-  color: #333;
+    flex: 1;
+    color: #333;
+    display: flex; /* Allow content inside to stack if needed */
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Default for desktop */
 }
 
 .Left h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
 }
 
-/* Contenedor que envuelve el texto para controlar el ancho */
 .typingContainer {
-  width: 20rem;
-  /* Quitamos overflow: hidden y white-space: nowrap */
+    width: 20rem; /* Fixed width for desktop */
 }
 
 .typingText {
-  font-size: 1.9rem;
-  font-family: 'Great Vibes', cursive;
-  position: relative;
-  margin: 0;
-  line-height: 1.5;
+    font-size: 1.9rem;
+    font-family: 'Great Vibes', cursive;
+    position: relative;
+    margin: 0;
+    line-height: 1.5;
 }
 
 .typingText::after {
-  content: "|";
-  position: absolute;
-  animation: blink 0.75s step-end infinite;
+    content: "|";
+    position: absolute;
+    animation: blink 0.75s step-end infinite;
 }
 
-/* Efecto de escritura para múltiples líneas */
 @keyframes typing {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .typingText {
-  animation: typing 5s steps(50) 1s forwards;
+    animation: typing 5s steps(50) 1s forwards;
 }
 
-/* Efecto de parpadeo del cursor */
 @keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 }
-
 
 .Center {
-  flex: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
 }
 
 .ImageContainer {
-  width: 100%;
-  height: 600px;
-  overflow: hidden;
-  position: relative;
+    width: 100%;
+    height: 600px; /* This will be adjusted for mobile */
+    overflow: hidden;
+    position: relative;
 }
 
 .ImageWrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 .Image {
-  width: auto;
-  height: 100%;
-  position: absolute;
-  left: 10rem;
-  top: 1rem;
-  transition: opacity 0.5s ease;
+    width: auto;
+    height: 100%;
+    position: absolute;
+    left: 10rem; /* Adjusted for desktop positioning */
+    top: 1rem;
+    transition: opacity 0.5s ease; /* For image transition, not responsive resizing */
+    object-fit: cover; /* Ensure image covers container without distortion */
+    object-position: center; /* Center the image within its container */
 }
 
 /* Estados de la animación */
 .ImageWrapper.visible {
-  animation: none;
+    animation: none;
 }
 
 .ImageWrapper.hiding {
-  animation: hideDown 1s forwards;
+    animation: hideDown 1s forwards;
 }
 
 .ImageWrapper.showing {
-  animation: showDown 1s forwards;
+    animation: showDown 1s forwards;
 }
 
 @keyframes hideDown {
-  0% {
-    clip-path: inset(0 0 0 0);
-  }
-  100% {
-    clip-path: inset(100% 0 0 0);
-  }
+    0% {
+        clip-path: inset(0 0 0 0);
+    }
+    100% {
+        clip-path: inset(100% 0 0 0);
+    }
 }
 
 @keyframes showDown {
-  0% {
-    clip-path: inset(100% 0 0 0);
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-  }
+    0% {
+        clip-path: inset(100% 0 0 0);
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
 }
 
 .Right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Default for desktop */
+    align-items: center;
 }
 
 .BtnComprar {
-  padding: 10px 20px;
-  background-color: #000000;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-right: 7rem;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 7rem; /* Adjusted for desktop positioning */
 }
 
 .BtnComprar:hover {
-  background-color: #000000;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Media Queries for Mobile --- */
+
+/* For screens up to 768px (common tablet portrait / large mobile) */
+@media (max-width: 768px) {
+    .Header {
+        flex-direction: column; /* Stack items vertically */
+        height: auto; /* Allow content to dictate height */
+        padding: 1rem; /* Adjust padding */
+        min-height: 80vh; /* Ensure it takes up a good portion of the screen */
+        justify-content: center; /* Center content vertically */
+    }
+
+    .Left, .Center, .Right {
+        flex: none; /* Remove flex sizing */
+        width: 100%; /* Take full width */
+        text-align: center; /* Center text and button */
+        padding: 0.5rem 0; /* Adjust vertical padding */
+        display: flex; /* Re-enable flex for internal centering */
+        flex-direction: column;
+        align-items: center; /* Center contents */
+        justify-content: center;
+    }
+
+    .Left h1 {
+        font-size: 2rem; /* Smaller heading */
+        margin-bottom: 0.5rem;
+    }
+
+    .typingContainer {
+        width: 90%; /* Adjust width for mobile text container */
+        max-width: 300px; /* Prevent text from becoming too wide */
+        margin-bottom: 1rem;
+    }
+
+    .typingText {
+        font-size: 1.3rem; /* Smaller typing text */
+        text-align: center;
+    }
+    .typingText::after {
+        left: 50%; /* Center the cursor */
+        transform: translateX(-50%);
+    }
+
+    .ImageContainer {
+        height: 300px; /* Fixed height for image container on mobile */
+        width: 90%; /* Occupy most of the width */
+        margin: 1rem 0;
+    }
+
+    .Image {
+        width: 100%; /* Make image fill container width */
+        height: 100%; /* Make image fill container height */
+        position: static; /* Remove absolute positioning */
+        object-fit: cover; /* Maintain aspect ratio and cover space */
+        object-position: center; /* Center the image content */
+        left: auto; /* Remove specific desktop positioning */
+        top: auto; /* Remove specific desktop positioning */
+    }
+
+    /* Animation adjustments for mobile if needed,
+       the current clip-path animation should still work fine. */
+
+
+    .BtnComprar {
+        margin-right: 0; /* Remove right margin */
+        margin-top: 1rem; /* Add some top margin to separate from image */
+        font-size: 1rem;
+        padding: 10px 30px; /* Slightly larger button for touch */
+    }
+}
+
+/* For screens up to 425px */
+@media (max-width: 425px) {
+    .Left h1 {
+        font-size: 1.8rem; /* Even smaller heading */
+    }
+
+    .typingContainer {
+        width: 95%; /* Adjust width for very small screens */
+        max-width: 280px;
+    }
+
+    .typingText {
+        font-size: 1.1rem; /* Further reduce font size */
+    }
+
+    .ImageContainer {
+        height: 270px; /* Smaller image height */
+    }
+
+    .BtnComprar {
+        font-size: 0.95rem;
+        padding: 8px 25px;
+    }
+}
+
+/* For screens up to 374px */
+@media (max-width: 374px) {
+    .Left h1 {
+        font-size: 1.6rem;
+    }
+
+    .typingText {
+        font-size: 1rem;
+    }
+
+    .ImageContainer {
+        height: 220px; /* Even smaller image height */
+    }
+}
+
+/* For screens up to 320px */
+@media (max-width: 320px) {
+    .Left h1 {
+        font-size: 1.4rem;
+    }
+
+    .typingText {
+        font-size: 0.9rem;
+    }
+
+    .ImageContainer {
+        height: 180px; /* Minimum image height */
+    }
 }

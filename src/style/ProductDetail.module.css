@@ -1,22 +1,28 @@
-  .container {
+/* ProductDetail.module.css */
+
+.container {
     display: flex;
-    min-height: 100vh;
+    min-height: 100vh; /* Keep for desktop */
     background-color: #f2f2f2;
     color: #333;
-    padding: 2rem;
-  }
-  .gallery {
+    padding: 2rem; /* Desktop padding */
+    flex-direction: row; /* Default for desktop */
+}
+
+.gallery {
     display: flex;
-    width: 50%;
-  }
-  .thumbnails {
+    width: 50%; /* Desktop width */
+    flex-direction: row; /* Default for desktop */
+}
+
+.thumbnails {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-right: 1rem;
-  }
-  
-  .thumbnail {
+}
+
+.thumbnail {
     width: 70px;
     height: 70px;
     border-radius: 4px;
@@ -25,29 +31,31 @@
     overflow: hidden;
     cursor: pointer;
     transition: border-color 0.2s;
-  }
-
-  .thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-  .thumbnail:hover, .thumbnailActive {
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail:hover,
+.thumbnailActive {
     border-color: #e74c3c;
-  }
+}
+
 .mainImage {
     flex-grow: 1;
     display: flex;
-    align-items: center;  
+    align-items: center;
     justify-content: center;
     background-color: #f2f2f2;
     border-radius: 8px;
     padding: 1rem;
-    height: 600px;
-    overflow: hidden; /* Impide que sobresalga */
-    position: relative; /* Añadido para el lente de zoom */
-    cursor: zoom-in; /* Cambia el cursor al pasar sobre la imagen */
+    height: 600px; /* Desktop height */
+    overflow: hidden;
+    position: relative;
+    cursor: zoom-in;
 }
 
 .mainImage img {
@@ -56,13 +64,13 @@
     object-fit: contain;
     object-position: center;
     display: block;
-    transition: transform 0.3s ease; /* Añadido para suavizar el zoom */
-    will-change: transform; /* Mejora el rendimiento de la animación */
+    transition: transform 0.3s ease;
+    will-change: transform;
 }
 
 .mainImage.zoomed img {
     transform: scale(1.8);
-    cursor: zoom-out; /* Cambia el cursor cuando está zoom */
+    cursor: zoom-out;
 }
 
 .zoomLens {
@@ -76,24 +84,25 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     z-index: 10;
     background: rgba(255, 255, 255, 0.105);
-    /* backdrop-filter: blur(2px); */
-    display: none; /* Oculto por defecto */
+    display: none;
 }
 
 .mainImage.zoomed .zoomLens {
-    display: block; /* Solo visible cuando hay zoom */
+    display: block;
 }
 
-  .details {
-    width: 50%;
-    padding: 0 2rem;
-  }
-  .title {
-    font-size: 1.5rem;
+.details {
+    width: 50%; /* Desktop width */
+    padding: 0 2rem; /* Desktop padding */
+}
+
+.title {
+    font-size: 1.5rem; /* Desktop font size */
     font-weight: bold;
     margin-bottom: 0.5rem;
-  }
-  .badge {
+}
+
+.badge {
     display: inline-block;
     background-color: #800000;
     color: white;
@@ -101,49 +110,37 @@
     border-radius: 4px;
     font-size: 0.75rem;
     margin-bottom: 0.5rem;
-  }
-  .reviews {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  .stars {
-    color: #ffd700;
-    margin-right: 0.5rem;
-  }
-  .reviewCount {
-    color: #58a6ff;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  .location {
-    display: flex;
-    align-items: center;
-    color: #8b949e;
-    margin-bottom: 2rem;
-  }
-  .price {
-    font-size: 2rem;
+}
+
+.price {
+    font-size: 2rem; /* Desktop font size */
     font-weight: bold;
     margin-bottom: 1rem;
-  }
-  .quantitySelector {
+}
+
+/* Accordion styles (already good, just minor padding tweaks for mobile) */
+.accordion {
+    margin-top: 1.5rem; /* Slightly reduced margin */
+    border-top: 1px solid #30363d;
+}
+
+.accordionHeader {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-  }
-  .quantityLabel {
-    margin-right: 1rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.accordionContent {
+    padding-bottom: 1rem;
     color: #8b949e;
-  }
-  .quantitySelect {
-    background-color: #0d1117;
-    color: white;
-    border: 1px solid #30363d;
-    border-radius: 4px;
-    padding: 0.5rem;
-  }
-  .button {
+    line-height: 1.5;
+}
+
+/* Buttons */
+.button {
     width: 100%;
     padding: 0.75rem;
     border-radius: 6px;
@@ -153,226 +150,361 @@
     align-items: center;
     justify-content: center;
     font-weight: 500;
-  }
-  .favoriteButton {
+    font-size: 1rem; /* Default button font size */
+}
+
+.favoriteButton {
     background-color: black;
     color: white;
     border: 1px solid #30363d;
-  }
-  .cartButton {
+}
+
+.cartButton {
     background-color: #f2f2f2;
     color: black;
     border: none;
-  }
-  .infoText {
-    color: #8b949e;
-    font-size: 0.875rem;
-    margin-bottom: 2rem;
-  }
-  .link {
-    color: #58a6ff;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  .optionTitle {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-  }
-  .optionGroup {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-  .optionButton {
-    background-color: transparent;
-    border: 1px solid #30363d;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .optionButtonSelected {
-    background-color: #1a2230;
-    border-color: #58a6ff;
-  }
-  .pickupOption {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-  }
-  .radioButton {
-    margin-right: 0.5rem;
-    margin-top: 0.25rem;
-  }
-  .pickupDetails {
-    display: flex;
-    flex-direction: column;
-  }
-  .pickupPrice {
-    font-weight: 500;
-  }
-  .pickupDate {
-    color: #8b949e;
-    font-size: 0.875rem;
-  }
-  .accordion {
-    margin-top: 2rem;
-    border-top: 1px solid #30363d;
-  }
-  .accordionHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  .accordionContent {
-    padding-bottom: 1rem;
-    color: #8b949e;
-    line-height: 1.5;
-  }
-
-/*   Productos relacionados */
-
-.relacionadosSection {
-  padding-left: 7.5rem;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid #eee;
-  width: 100%;
-  grid-column: 1 / -1;
-  padding-bottom: 3rem;
 }
 
-/* linea */
-
-.relacionadosDivider {
-  border-bottom: 1px solid #30363d;
-  margin-bottom: 1.5rem;
-  width: 30%;
-}
-
-.relacionadosTitle {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  color: #333;
-  
-}
-
-.relacionadosGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Antes 200px */
-  gap: 1rem; /* más compacto */
-}
-
-.relacionadoCard {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.relacionadoCard:hover {
-  transform: translateY(-5px);
-}
-
-.relacionadoImage {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-}
-
-.relacionadoNombre {
-  font-size: 1rem;
-  margin: 0.25rem 0;
-  color: #333;
-}
-
-.relacionadoPrecio {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #000;
-  margin: 0;
-}
-
-/* Metodos de pago */
-
+/* Payment Methods */
 .paymentMethods {
-  margin-top: 1.5rem;
-  background-color: #f2f2f2;
-  padding: 1rem;    
-  text-align: center;
+    margin-top: 1.5rem;
+    background-color: #f2f2f2;
+    padding: 1rem;
+    text-align: center;
 }
 
 .paymentTitle {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
 }
 
 .paymentIcons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .paymentIcons img {
-  width: 40px;
-  height: auto;
-  object-fit: contain;
+    width: 40px; /* Default desktop icon size */
+    height: auto;
+    object-fit: contain;
 }
 
-/* Estilos para el selector de talles */
+/* Size Selector */
 .sizeSelector {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 12px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
 }
 
 .sizeOption {
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 50px;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+    transition: all 0.2s ease;
 }
 
 .sizeOption:hover {
-  border-color: #333;
+    border-color: #333;
 }
 
 .selectedSize {
-  background-color: #000;
-  color: white;
-  border-color: #000;
+    background-color: #000;
+    color: white;
+    border-color: #000;
 }
 
 .sizeStock {
-  font-size: 0.8em;
-  color: #666;
-  margin-top: 2px;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 2px;
 }
 
 .addToCartButton {
-  margin-top: 16px;
-  width: 100%;
-  padding: 12px;
-  background-color: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
+    margin-top: 16px;
+    width: 100%;
+    padding: 12px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .addToCartButton:hover {
-  opacity: 0.9;
+    opacity: 0.9;
+}
+
+
+/* --- Related Products Section --- */
+
+.relacionadosSection {
+    padding-left: 7.5rem; /* Desktop padding */
+    padding-right: 2rem; /* Add right padding for consistency */
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+    width: 100%;
+    grid-column: 1 / -1; /* Ensure it spans full width */
+    padding-bottom: 3rem;
+}
+
+.relacionadosDivider {
+    border-bottom: 1px solid #30363d;
+    margin-bottom: 1.5rem;
+    width: 30%; /* Default desktop width */
+}
+
+.relacionadosTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.relacionadosGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Desktop grid */
+    gap: 1rem;
+}
+
+.relacionadoCard {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.relacionadoCard:hover {
+    transform: translateY(-5px);
+}
+
+.relacionadoImage {
+    width: 100%;
+    height: 180px; /* Default desktop height */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.relacionadoNombre {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+    color: #333;
+    text-align: center; /* Center name */
+}
+
+.relacionadoPrecio {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+    text-align: center; /* Center price */
+}
+
+/* --- Media Queries for Mobile --- */
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack gallery and details vertically */
+        padding: 1rem; /* Reduce overall padding */
+        min-height: auto; /* Allow height to be dynamic */
+    }
+
+    .gallery {
+        width: 100%; /* Full width for gallery */
+        flex-direction: column-reverse; /* Put thumbnails below main image */
+        margin-bottom: 1rem;
+    }
+
+    .mainImage {
+        width: 100%; /* Ensure main image takes full width */
+        height: 400px; /* Adjust main image height for tablets/larger phones */
+        margin-bottom: 1rem; /* Space between main image and thumbnails */
+        padding: 0.5rem;
+    }
+    
+    .mainImage.zoomed img {
+        transform: scale(1.5); /* Reduce zoom level for smaller screens */
+    }
+
+    .zoomLens {
+        display: none !important; /* Hide zoom lens on touch devices */
+    }
+
+    .thumbnails {
+        flex-direction: row; /* Display thumbnails horizontally */
+        justify-content: center; /* Center thumbnails */
+        flex-wrap: wrap; /* Allow thumbnails to wrap if many */
+        margin-right: 0; /* Remove right margin */
+        gap: 0.5rem; /* Smaller gap between thumbnails */
+    }
+
+    .thumbnail {
+        width: 60px; /* Slightly smaller thumbnails */
+        height: 60px;
+    }
+
+    .details {
+        width: 100%; /* Full width for details */
+        padding: 0 1rem; /* Adjust padding for details section */
+    }
+
+    .title {
+        font-size: 1.8rem; /* Larger title for prominence */
+        text-align: center;
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.6rem;
+        margin-left: auto; /* Center badge if it's the only inline element */
+        margin-right: auto;
+        display: block; /* Make it a block element to center */
+        width: fit-content; /* Only take content width */
+    }
+    
+    .price {
+        font-size: 2.2rem; /* Larger price */
+        text-align: center;
+    }
+
+    .accordion {
+        margin-top: 1rem; /* Reduce accordion top margin */
+    }
+    
+    .accordionHeader {
+        padding: 0.8rem 0; /* Adjust accordion header padding */
+        font-size: 1rem;
+    }
+    
+    .accordionContent p {
+        font-size: 0.9rem; /* Smaller text inside accordion */
+    }
+
+    .button {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .paymentMethods {
+        padding: 0.8rem;
+    }
+
+    .paymentTitle {
+        font-size: 0.85rem;
+    }
+
+    .paymentIcons img {
+        width: 35px; /* Smaller payment icons */
+    }
+
+    .sizeOption {
+        min-width: 45px; /* Smaller size options */
+        padding: 6px 10px;
+    }
+    .sizeStock {
+        font-size: 0.75em; /* Smaller stock text */
+    }
+    
+    .relacionadosSection {
+        padding: 1.5rem 1rem 2rem; /* Adjusted padding for related products section */
+    }
+
+    .relacionadosTitle {
+        font-size: 1.3rem; /* Smaller title for related products */
+        text-align: center;
+    }
+
+    .relacionadosDivider {
+        width: 50%; /* Make divider longer or remove for mobile */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .relacionadosGrid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+        gap: 0.8rem; /* Smaller gap */
+    }
+
+    .relacionadoImage {
+        height: 150px; /* Smaller image height for related products */
+    }
+
+    .relacionadoNombre,
+    .relacionadoPrecio {
+        font-size: 0.9rem; /* Smaller text for related product cards */
+    }
+}
+
+@media (max-width: 480px) {
+    .mainImage {
+        height: 300px; /* Even smaller main image height for small phones */
+    }
+
+    .thumbnails {
+        gap: 0.4rem;
+    }
+
+    .thumbnail {
+        width: 50px; /* Smallest thumbnails */
+        height: 50px;
+    }
+
+    .title {
+        font-size: 1.6rem; /* Adjust title size for smaller phones */
+    }
+    
+    .price {
+        font-size: 2rem; /* Adjust price size */
+    }
+
+    .paymentIcons img {
+        width: 30px; /* Smallest payment icons */
+    }
+    
+    .relacionadosGrid {
+        grid-template-columns: 1fr; /* Stack related products in a single column */
+        gap: 1rem;
+    }
+
+    .relacionadoImage {
+        height: 300px; /* Make related product images taller when stacked */
+    }
+
+    .relacionadoNombre,
+    .relacionadoPrecio {
+        font-size: 1rem; /* Restore slightly larger text for single column */
+    }
+}
+
+@media (max-width: 374px) {
+    .mainImage {
+        height: 250px;
+    }
+    .relacionadoImage {
+        height: 180px;
+    }
+}
+
+@media (max-width: 320px) {
+    .mainImage {
+        height: 220px;
+    }
+    .relacionadoImage {
+        height: 150px;
+    }
+    .title {
+        font-size: 1.4rem;
+    }
+    .price {
+        font-size: 1.8rem;
+    }
 }

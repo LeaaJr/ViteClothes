@@ -1,3 +1,5 @@
+/* ProductCard.module.css */
+
 .card {
     display: flex;
     flex-direction: column;
@@ -6,12 +8,19 @@
     background-color: #f2f2f2;
     border-radius: 4px;
     overflow: hidden;
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */ /* Added subtle shadow for definition */ /* (opcional) */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add transition for hover */
+}
+
+.card:hover {
+    transform: translateY(-3px); /* Lift card on hover */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* More prominent shadow on hover */
 }
 
 .imageContainer {
     position: relative;
     width: 100%;
-    height: 350px;
+    height: 350px; /* Desktop image height */
     background-color: #f2f2f2;
     display: flex;
     justify-content: center;
@@ -22,7 +31,7 @@
 .image {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
+    object-fit: contain; /* Good for maintaining aspect ratio */
     cursor: pointer;
 }
 
@@ -32,15 +41,23 @@
     left: 50%;
     transform: translateX(-50%);
     cursor: pointer;
-    font-size: 24px;
+    font-size: 24px; /* Icon size */
     color: #000;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9); /* Slightly more opaque background */
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 40px; /* Larger hit area */
+    height: 40px; /* Larger hit area */
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Subtle shadow */
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .addButton {
+    opacity: 1; /* Show on hover */
+    transform: translateX(-50%) translateY(-5px); /* Slight lift on hover */
 }
 
 .details {
@@ -55,15 +72,17 @@
 }
 
 .title {
-    font-size: 12px;
-    font-weight: 400;
+    font-size: 14px; /* Slightly larger default for better readability */
+    font-weight: 500; /* Slightly bolder */
     margin-bottom: 5px;
     color: #000;
     text-transform: uppercase;
+    line-height: 1.3; /* Ensure spacing for multi-line titles */
 }
 
 .price {
-    font-size: 12px;
+    font-size: 14px; /* Consistent with title font size */
+    font-weight: bold; /* Make price stand out */
     color: #000;
 }
 
@@ -75,20 +94,105 @@
 
 .saveButton {
     cursor: pointer;
-    color: #000;
+    color: #000; /* Default icon color */
     padding: 5px;
     margin-left: 10px;
+    align-self: center; /* Align vertically in the center */
+    transition: color 0.2s ease;
 }
 
 .saveButton:hover {
-    color: black;
+    color: #e74c3c; /* Change color on hover for save button */
 }
 
 .saveButton.saved {
-    color: black;
+    color: black; /* Or a distinct color if saved */
 }
 
 /* Evita que los hijos de .card disparen el evento click de la card */
 .details > * {
     pointer-events: auto;
+}
+
+/* Tooltip for description (if used) */
+.tooltip {
+    /* Style your tooltip here */
+    display: none; /* Hidden by default */
+    position: absolute;
+    /* ... more tooltip styling ... */
+}
+
+/* --- Mobile Specific Styles for ProductCard --- */
+
+@media (max-width: 768px) {
+    .imageContainer {
+        height: 250px; /* Adjust image container height for tablets/larger phones */
+    }
+
+    .addButton {
+        width: 35px; /* Slightly smaller button */
+        height: 35px;
+        font-size: 20px;
+        opacity: 1; /* Always visible on mobile for easier tapping */
+        transform: translateX(-50%); /* No lift animation */
+    }
+
+    .details {
+        padding: 8px; /* Reduce padding inside card details */
+        align-items: center; /* Center align items vertically in details */
+    }
+
+    .title {
+        font-size: 13px; /* Smaller title font size */
+    }
+
+    .price {
+        font-size: 13px; /* Smaller price font size */
+    }
+
+    .saveButton {
+        padding: 3px; /* Smaller padding */
+        margin-left: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .imageContainer {
+        height: 300px; /* Make image taller when it's the only one in a row */
+    }
+
+    .addButton {
+        width: 45px; /* Make button larger for single-column view */
+        height: 45px;
+        font-size: 24px;
+    }
+
+    .details {
+        padding: 10px 15px; /* Restore more padding for single column */
+    }
+
+    .title {
+        font-size: 15px; /* Larger title for single column */
+    }
+
+    .price {
+        font-size: 15px; /* Larger price for single column */
+    }
+}
+
+@media (max-width: 374px) {
+    .imageContainer {
+        height: 250px; /* Adjust height for very small screens */
+    }
+}
+
+@media (max-width: 320px) {
+    .imageContainer {
+        height: 200px; /* Minimum height for image */
+    }
+    .addButton {
+        width: 40px; /* Slightly smaller for very tiny screens */
+        height: 40px;
+        font-size: 20px;
+    }
 }

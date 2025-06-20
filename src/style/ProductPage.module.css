@@ -1,42 +1,86 @@
+/* ProductPage.module.css */
 
 .container {
-  background-color: #f2f2f2;
-  width: 100%;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+    background-color: #f2f2f2;
+    width: 100%;
+    padding: 20px; /* Default desktop padding */
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .title {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
+    font-size: 24px; /* Default desktop font size */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 0 10px; /* Add horizontal padding for smaller screens */
 }
 
 /* Contenedor del grid de productos */
 .productosGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Máximo 4 productos por fila */
-  gap: 20px; /* Espacio entre las cards */
-  margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Desktop: 4 products per row */
+    gap: 20px; /* Espacio entre las cards */
+    margin-top: 20px;
+    padding: 0 10px; /* Add horizontal padding to the grid itself */
 }
 
 .empty {
-  text-align: center;
-  font-size: 18px;
-  color: #666;
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    grid-column: 1 / -1; /* Make "No products found" span all columns */
 }
 
 /* Estilos adicionales */
 .loading {
-  text-align: center;
-  font-size: 20px;
-  color: #00aaff;
+    text-align: center;
+    font-size: 20px;
+    color: #00aaff;
+    grid-column: 1 / -1; /* Make loading span all columns */
 }
 
 .error {
-  text-align: center;
-  font-size: 20px;
-  color: #ff0000;
+    text-align: center;
+    font-size: 20px;
+    color: #ff0000;
+    grid-column: 1 / -1; /* Make error span all columns */
+}
+
+/* --- Mobile Specific Styles for ProductPage --- */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px; /* Reduce container padding on smaller screens */
+    }
+
+    .title {
+        font-size: 20px; /* Smaller title for mobile */
+        margin-bottom: 15px;
+    }
+
+    .productosGrid {
+        grid-template-columns: repeat(2, 1fr); /* Mobile: 2 products per row */
+        gap: 15px; /* Slightly smaller gap */
+        padding: 0 5px; /* Reduce grid padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .productosGrid {
+        grid-template-columns: 1fr; /* Very small mobile: 1 product per row */
+        gap: 10px; /* Even smaller gap */
+        padding: 0; /* Remove horizontal grid padding */
+    }
+
+    .title {
+        font-size: 18px; /* Further reduce title size */
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    .title {
+        font-size: 16px; /* Smallest title size */
+    }
 }
