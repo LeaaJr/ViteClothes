@@ -27,4 +27,6 @@ dist-ssr
 
 #no se debe subir
 
+#/admin/login
+
 .env.production

@@ -1,51 +1,116 @@
+/* Home.module.css */
+
 .container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Added default padding for desktop, can be adjusted for mobile */
+    padding: 0; /* Header already handles its own padding */
 }
 
-.loading, .error {
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
+.loading,
+.error {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
 }
 
 .error {
-  color: #ff3333;
+    color: #ff3333;
 }
 
 .featuredSection {
-  padding: 2rem 0;
-  background: #f2f2f2;
+    padding: 2rem 0; /* Desktop padding */
+    background: #f2f2f2;
 }
 
 .appPromoSection {
-  background-color: #f2f2f2;
-  padding: 4rem 0;
-  width: 100%;
+    background-color: #f2f2f2;
+    padding: 4rem 0; /* Desktop padding */
+    width: 100%;
 }
 
 .categoriesSection {
-  padding: 2rem 0 8rem;
-  background: #f2f2f2;
+    padding: 2rem 0 8rem; /* Desktop padding */
+    background: #f2f2f2;
 }
 
-/* ESTA PARTE ES DEL PARALELAX */ 
-
-.container {
-  overflow: visible;
-}
+/* ESTA PARTE ES DEL PARALELAX */
 
 .parallaxWrapper {
-  /* Elimina cualquier restricción de altura */
-  height: auto;
+    height: auto; /* Good, keeps it flexible */
+    /* Add padding here if needed for the parallax content itself,
+       otherwise, the section content will define it. */
 }
 
-/* SECTION DE TENDENCIA */
-
+/* SECTION DE TENDENCIA (Applies to both featuredSection for trends) */
 .sectionTitle {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  text-align: center;
+    font-size: 2rem; /* Desktop font size */
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+    padding: 0 1rem; /* Add horizontal padding to prevent text from touching edges */
+}
+
+/* --- Mobile Specific Styles for Home Sections --- */
+
+@media (max-width: 768px) {
+    .container {
+        /* No major changes needed here as it's already column flex */
+    }
+
+    .featuredSection,
+    .appPromoSection,
+    .categoriesSection,
+    .parallaxWrapper {
+        /* Reduce vertical padding for all main sections on mobile */
+        padding: 1.5rem 0;
+    }
+
+    /* Adjust padding specifically for MobileApp if it has internal padding */
+    .appPromoSection {
+        padding: 2rem 0; /* Still keep it slightly larger due to content */
+    }
+
+    .categoriesSection {
+        padding-bottom: 4rem; /* Reduce bottom padding for categories */
+    }
+
+    .sectionTitle {
+        font-size: 1.6rem; /* Smaller title for mobile */
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (max-width: 425px) {
+    .featuredSection,
+    .appPromoSection,
+    .categoriesSection,
+    .parallaxWrapper {
+        padding: 1rem 0; /* Even smaller vertical padding */
+    }
+
+    .appPromoSection {
+        padding: 1.5rem 0;
+    }
+
+    .categoriesSection {
+        padding-bottom: 2rem; /* Reduce bottom padding further */
+    }
+
+    .sectionTitle {
+        font-size: 1.4rem; /* Further reduce title size */
+    }
+}
+
+@media (max-width: 374px) {
+    .sectionTitle {
+        font-size: 1.3rem; /* Even smaller title */
+    }
+}
+
+@media (max-width: 320px) {
+    .sectionTitle {
+        font-size: 1.2rem; /* Smallest title size */
+    }
 }

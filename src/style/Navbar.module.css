@@ -1,44 +1,59 @@
+/* Navbar.module.css */
+
+/* Existing base styles (adjusted to be more robust) */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid rgba(200, 200, 200, 0.5); /* Menos visible */
-  background-color: transparent;
-  width: 100%;
-  box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative; /* Essential for mobile menu positioning */
+    z-index: 1000; /* Ensure navbar is above other content */
 }
 
-  .navLeft {
+.navLeft {
     display: flex;
     gap: 2rem;
     background-color: transparent;
-  }
-  .navCenter {
+}
+
+/* This was commented out in your JSX, assuming you want a logo/title. */
+/* If you don't use it, remove this entire block. */
+.navCenter {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     font-weight: bold;
     font-size: 1.25rem;
     background-color: transparent;
-  }
-  .navRight {
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.navRight {
     display: flex;
     gap: 1rem;
-  }
-  .navLink {
+    align-items: center; /* Align items vertically in navRight */
+}
+
+.navLink {
     color: #6b7280;
     text-decoration: none;
     transition: color 0.2s ease;
     background-color: transparent;
-  }
-  .navLink:hover {
+}
+
+.navLink:hover {
     color: #111827;
-  }
-  .active {
+}
+
+.active {
     color: #505151;
-  }
-  .signInButton {
+}
+
+.signInButton {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
     background-color: transparent;
@@ -46,11 +61,13 @@
     border: 1px solid #2f2f2f;
     cursor: pointer;
     transition: all 0.2s ease;
-  }
-  .signInButton:hover {
+}
+
+.signInButton:hover {
     background-color: white;
-  }
-  .signUpButton {
+}
+
+.signUpButton {
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
     background-color: #2f2f2f;
@@ -58,151 +75,285 @@
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
-  }
-  .signUpButton:hover {
-    background-color: rgb(38, 38, 38);;
-  }
+}
+
+.signUpButton:hover {
+    background-color: rgb(38, 38, 38);
+}
 
 .userMenu {
-  position: relative; /* Contenedor padre */
-  cursor: pointer;
-  display: inline-block; /* importante para que el ancho sea solo lo que ocupa el texto */
-  padding-top: 8px;
-}
-  
-/*   .userName:hover + .dropdown,
-  .dropdown:hover {
-    display: block;
-  } */
-
-  .dropdown {
-  position: absolute;
-  top: calc(100% + 8px); /* Pequeño espacio del elemento padre */
-  right: 0;
-  background: #f2f2f2;
-  border-radius: 8px;
-  z-index: 1000;
-  min-width: 130px;
-  box-shadow: 
-    0 2px 4px rgba(0,0,0,0.05),
-    0 4px 16px rgba(0,0,0,0.08); /* Sombra más suave y elegante */
-  padding: 4px 0;
-  border: 1px solid rgba(0,0,0,0.04); /* Borde casi imperceptible */
-  opacity: 0; /* Inicialmente invisible para animación */
-  transform: translateY(-10px);
-  transition: 
-    opacity 0.2s ease-out,
-    transform 0.2s ease-out;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    padding-top: 8px;
 }
 
-/* Clase para cuando el dropdown está visible */
+.userName {
+    user-select: none; /* Prevents text selection when clicking to open dropdown */
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #f2f2f2;
+    border-radius: 8px;
+    z-index: 1000;
+    min-width: 130px;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 4px 0;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    opacity: 0; /* Initially invisible for animation */
+    transform: translateY(-10px);
+    transition:
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out;
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
 .dropdown.visible {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Allow interaction when visible */
 }
 
 .dropdownItem {
-  display: block;
-  padding: 10px 16px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  margin: 0 4px;
-  border-radius: 4px;
+    display: block;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    margin: 0 4px;
+    border-radius: 4px;
 }
 
 .dropdownItem:hover {
-  background-color: rgba(0,0,0,0.03); /* Fondo muy sutil */
-  color: #000;
+    background-color: rgba(0, 0, 0, 0.03);
+    color: #000;
 }
 
-/* Separador entre items (opcional) */
 .dropdownDivider {
-  height: 1px;
-  background: rgba(0,0,0,0.05);
-  margin: 4px 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.05);
+    margin: 4px 0;
 }
 
-/* Para el botón de cerrar sesión */
 .dropdownItem.logout {
-  color: #e74c3c;
+    color: #e74c3c;
 }
 
 .dropdownItem.logout:hover {
-  background-color: rgba(231, 76, 60, 0.08);
+    background-color: rgba(231, 76, 60, 0.08);
 }
 
-  .cart{
-    color: black;
-  }
-
-  /* Contenedor principal del carrito */
 .cartContainer {
-  position: relative;
-  margin-left: 1rem;
-  display: flex;
-  align-items: center;
+    position: relative;
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
 }
 
-/* Botón del carrito */
 .cartButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: inherit;
-  transition: all 0.2s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    transition: all 0.2s ease;
 }
 
 .cartButton:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
-/* Icono del carrito */
 .cartIcon {
-  width: 28px;
-  height: 28px;
-  color: #333; /* Color del icono */
-  stroke-width: 1.5;
-  transition: color 0.2s ease;
+    width: 28px;
+    height: 28px;
+    color: #333;
+    stroke-width: 1.5;
+    transition: color 0.2s ease;
 }
 
 .cartButton:hover .cartIcon {
-  color: #e74c3c;; /* Color al hacer hover */
+    color: #e74c3c;
 }
 
-/* Badge de contador */
 .cartBadge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: #e74c3c; /* Color de fondo */
-  color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: bold;
-  border: 2px solid white;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border: 2px solid white;
 }
+
+
+/* --- Mobile Specific Styles --- */
+
+/* Hamburger Button */
+.hamburgerMenu {
+    display: none; /* Hidden by default on desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001; /* Above mobile menu */
+    color: #333; /* Default icon color */
+}
+
+.hamburgerIcon {
+    width: 30px;
+    height: 30px;
+}
+
+/* Mobile Menu Container */
+.mobileMenuContainer {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Position right below the navbar */
+    left: 0;
+    width: 100%;
+    background-color: white; /* Or your navbar background */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 998; /* Below hamburger, below main navbar */
+    flex-direction: column; /* Stack items vertically */
+    padding: 1rem 0;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(200, 200, 200, 0.5);
+    opacity: 0;
+    transform: translateY(-10px); /* Start slightly off-screen */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
+.mobileMenuContainer.open {
+    display: flex; /* Show when open */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Allow interaction when visible */
+}
+
+.mobileNavLink,
+.mobileAuthButton {
+    padding: 0.75rem 2rem; /* More padding for touch targets */
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: #333;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.mobileNavLink:hover,
+.mobileAuthButton:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mobileAuthButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+}
+
+.mobileAuthButtons .signInButton, /* Targeting nested existing classes */
+.mobileAuthButtons .signUpButton {
+    width: 100%; /* Full width buttons */
+    text-align: center;
+    padding: 0.75rem 1rem;
+    /* Override any flex properties from parent */
+    flex-shrink: 0;
+}
+
+/* --- Media Queries --- */
 
 @media (max-width: 768px) {
-  .cartIcon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .cartBadge {
-    width: 18px;
-    height: 18px;
-    font-size: 0.65rem;
-  }
+    /* Hide desktop elements */
+    .navLeft,
+    .navRight {
+        display: none;
+    }
+
+    /* Show hamburger */
+    .hamburgerMenu {
+        display: block;
+    }
+
+    /* Adjust navbar padding for mobile */
+    .navbar {
+        padding: 0.75rem 1rem;
+        justify-content: space-between; /* Ensure space between hamburger, logo, cart */
+    }
+
+    /* Adjust navCenter (logo) for mobile */
+    .navCenter {
+        position: static; /* Remove absolute positioning */
+        transform: none; /* Remove transform */
+        flex-grow: 1; /* Allow it to take available space */
+        text-align: center; /* Center its content */
+    }
+
+    /* Cart icon size for smaller screens */
+    .cartIcon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .cartBadge {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+    }
+}
+
+/* Specific breakpoints for further refinements */
+@media (max-width: 425px) {
+    .navbar {
+        padding: 0.75rem 0.75rem;
+    }
+    .hamburgerIcon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 374px) {
+    .navbar {
+        padding: 0.6rem 0.6rem;
+    }
+    .hamburgerIcon {
+        width: 26px;
+        height: 26px;
+    }
+    .navCenter {
+        font-size: 1.1rem; /* Slightly smaller logo text */
+    }
+}
+
+@media (max-width: 320px) {
+    .navbar {
+        padding: 0.5rem 0.5rem;
+    }
+    .navCenter {
+        font-size: 1rem; /* Even smaller logo text */
+    }
 }
