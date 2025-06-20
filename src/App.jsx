@@ -8,7 +8,7 @@ import ProductsPage from './page/ProductPage';
 import ProductDetail  from './page/ProductDetail';
 import SavedProducts from './page/SavedProducts';
 import { Footer } from './components/Footer';
-import ShoppingCart from './components/ShoppingCart';
+/* import ShoppingCart from './components/ShoppingCart'; */
 import Checkout from './page/Checkout';
 import AdminProductForm from './interface/AdminProductForm';
 import AdminLoginPage from './interface/AdminLoginPage';
@@ -34,7 +34,7 @@ function App() {
           <Route path="/productos" element={<ProductsPage />} /> 
           
           <Route path="/SavedProducts" element={<SavedProducts />} />
-          <Route path="/Shoppingcart" element={<ShoppingCart />} />
+          {/* <Route path="/Shoppingcart" element={<ShoppingCart />} /> */}
           <Route path="/Checkout" element={<Checkout />} />
 
           {/* Ruta para el login de adm */}

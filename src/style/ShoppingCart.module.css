@@ -1,272 +1,373 @@
 /* ShoppingCart.module.css */
+
+/* Core Dialog Structure - largely fine, but let's ensure full height */
 .outerContainer,
 .innerContainer,
 .panelContainer,
 .dialogPanel {
-  height: 100%;
+    height: 100%;
 }
 
-
 .dialog {
-  position: relative;
-  z-index: 10;
+    position: relative;
+    z-index: 9999; /* Ensure it's on top of everything */
 }
 
 .dialogBackdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(107, 114, 128, 0.75);
-  transition: opacity 500ms ease-in-out;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(107, 114, 128, 0.75);
+    transition: opacity 500ms ease-in-out;
 }
 
 .outerContainer {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
 }
 
 .innerContainer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
 }
 
 .panelContainer {
-  pointer-events: none;
-  position: fixed;
-  inset-y: 0;
-  right: 0;
-  display: flex;
-  max-width: 100%;
-  padding-left: 2.5rem; /* pl-10 */
+    pointer-events: none;
+    position: fixed;
+    inset-y: 0;
+    right: 0; /* Default: slides from right */
+    display: flex;
+    max-width: 100%;
+    padding-left: 2.5rem; /* pl-10 for desktop */
 }
 
 .dialogPanel {
-  pointer-events: auto;
-  width: 100vw;
-  max-width: 28rem;
-  transform: translateX(0);
-  transition: transform 500ms ease-in-out;
-  height: 100vh;
+    pointer-events: auto;
+    width: 100vw; /* This is key. For desktop, it takes full viewport width, but max-width limits it. */
+    max-width: 28rem; /* Desktop max width (approx 448px) */
+    transform: translateX(0); /* Ensure it's visible by default for the open state */
+    transition: transform 500ms ease-in-out;
+    height: 100vh; /* Full viewport height */
 }
 
 .panelContent {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: scroll;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: scroll; /* Scroll content if it overflows */
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
 }
 
 .content {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 1.5rem 1rem;
+    flex-grow: 1;
+    overflow-y: auto; /* Allows content within to scroll if individual section is too long */
+    padding: 1.5rem 1rem;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1rem; /* Add padding below header */
+    border-bottom: 1px solid #e5e7eb; /* Add a subtle separator */
+    margin-bottom: 1.5rem; /* Space before cart items */
 }
 
 .headerTitle {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #1f2937; /* Gray-900 */
+    font-size: 1.25rem; /* Slightly larger title for readability */
+    font-weight: 600; /* Bolder */
+    color: #1f2937;
 }
 
-.closeButtonContainer {
-  margin-left: 0.75rem;
-  display: flex;
-  height: 1.75rem;
-  align-items: center;
-}
+/* No longer needed if close button is directly in header */
+/* .closeButtonContainer {
+    margin-left: 0.75rem;
+    display: flex;
+    height: 1.75rem;
+    align-items: center;
+} */
 
 .closeButton {
-  padding: 0.5rem;
-  color: #9ca3af; /* Gray-400 */
-  transition: color 0.2s;
-  background: none;
-  border: none;
-  cursor: pointer;
+    padding: 0.5rem;
+    color: #9ca3af;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 1rem; /* Space close button from title */
 }
 
 .closeButton:hover {
-  color: #6b7280; /* Gray-500 */
+    color: #6b7280;
 }
 
-.buttonInset {
-  position: absolute;
-  inset: -0.125rem;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
+/* Remove unused/redundant styles based on your JSX */
+/* .buttonInset { position: absolute; inset: -0.125rem; } */
+/* .srOnly { ... } */ /* If you're not explicitly using this in your JSX */
 
 .xMarkIcon {
-  width: 1.5rem;
-  height: 1.5rem;
+    width: 1.75rem; /* Make icon slightly larger */
+    height: 1.75rem;
 }
 
 .cartList {
-  margin-top: 2rem;
+    margin-top: 0; /* Adjust margin as header already provides spacing */
+    flex-grow: 1; /* Allow cart list to grow and fill space */
+    overflow-y: auto; /* Enable scrolling for the list itself */
+    padding-right: 0.5rem; /* Add some padding for scrollbar */
 }
 
 .emptyCartText {
-  color: #6b7280; /* text-gray-500 */
+    color: #6b7280;
+    text-align: center; /* Center the empty cart message */
+    padding: 2rem 0; /* Add padding for visibility */
 }
 
 .cartItemsList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top-width: 1px;
-  border-color: #e5e7eb; /* divide-gray-200 */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    /* border-top-width: 1px; This might be redundant if items have top border/padding */
+    border-color: #e5e7eb;
 }
 
 .cartItem {
-  display: flex;
-  padding: 1.5rem 0;
-  border-bottom-width: 1px;
-  border-color: #e5e7eb; /* divide-gray-200 */
+    display: flex;
+    padding: 1rem 0; /* Slightly reduced vertical padding for items */
+    border-bottom: 1px solid #e5e7eb; /* Better explicit border */
+    align-items: flex-start; /* Align items to the top */
 }
 
 .cartImage {
-  width: 6rem;
-  height: 6rem;
-  border-radius: 0.375rem;
-  border: 1px solid #d1d5db; /* Gray-200 */
-  overflow: hidden;
+    width: 5rem; /* Slightly smaller image */
+    height: 5rem;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    overflow: hidden;
+    flex-shrink: 0; /* Prevent image from shrinking */
 }
 
 .cartImageImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .cartDetails {
-  margin-left: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+    margin-left: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute content */
 }
 
 .cartItemHeader {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1f2937; /* Gray-900 */
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem; /* Slightly smaller text for item header */
+    font-weight: 600; /* Bolder product name */
+    color: #1f2937;
+    margin-bottom: 0.25rem; /* Space between header and details */
+}
+
+.itemName {
+    /* No specific style needed here unless different from headerTitle */
 }
 
 .cartItemPrice {
-  margin-left: 1rem;
+    margin-left: 0.5rem; /* Reduce margin */
+    font-weight: 500;
 }
 
-.cartItemQuantity {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: #6b7280; /* Gray-500 */
-}
-
-.cartItemActions {
-  display: flex;
-  flex: 1;
-  align-items: flex-end;
-  justify-content: space-between;
-  font-size: 0.875rem;
-}
-
-.subtotal {
-  border-top: 1px solid #e5e7eb; /* Gray-200 */
-  padding: 1.5rem 1rem;
-}
-
-.subtotalText {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1f2937; /* Gray-900 */
-}
-
-.shippingText {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #6b7280; /* text-gray-500 */
-}
-
-.checkoutButtonContainer {
-  margin-top: 1.5rem;
-}
-
-.checkoutButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  color: white;
-  background-color: #e74c3c; /* Indigo-600 */
-  border-radius: 0.375rem;
-  border: 1px solid transparent;
-  transition: background-color 0.2s;
-  text-decoration: none;
-  text-align: center;
-}
-
-.checkoutButton:hover {
-  background-color: black; /* Indigo-700 */
-}
-
-/* Estilos para los detalles del ítem */
 .itemDetails {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column; /* Stack quantity and size vertically on small screens */
+    gap: 0.25rem; /* Smaller gap */
+    margin-top: 0.5rem; /* Keep margin */
 }
 
 .cartItemQuantity,
 .cartItemSize {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0;
+    font-size: 0.8rem; /* Smaller text for quantity/size */
+    color: #6b7280;
+    margin: 0;
 }
 
 .cartItemSize {
-  background-color: #f3f4f6;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
+    background-color: #f3f4f6;
+    padding: 0.15rem 0.4rem; /* Smaller padding for size badge */
+    border-radius: 0.2rem;
+    width: fit-content; /* Ensure it wraps content */
 }
 
-/* Ajustes para el botón Remove */
 .removeButton {
-  margin-top: 0.5rem;
-  font-weight: 500;
-  color: #ef4444;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s;
-  padding: 0.25rem 0;
-  text-align: left;
+    margin-top: 0.75rem; /* More space from details */
+    font-weight: 500;
+    color: #ef4444;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0.25rem 0;
+    text-align: left;
+    align-self: flex-start; /* Align to the left in column */
 }
 
 .removeButton:hover {
-  color: #dc2626;
-  text-decoration: underline;
+    color: #dc2626;
+    text-decoration: underline;
+}
+
+.subtotal {
+    border-top: 1px solid #e5e7eb;
+    padding: 1.5rem 1rem;
+    flex-shrink: 0; /* Prevent subtotal from shrinking when content overflows */
+}
+
+.subtotalText {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.125rem; /* Slightly larger subtotal text */
+    font-weight: 600; /* Bolder */
+    color: #1f2937;
+}
+
+.shippingText {
+    margin-top: 0.5rem;
+    font-size: 0.85rem; /* Slightly smaller */
+    color: #6b7280;
+    text-align: center; /* Center the shipping text */
+}
+
+/* Remove checkoutButtonContainer as Link handles its own styling */
+/* .checkoutButtonContainer { margin-top: 1.5rem; } */
+
+.checkoutButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0.85rem 1.5rem; /* Slightly more padding */
+    margin-top: 1.5rem; /* Add margin to separate from shipping text */
+    font-size: 1.05rem; /* Slightly larger font */
+    font-weight: 600; /* Bolder */
+    color: white;
+    background-color: #e74c3c;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    text-align: center;
+}
+
+.checkoutButton:hover {
+    background-color: black;
+}
+
+
+/* --- Mobile Specific Styles --- */
+
+@media (max-width: 768px) {
+    .panelContainer {
+        /* On smaller screens, make the panel cover the full width */
+        right: 0;
+        left: 0; /* This makes it span the full width */
+        padding-left: 0; /* Remove padding from the left */
+        justify-content: center; /* Center the panel if it has a max-width */
+    }
+
+    .dialogPanel {
+        max-width: 100%; /* Ensure it can go full width */
+        width: 100vw; /* Take full viewport width */
+        border-radius: 0; /* Remove border-radius for full screen */
+        box-shadow: none; /* Remove shadow if it's full screen */
+    }
+
+    .content {
+        padding: 1rem 0.75rem; /* Reduce padding inside content area */
+    }
+
+    .header {
+        padding-top: 0.5rem; /* Adjust header padding */
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .headerTitle {
+        font-size: 1.1rem; /* Smaller title for mobile */
+    }
+
+    .xMarkIcon {
+        width: 1.5rem; /* Back to original size */
+        height: 1.5rem;
+    }
+
+    .cartItem {
+        padding: 0.75rem 0; /* Further reduce item padding */
+    }
+
+    .cartImage {
+        width: 4.5rem; /* Smaller image on very small screens */
+        height: 4.5rem;
+    }
+
+    .cartDetails {
+        margin-left: 0.75rem; /* Reduce margin */
+    }
+    
+    .cartItemHeader {
+        font-size: 0.9rem; /* Smaller font for item name/price */
+    }
+    .cartItemPrice {
+        margin-left: 0.25rem; /* Less space for price */
+    }
+
+    .itemDetails {
+        flex-direction: row; /* Keep quantity/size side-by-side if there's room */
+        gap: 0.75rem;
+        margin-top: 0.25rem; /* Less margin */
+    }
+
+    .cartItemQuantity,
+    .cartItemSize {
+        font-size: 0.75rem; /* Even smaller font */
+    }
+
+    .removeButton {
+        margin-top: 0.5rem; /* Reduce margin */
+        font-size: 0.8rem; /* Smaller remove button text */
+    }
+
+    .subtotal {
+        padding: 1rem 0.75rem; /* Reduce subtotal padding */
+    }
+
+    .subtotalText {
+        font-size: 1rem; /* Smaller subtotal text */
+    }
+
+    .shippingText {
+        font-size: 0.8rem; /* Smaller shipping text */
+    }
+
+    .checkoutButton {
+        padding: 0.75rem 1rem; /* Smaller button padding */
+        font-size: 0.95rem; /* Smaller button text */
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* For smaller phones, ensure single column for item details */
+    .itemDetails {
+        flex-direction: column; /* Stack quantity and size vertically again */
+        gap: 0.15rem; /* Very small gap */
+    }
+    .cartItemSize {
+        padding: 0.1rem 0.3rem; /* Even smaller padding for badge */
+        font-size: 0.7rem;
+    }
 }

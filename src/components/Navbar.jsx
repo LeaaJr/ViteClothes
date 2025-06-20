@@ -1,55 +1,65 @@
-import styles from '../style/Navbar.module.css'; // Make sure this path is correct
+import styles from '../style/Navbar.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useState, useRef, useEffect } from 'react';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline'; // If you're using this for the cart icon
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import ShoppingCart from '../components/ShoppingCart';
 import { useCart } from '../context/CartContext';
-import { HiMenu, HiOutlineX } from 'react-icons/hi'; // Hamburger icons
-// import { BsCart } from 'react-icons/bs'; // If you prefer this cart icon
+import { HiMenu, HiOutlineX } from 'react-icons/hi';
+
 
 const Navbar = () => {
-    const { user, logout, isAdmin } = useAuth(); // Destructure isAdmin as well
+    const { user, logout, isAdmin } = useAuth();
     const { cartItems } = useCart();
     const navigate = useNavigate();
 
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false); // Renamed for clarity: controls desktop user menu
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Controls the full mobile slide-out menu
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const userMenuRef = useRef(null); // Ref for the desktop user dropdown
+    const userMenuRef = useRef(null);
 
-    // Toggle desktop user dropdown
+    // --- ADD THESE LOGS ---
+    console.log('Navbar rendering. isCartOpen:', isCartOpen);
+
+    useEffect(() => {
+        console.log('Navbar useEffect triggered. Current isCartOpen:', isCartOpen);
+    }, [isCartOpen]); // Log when isCartOpen changes
+
+    // Also, add a log *inside* the button click
+    const handleOpenCart = () => {
+        setIsCartOpen(true);
+        // Also close the mobile menu if it's open, otherwise the cart modal will open
+        // behind the mobile menu or with it still visible.
+        setIsMobileMenuOpen(false);
+    };
+    // --- END ADDED LOGS ---
+
     const handleUserMenuClick = () => {
         setIsUserDropdownOpen(!isUserDropdownOpen);
     };
 
-    // Logout function
     const handleLogout = () => {
         logout();
-        setIsUserDropdownOpen(false); // Close dropdown if open
-        setIsMobileMenuOpen(false); // Close mobile menu if open
+        setIsUserDropdownOpen(false);
+        setIsMobileMenuOpen(false);
         navigate('/');
     };
 
-    // Toggle mobile hamburger menu
     const handleMobileMenuToggle = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
-        setIsUserDropdownOpen(false); // Close desktop dropdown when mobile menu opens
+        setIsUserDropdownOpen(false);
     };
 
-    // Close mobile menu after navigating (for mobile links)
     const handleMobileNavLinkClick = () => {
         setIsMobileMenuOpen(false);
     };
 
-    // Handle authentication button clicks (Sign In/Sign Up) in mobile menu
     const handleMobileAuthButtonClick = (path) => {
         setIsMobileMenuOpen(false);
         navigate(path);
     };
 
-    // Close desktop user dropdown if click outside
     useEffect(() => {
         function handleClickOutside(event) {
             if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -152,7 +162,14 @@ const Navbar = () => {
                 <a onClick={scrollToSection} className={styles.mobileNavLink} style={{ cursor: 'pointer' }}>
                     Contact
                 </a>
-                <Link to="/Shoppingcart" className={styles.mobileNavLink} onClick={handleMobileNavLinkClick}>Shopping Cart ({cartItems.length})</Link> {/* Added cart to mobile menu */}
+
+                {/* NEW: Use a button or <a> tag that opens the modal */}
+                <button
+                    className={styles.mobileNavLink} // You can reuse your mobileNavLink styles
+                    onClick={handleOpenCart} // Call the function to open the cart modal
+                >
+                    Shopping Cart ({cartItems.length})
+                </button>
 
                 <div className={styles.dropdownDivider}></div> {/* Separator for auth options */}
 
@@ -178,7 +195,9 @@ const Navbar = () => {
             </div>
 
             {/* Shopping Cart Modal */}
+            {typeof isCartOpen === 'boolean' && ( // Only render if isCartOpen is definitively a boolean
             <ShoppingCart open={isCartOpen} onClose={() => setIsCartOpen(false)} />
+)}
         </nav>
     );
 };
