@@ -1,3 +1,4 @@
+/* Estilos base (se mantienen igual) */
 .container {
   display: flex;
   width: 100%;
@@ -15,7 +16,7 @@
 .imageSection {
   flex: 1;
   overflow: hidden;
-  display: block; /* debe estar visible */
+  display: block;
   background-size: cover;
 }
 .logo {
@@ -25,13 +26,11 @@
   font-family: 'Times New Roman', serif;
   letter-spacing: -1px;
 }
-
 .logo img {
   max-width: 100%;
   height: auto;
-  max-height: 120px; /* Ajusta según el tamaño deseado */
+  max-height: 120px;
 }
-
 .title {
   font-size: 0.9rem;
   font-weight: 400;
@@ -95,12 +94,91 @@
   object-fit: contain;
   display: block;
 }
-/* Responsive styles */
-@media (min-width: 768px) {
-  .formSection {
-    padding: 4rem;
-  }
+
+/* Media Queries para responsive */
+@media (max-width: 768px) {
   .imageSection {
-    display: block;
+    display: none; /* Ocultamos la imagen en pantallas pequeñas */
+  }
+  
+  .formSection {
+    padding: 2rem;
+    max-width: 100%;
+  }
+}
+
+/* Para 425px */
+@media (max-width: 425px) {
+  .container {
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .logo {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .title {
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .formSection {
+    padding: 1.5rem;
+  }
+  
+  .loginButton {
+    width: 100%;
+  }
+}
+
+/* Para 375px */
+@media (max-width: 375px) {
+  .logo {
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .title {
+    font-size: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .formSection {
+    padding: 1.2rem;
+  }
+  
+  .inputGroup {
+    margin-bottom: 1.2rem;
+  }
+  
+  .forgotPassword {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Para 320px */
+@media (max-width: 320px) {
+  .logo {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .title {
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+  }
+  
+  .formSection {
+    padding: 1rem;
+  }
+  
+  .input {
+    font-size: 0.8rem;
+  }
+  
+  .loginButton {
+    padding: 0.7rem 0.8rem;
   }
 }

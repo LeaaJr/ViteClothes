@@ -1,28 +1,48 @@
 // src/components/ProtectedRoute.jsx
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react'; // Import useEffect
+import { Navigate, useLocation } from 'react-router-dom'; // Import useLocation
 import { useAuth } from '../auth/AuthContext';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
-    const { isAuthenticated, isAdmin, loading } = useAuth(); // Obtén el estado de auth
+    const { isAuthenticated, isAdmin, loading, user } = useAuth(); // Also get 'user' for more context
+    const location = useLocation(); // Get current location
 
-    // Mientras se está cargando el estado de autenticación (ej. verificando token inicial)
+    console.log('ProtectedRoute rendering for path:', location.pathname);
+    console.log('  loading:', loading);
+    console.log('  isAuthenticated:', isAuthenticated);
+    console.log('  isAdmin:', isAdmin);
+    console.log('  adminOnly (prop):', adminOnly);
+    console.log('  User object:', user); // Inspect the full user object
+
+    useEffect(() => {
+        console.log('ProtectedRoute useEffect triggered for path:', location.pathname);
+        console.log('  (useEffect) loading:', loading);
+        console.log('  (useEffect) isAuthenticated:', isAuthenticated);
+        console.log('  (useEffect) isAdmin:', isAdmin);
+        if (!loading && !isAuthenticated) {
+            console.log('  Redirecting to /admin/login because not authenticated.');
+        } else if (!loading && adminOnly && !isAdmin) {
+            console.log('  Redirecting to / because adminOnly and not an admin.');
+        }
+    }, [loading, isAuthenticated, isAdmin, adminOnly, location.pathname]);
+
+
+    // While loading the authentication state
     if (loading) {
-        return <div>Loading authentication...</div>; // O un spinner/loading screen
+        return <div>Loading authentication...</div>; 
     }
 
-    // Si no está autenticado, redirige al login de admin
+    // If not authenticated, redirect to admin login
     if (!isAuthenticated) {
         return <Navigate to="/admin/login" replace />;
     }
 
-    // Si es solo para administradores y el usuario no es admin, redirige
+    // If it's only for administrators and the user isn't an admin, redirect
     if (adminOnly && !isAdmin) {
-        // Redirigir a "Acceso Denegado" o a la home
         return <Navigate to="/" replace />; 
     }
 
-    // Si está ok y cumple los requisitos de rol, renderiza el contenido
+    // If all checks pass, render the content
     return children;
 };
 

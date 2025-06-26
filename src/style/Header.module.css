@@ -229,6 +229,79 @@
     }
 }
 
+/* Añade esto para corregir el problema específico en 769px */
+@media (min-width: 769px) and (max-width: 900px) {
+  .Header {
+    height: 550px; /* Altura intermedia */
+  }
+  
+  .ImageContainer {
+    height: 500px; /* Altura reducida para la imagen */
+  }
+  
+  .Image {
+    left: 5rem; /* Posición más centrada */
+    height: 90%; /* Altura relativa al contenedor */
+    width: auto; /* Mantiene proporciones */
+  }
+  
+  .BtnComprar {
+    margin-right: 3rem; /* Margen reducido */
+  }
+}
+
+/* Refinamos el media query de 768px para mejor transición */
+@media (max-width: 768px) {
+  .Header {
+    flex-direction: column;
+    height: auto;
+    padding: 1.5rem; /* Aumentamos un poco el padding */
+    min-height: 85vh; /* Más espacio vertical */
+  }
+
+  .ImageContainer {
+    height: 320px; /* Aumentamos ligeramente la altura */
+    width: 85%; /* Un poco menos de ancho */
+    margin: 1.5rem 0; /* Más margen vertical */
+    transition: all 0.3s ease; /* Suaviza los cambios */
+  }
+
+  .Image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Cambiamos a 'contain' para ver toda la imagen */
+    object-position: center center;
+    transition: all 0.3s ease;
+  }
+  
+  /* Ajustamos los otros elementos para mantener proporciones */
+  .Left h1 {
+    font-size: 2.2rem; /* Tamaño ligeramente mayor */
+    margin-bottom: 0.8rem;
+  }
+  
+  .typingText {
+    font-size: 1.4rem;
+  }
+  
+  .BtnComprar {
+    padding: 12px 35px; /* Botón un poco más grande */
+    margin-top: 1.5rem;
+  }
+}
+
+/* Añadimos un punto intermedio adicional */
+@media (max-width: 600px) {
+  .ImageContainer {
+    height: 280px;
+    width: 90%;
+  }
+  
+  .Image {
+    object-fit: cover; /* Volvemos a cover en móviles más pequeños */
+  }
+}
+
 /* For screens up to 425px */
 @media (max-width: 425px) {
     .Left h1 {
@@ -245,7 +318,7 @@
     }
 
     .ImageContainer {
-        height: 270px; /* Smaller image height */
+        height: 250px; /* Smaller image height */
     }
 
     .BtnComprar {
@@ -282,4 +355,54 @@
     .ImageContainer {
         height: 180px; /* Minimum image height */
     }
+}
+
+/* Media Query específica para 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .Header {
+    height: 500px; /* Reducimos la altura para evitar cortes */
+    padding: 15px;
+  }
+
+  .Left h1 {
+    font-size: 2rem; /* Reducimos el tamaño del título */
+  }
+
+  .typingContainer {
+    width: 16rem; /* Ajustamos el ancho del texto animado */
+  }
+
+  .typingText {
+    font-size: 1.5rem; /* Reducimos el tamaño del texto animado */
+  }
+
+  .ImageContainer {
+    height: 450px; /* Ajustamos la altura de la imagen */
+  }
+
+  .Image {
+    left: 5rem; /* Ajustamos la posición horizontal de la imagen */
+    top: 0.5rem;
+  }
+
+  .BtnComprar {
+    margin-right: 2rem; /* Reducimos el margen derecho del botón */
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+}
+
+/* Ajustamos también el rango entre 1025px y 1200px para una transición suave */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .Header {
+    height: 580px;
+  }
+
+  .Image {
+    left: 7rem;
+  }
+
+  .BtnComprar {
+    margin-right: 4rem;
+  }
 }
