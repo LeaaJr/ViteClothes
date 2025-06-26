@@ -41,3 +41,12 @@ and on the other hand start the application normally
 
 ![image](https://github.com/user-attachments/assets/9dc02369-5aa1-4818-89dc-9d4e603b79f0)
 
+![image](https://github.com/user-attachments/assets/14976f05-be8b-4e3e-9b65-18796ed1577c)
+
+An admin logs in via /admin/login
+
+They navigate to /admin/products-list
+
+They see a list of all products
+
+For any product they want to edit, they click an "Edit" button, which takes them to /admin/edit-product/{{product.id}}
