@@ -1,7 +1,7 @@
 /* AdminProductForm.jsx */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom'; // Import useParams
 import { Snackbar, Alert } from '@mui/material';
 
 // API
@@ -9,22 +9,23 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const AdminProductForm = () => {
     const navigate = useNavigate();
+    const { id } = useParams(); // Get product ID from URL (e.g., /admin/edit-product/123)
 
     // Estado que tiene los datos del formulario
-const [formData, setFormData] = useState({
-    nombre: '',
-    precio: '',
-    descripcion: '',
-    categoria: '',
-    subcategoria: '',
-    stock: '',
-    img1: '',
-    img2: '',
-    img3: '',
-    talles: {},
-    destacado: false, // Default to false
-    tendencia: false  // Default to false
-});
+    const [formData, setFormData] = useState({
+        nombre: '',
+        precio: '',
+        descripcion: '',
+        categoria: '',
+        subcategoria: '',
+        stock: '',
+        img1: '',
+        img2: '',
+        img3: '',
+        talles: {},
+        destacado: false, // Default to false
+        tendencia: false  // Default to false
+    });
 
     // Estado de carga y error
     const [loading, setLoading] = useState(false);
@@ -36,36 +37,79 @@ const [formData, setFormData] = useState({
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
+    // --- NEW: Fetch product data if ID exists (for editing) ---
+    useEffect(() => {
+        if (id) { // Only fetch if 'id' is present in the URL
+            setLoading(true);
+            axios.get(`${API_BASE_URL}/productos/${id}`)
+                .then(response => {
+                    // When fetching, talles might be null, ensure it's an object
+                    const fetchedData = {
+                        ...response.data,
+                        talles: response.data.talles || {}
+                    };
+                    setFormData(fetchedData);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    console.error('Error fetching product for edit:', err.response?.data || err.message);
+                    setSnackbarMessage('Error loading product data for editing.');
+                    setSnackbarSeverity('error');
+                    setOpenSnackbar(true);
+                    setLoading(false);
+                    // Optionally redirect if product not found or error
+                    // navigate('/admin/products-list'); 
+                });
+        }
+    }, [id]); // Re-run effect if ID changes
+
     // Esto es para manejar los cambios en la entrada del formulario
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target; // Added type and checked for checkboxes
         setFormData(prevData => ({
             ...prevData,
-            [name]: value
+            [name]: type === 'checkbox' ? checked : value // Handle checkboxes correctly
         }));
     };
 
     // Manejar cambios específicamente para tamaños (entrada dinámica)
-    const handleSizeChange = (size, stock) => {
+    const handleSizeChange = (sizeKey, newValue) => { // 'sizeKey' is the current key in formData.talles
         setFormData(prevData => ({
             ...prevData,
             talles: {
                 ...prevData.talles,
-                [size]: parseInt(stock, 10) || 0
+                [sizeKey]: parseInt(newValue, 10) || 0 // Ensure stock is an integer
             }
         }));
+    };
+    
+    // Update size key when user types in the size name input
+    const handleSizeNameChange = (oldSizeKey, newSizeName) => {
+        setFormData(prevData => {
+            const newTalles = {};
+            Object.entries(prevData.talles).forEach(([key, value]) => {
+                if (key === oldSizeKey) {
+                    newTalles[newSizeName] = value; // Assign old stock to new size name
+                } else {
+                    newTalles[key] = value;
+                }
+            });
+            return { ...prevData, talles: newTalles };
+        });
     };
 
     // Agregar un nuevo campo de entrada de tamaño
     const addSizeField = () => {
-        setFormData(prevData => ({
-            ...prevData,
-            // Utilizo una clave única como 'newSize_N' para evitar problemas
-            talles: {
-                ...prevData.talles,
-                [`newSize_${Object.keys(prevData.talles).length}`]: 0 
-            }
-        }));
+        setFormData(prevData => {
+            const newKey = `newSize_${Object.keys(prevData.talles).length}_${Date.now()}`; // More robust unique key
+            return {
+                ...prevData,
+                talles: {
+                    ...prevData.talles,
+                    [newKey]: 0 
+                }
+            };
+        });
     };
 
     // Eliminar un campo de entrada de tamaño
@@ -81,62 +125,79 @@ const [formData, setFormData] = useState({
     };
 
     // Manejar el envío del formulario
- const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
-    setOpenSnackbar(false); // Cerrar cualquier snackbar existente
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSuccess('');
+        setOpenSnackbar(false); // Cerrar cualquier snackbar existente
 
-    try {
-        // Preparar los datos del producto
-        const productData = {
-            ...formData,
-            precio: parseFloat(formData.precio),
-            stock: parseInt(formData.stock, 10),
-            img1: formData.img1 || null,
-            img2: formData.img2 || null,
-            img3: formData.img3 || null,
-            talles: Object.fromEntries(
-                Object.entries(formData.talles).filter(([size, stock]) => size.startsWith('newSize_') ? stock > 0 : true)
-            )
-        };
+        try {
+            // Preparar los datos del producto
+            const productData = {
+                ...formData,
+                precio: parseFloat(formData.precio),
+                stock: parseInt(formData.stock, 10),
+                img1: formData.img1 || null,
+                img2: formData.img2 || null,
+                img3: formData.img3 || null,
+                // Clean up 'newSize_' temporary keys and only keep valid sizes
+                talles: Object.fromEntries(
+                    Object.entries(formData.talles)
+                          .filter(([sizeName, stockValue]) => sizeName && sizeName.trim() !== '') // Remove empty size names
+                          .map(([sizeName, stockValue]) => [
+                              sizeName.startsWith('newSize_') ? '' : sizeName, // Remove temp prefix for submission
+                              parseInt(stockValue, 10) || 0
+                          ])
+                          .filter(([sizeName, stockValue]) => sizeName && sizeName.trim() !== '') // Ensure size name is not empty after potential cleanup
+                )
+            };
 
-        const response = await axios.post(`${API_BASE_URL}/productos`, productData);
+            let response;
+            if (id) {
+                // If ID exists, it's an update (PUT)
+                response = await axios.put(`${API_BASE_URL}/productos/${id}`, productData);
+                setSuccess('Product updated successfully!');
+                setSnackbarMessage('Product updated successfully!');
+            } else {
+                // Otherwise, it's a new product (POST)
+                response = await axios.post(`${API_BASE_URL}/productos`, productData);
+                setSuccess('Product added successfully!');
+                setSnackbarMessage('Product added successfully!');
+            }
+            
+            setSnackbarSeverity('success');
+            setOpenSnackbar(true);
 
-        setSuccess('Product added successfully!');
-        setSnackbarMessage('Product added successfully!');
-        setSnackbarSeverity('success');
-        setOpenSnackbar(true);
+            // Opcionalmente, restablezca el formulario o navegue
+            if (!id) { // Only clear form if it was a new product addition
+                setFormData({
+                    nombre: '',
+                    precio: '',
+                    descripcion: '',
+                    categoria: '',
+                    subcategoria: '',
+                    stock: '',
+                    img1: '',
+                    img2: '',
+                    img3: '',
+                    destacado: false,
+                    tendencia: false,
+                    talles: {}
+                });
+            }
+            // navigate('/productos'); // Descomentar para redirigir después del éxito (considerar dónde quieres redirigir)
+        } catch (err) {
+            console.error('Error processing product:', err.response?.data || err.message);
 
-        // Opcionalmente, restablezca el formulario o navegue
-        setFormData({
-            nombre: '',
-            precio: '',
-            descripcion: '',
-            categoria: '',
-            subcategoria: '',
-            stock: '',
-            img1: '',
-            img2: '',
-            img3: '',
-            destacado: false,
-            tendencia: false,
-            talles: {}
-        });
-        // browse('/productos'); // Descomentar para redirigir después del éxito
-    } catch (err) {
-        console.error('Error adding product:', err.response?.data || err.message);
-
-        // Mover estas líneas dentro del bloque catch
-        setError(err.response?.data?.detail || 'Failed to add product.');
-        setSnackbarMessage(err.response?.data?.detail || 'Failed to add product.');
-        setSnackbarSeverity('error');
-        setOpenSnackbar(true);
-    } finally {
-        setLoading(false);
-    }
-};
+            setError(err.response?.data?.detail || 'Failed to process product.');
+            setSnackbarMessage(err.response?.data?.detail || 'Failed to process product.');
+            setSnackbarSeverity('error');
+            setOpenSnackbar(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -147,7 +208,8 @@ const [formData, setFormData] = useState({
 
     return (
         <div className="admin-product-form-container" style={{ padding: '20px', maxWidth: '800px', margin: 'auto', fontFamily: 'Arial, sans-serif' }}>
-            <h2>Add New Product</h2>
+            {/* Dynamic Title */}
+            <h2>{id ? 'Edit Product' : 'Add New Product'}</h2> 
             <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
                     <label style={{ display: 'block', marginBottom: '5px' }}>Product Name:</label>
@@ -192,7 +254,7 @@ const [formData, setFormData] = useState({
                         type="checkbox" 
                         name="destacado" 
                         checked={formData.destacado} 
-                        onChange={(e) => setFormData(prevData => ({ ...prevData, destacado: e.target.checked }))} 
+                        onChange={handleChange} // Use common handleChange for checkboxes too
                         id="destacado"
                     />
                     <label htmlFor="destacado">Is Featured?</label>
@@ -202,7 +264,7 @@ const [formData, setFormData] = useState({
                         type="checkbox" 
                         name="tendencia" 
                         checked={formData.tendencia} 
-                        onChange={(e) => setFormData(prevData => ({ ...prevData, tendencia: e.target.checked }))} 
+                        onChange={handleChange} // Use common handleChange for checkboxes too
                         id="tendencia"
                     />
                     <label htmlFor="tendencia">Is Trending?</label>
@@ -211,38 +273,23 @@ const [formData, setFormData] = useState({
                 {/* Dynamic Size Inputs */}
                 <div style={{ gridColumn: '1 / -1', borderTop: '1px solid #eee', paddingTop: '20px' }}>
                     <h3 style={{ marginTop: '0' }}>Sizes and Stock</h3>
-                    {Object.entries(formData.talles).map(([size, stock]) => (
-                        <div key={size} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                    {Object.entries(formData.talles).map(([sizeKey, stockValue]) => (
+                        <div key={sizeKey} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
                             <input
                                 type="text"
-                                value={size.startsWith('newSize_') ? '' : size} // Borrar clave temporal para visualización
-                                onChange={(e) => {
-                                    const oldSize = size;
-                                    const newSize = e.target.value;
-                                    setFormData(prevData => {
-                                        const newTalles = {};
-                                        // Vuelva a agregar los tamaños existentes, pero reemplace la clave temporal anterior con el nuevo tamaño definido por el usuario
-                                        Object.entries(prevData.talles).forEach(([key, val]) => {
-                                            if (key === oldSize) {
-                                                newTalles[newSize] = val; // Asignar el stock actual al nuevo nombre de tamaño
-                                            } else {
-                                                newTalles[key] = val;
-                                            }
-                                        });
-                                        return { ...prevData, talles: newTalles };
-                                    });
-                                }}
+                                value={sizeKey.startsWith('newSize_') ? '' : sizeKey} // Clear temporary key for display
+                                onChange={(e) => handleSizeNameChange(sizeKey, e.target.value)} // New handler for size name
                                 placeholder="Size (e.g., S, M, L)"
                                 style={{ flex: 1, padding: '8px' }}
                             />
                             <input
                                 type="number"
-                                value={stock}
-                                onChange={(e) => handleSizeChange(size, e.target.value)}
+                                value={stockValue} // Use stockValue from map directly
+                                onChange={(e) => handleSizeChange(sizeKey, e.target.value)} // Use sizeKey to update correct entry
                                 placeholder="Stock"
                                 style={{ width: '80px', padding: '8px' }}
                             />
-                            <button type="button" onClick={() => removeSizeField(size)} style={{ background: 'salmon', color: 'white', border: 'none', padding: '8px 12px', cursor: 'pointer' }}>Remove</button>
+                            <button type="button" onClick={() => removeSizeField(sizeKey)} style={{ background: 'salmon', color: 'white', border: 'none', padding: '8px 12px', cursor: 'pointer' }}>Remove</button>
                         </div>
                     ))}
                     <button type="button" onClick={addSizeField} style={{ background: '#007bff', color: 'white', border: 'none', padding: '10px 15px', cursor: 'pointer', marginTop: '10px' }}>Add Size</button>
@@ -250,7 +297,7 @@ const [formData, setFormData] = useState({
 
                 <div style={{ gridColumn: '1 / -1', textAlign: 'center', marginTop: '20px' }}>
                     <button type="submit" disabled={loading} style={{ padding: '10px 20px', fontSize: '16px', background: loading ? '#ccc' : '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                        {loading ? 'Adding...' : 'Add Product'}
+                        {loading ? 'Processing...' : (id ? 'Update Product' : 'Add Product')} {/* Dynamic button text */}
                     </button>
                 </div>
             </form>

@@ -1,15 +1,43 @@
-/* Home.module.css */
+/* Home.module.css - Versión optimizada */
 
 .container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Added default padding for desktop, can be adjusted for mobile */
-    padding: 0; /* Header already handles its own padding */
+    padding: 0;
+    overflow-x: hidden; /* Previene desbordamiento horizontal */
 }
 
-.loading,
-.error {
+/* Estilos comunes para secciones */
+.sectionCommon {
+    width: 100%;
+    padding: 3rem 0;
+    background: #f2f2f2;
+}
+
+.featuredSection {
+    composes: sectionCommon;
+    padding-bottom: 4rem;
+}
+
+.appPromoSection {
+    composes: sectionCommon;
+    background-color: #f2f2f2;
+    padding: 5rem 0;
+}
+
+.categoriesSection {
+    composes: sectionCommon;
+    padding-bottom: 6rem;
+}
+
+.parallaxWrapper {
+    height: auto;
+    position: relative;
+}
+
+/* Estilos para estados */
+.loading, .error {
     text-align: center;
     padding: 2rem;
     font-size: 1.2rem;
@@ -19,98 +47,123 @@
     color: #ff3333;
 }
 
-.featuredSection {
-    padding: 2rem 0; /* Desktop padding */
-    background: #f2f2f2;
-}
-
-.appPromoSection {
-    background-color: #f2f2f2;
-    padding: 4rem 0; /* Desktop padding */
-    width: 100%;
-}
-
-.categoriesSection {
-    padding: 2rem 0 8rem; /* Desktop padding */
-    background: #f2f2f2;
-}
-
-/* ESTA PARTE ES DEL PARALELAX */
-
-.parallaxWrapper {
-    height: auto; /* Good, keeps it flexible */
-    /* Add padding here if needed for the parallax content itself,
-       otherwise, the section content will define it. */
-}
-
-/* SECTION DE TENDENCIA (Applies to both featuredSection for trends) */
+/* Títulos de sección */
 .sectionTitle {
-    font-size: 2rem; /* Desktop font size */
+    font-size: 2.2rem;
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-align: center;
-    padding: 0 1rem; /* Add horizontal padding to prevent text from touching edges */
+    padding: 0 1.5rem;
+    line-height: 1.3;
 }
 
-/* --- Mobile Specific Styles for Home Sections --- */
+/* ------------------------- */
+/* MEDIA QUERIES OPTIMIZADAS */
+/* ------------------------- */
 
+/* Laptops pequeñas y tablets grandes (1024px - 769px) */
+@media (max-width: 1024px) {
+    .sectionCommon {
+        padding: 2.5rem 0;
+    }
+    
+    .appPromoSection {
+        padding: 4rem 0;
+    }
+    
+    .sectionTitle {
+        font-size: 2rem;
+    }
+}
+
+/* Tablets (768px - 601px) */
 @media (max-width: 768px) {
-    .container {
-        /* No major changes needed here as it's already column flex */
+    .sectionCommon {
+        padding: 2rem 0;
     }
+    
+    .featuredSection {
+        padding-bottom: 3rem;
+    }
+    
+    .appPromoSection {
+        padding: 3rem 0;
+    }
+    
+    .categoriesSection {
+        padding-bottom: 4rem;
+    }
+    
+    .sectionTitle {
+        font-size: 1.8rem;
+        margin-bottom: 1.2rem;
+    }
+}
 
-    .featuredSection,
-    .appPromoSection,
-    .categoriesSection,
-    .parallaxWrapper {
-        /* Reduce vertical padding for all main sections on mobile */
+/* Tablets pequeñas y móviles grandes (600px - 425px) */
+@media (max-width: 600px) {
+    .sectionCommon {
+        padding: 1.8rem 0;
+    }
+    
+    .appPromoSection {
+        padding: 2.5rem 0;
+    }
+    
+    .sectionTitle {
+        font-size: 1.6rem;
+        padding: 0 1rem;
+    }
+}
+
+/* Móviles medianos (424px - 376px) */
+@media (max-width: 424px) {
+    .sectionCommon {
         padding: 1.5rem 0;
     }
-
-    /* Adjust padding specifically for MobileApp if it has internal padding */
+    
+    .featuredSection {
+        padding-bottom: 2rem;
+    }
+    
     .appPromoSection {
-        padding: 2rem 0; /* Still keep it slightly larger due to content */
+        padding: 2rem 0;
     }
-
+    
     .categoriesSection {
-        padding-bottom: 4rem; /* Reduce bottom padding for categories */
+        padding-bottom: 3rem;
     }
-
+    
     .sectionTitle {
-        font-size: 1.6rem; /* Smaller title for mobile */
-        margin-bottom: 0.75rem;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
     }
 }
 
-@media (max-width: 425px) {
-    .featuredSection,
-    .appPromoSection,
-    .categoriesSection,
-    .parallaxWrapper {
-        padding: 1rem 0; /* Even smaller vertical padding */
+/* Móviles pequeños (375px - 321px) */
+@media (max-width: 375px) {
+    .sectionCommon {
+        padding: 1.2rem 0;
     }
-
-    .appPromoSection {
-        padding: 1.5rem 0;
-    }
-
-    .categoriesSection {
-        padding-bottom: 2rem; /* Reduce bottom padding further */
-    }
-
+    
     .sectionTitle {
-        font-size: 1.4rem; /* Further reduce title size */
+        font-size: 1.3rem;
     }
 }
 
-@media (max-width: 374px) {
-    .sectionTitle {
-        font-size: 1.3rem; /* Even smaller title */
-    }
-}
-
+/* Móviles muy pequeños (320px y menos) */
 @media (max-width: 320px) {
+    .sectionCommon {
+        padding: 1rem 0;
+    }
+    
     .sectionTitle {
-        font-size: 1.2rem; /* Smallest title size */
+        font-size: 1.2rem;
+        padding: 0 0.8rem;
+    }
+    
+    .loading, .error {
+        padding: 1.5rem;
+        font-size: 1rem;
     }
 }
