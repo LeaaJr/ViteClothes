@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from fastapi import HTTPException  # Asegúrate de importar HTTPException
+from fastapi import HTTPException
 from typing import Dict, Optional
 
 class Producto(BaseModel):

@@ -1,11 +1,61 @@
+/* TypingText.module.css */
+
 .typingText {
-    font-size: 1.9rem;
+    font-size: 2.9rem; /* Desktop default */
     font-family: 'Great Vibes', cursive;
     line-height: 1.5;
     white-space: pre-wrap;
     word-wrap: break-word;
-  }
-  
-  .cursor {
+    /* No min-height/height for desktop, it's flexible */
+}
+
+.cursor {
     animation: blink 0.75s step-end infinite;
-  }
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+
+/* --- NEW MOBILE STYLES FOR .typingText ITSELF --- */
+/* Apply fixed height and overflow directly to the P tag on mobile */
+@media (max-width: 768px) {
+    .typingText {
+        font-size: 1.3rem; /* Matches Header.module.css setting */
+        line-height: 1.4; /* Matches Header.module.css setting */
+        /* Set a fixed height that accommodates the full text */
+        height: 6em; /* Adjust based on font-size (1.3rem * 1.4 line-height * approx 3-4 lines = 5.2 - 6.5em) */
+        overflow: hidden; /* Prevent text from pushing container if it slightly exceeds height */
+        /* Optional: background-color: rgba(0, 0, 255, 0.1); /* For debugging this specific element */
+    }
+}
+
+@media (max-width: 425px) {
+    .typingText {
+        font-size: 1.1rem; /* Matches Header.module.css setting */
+        line-height: 1.4;
+        height: 7em; /* More lines on smaller width, adjust as needed */
+    }
+}
+
+@media (max-width: 374px) {
+    .typingText {
+        font-size: 1rem; /* Matches Header.module.css setting */
+        line-height: 1.4;
+        height: 8em; /* Even more lines for very narrow screens */
+    }
+}
+
+@media (max-width: 320px) {
+    .typingText {
+        font-size: 0.9rem; /* Matches Header.module.css setting */
+        line-height: 1.4;
+        height: 9em; /* Maximum expected lines */
+    }
+}

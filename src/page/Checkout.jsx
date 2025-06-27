@@ -4,6 +4,7 @@ import styles from '../style/Checkout.module.css';
 import logolm from '../style/logos/lm.png'
 import { useCart } from '../context/CartContext';
 
+
 const Checkout = () => {
   const stripe = useStripe();
   const elements = useElements();
