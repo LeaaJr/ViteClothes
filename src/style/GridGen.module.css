@@ -13,20 +13,21 @@
     grid-template-rows: repeat(5, 1fr);
     gap: 10px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    padding: 0; /* Remove any default padding */
+    padding: 0;
 }
 
 /* Estilo común para cada celda dentro del grid */
-.wrapper > a { /* Targetting Link elements directly */
+.wrapper > a {
     background-color: rgb(233, 171, 88 / 50%);
     padding: 1px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* Needed for absolute positioning of h3 and overlay */
-    text-decoration: none; /* Remove underline from links */
-    color: inherit; /* Inherit color for text */
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    /* transition: filter 0.3s ease; */ /* Removed here, handled by .gridItemAnimated */
 }
 
 /* Specific grid placements for desktop */
@@ -44,7 +45,7 @@
     cursor: pointer;
 }
 
-.four { /* Assuming 'three' is missing or not used */
+.four {
     grid-column: 3 / 4;
     grid-row: 1 / 4;
     filter: brightness(0.5);
@@ -79,79 +80,155 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); /* Dark overlay */
-    z-index: 1; /* Below text, above image */
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
     transition: background-color 0.3s ease;
 }
 
 .wrapper > a:hover .overlay {
-    background-color: rgba(0, 0, 0, 0.1); /* Lighter on hover */
+    background-color: rgba(0, 0, 0, 0.1);
 }
-
 
 .hachetres {
     position: absolute;
-    z-index: 2; /* Above overlay */
+    z-index: 2;
     color: white;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: transparent;
-    font-size: 1.5rem; /* Default font size for desktop */
+    font-size: 1.5rem;
     text-align: center;
-    white-space: nowrap; /* Prevent text from wrapping on desktop if short */
-    transition: font-size 0.3s ease; /* For smooth font size transitions */
+    white-space: nowrap;
+    transition: font-size 0.3s ease;
 }
 
 
-/* --- Mobile Specific Styles --- */
+/* --- MOBILE SPECIFIC STYLES & ANIMATIONS --- */
 
 @media (max-width: 768px) {
     .wrapper {
-        height: auto; /* Remove fixed height for mobile */
-        grid-template-columns: 1fr; /* Stack all items in a single column */
-        grid-template-rows: auto; /* Rows adapt to content height */
-        gap: 15px; /* Slightly larger gap between stacked items */
-        padding: 10px; /* Add some padding to the wrapper */
-        max-width: 100%; /* Allow wrapper to take full width */
-        box-shadow: none; /* Remove shadow if desired for mobile */
+        height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 15px;
+        padding: 10px;
+        max-width: 100%;
+        box-shadow: none;
     }
 
     /* Reset grid-column and grid-row for all items on mobile */
     .one, .two, .four, .five {
-        grid-column: 1 / -1; /* Span entire width */
-        grid-row: auto; /* Take natural row space */
-        height: 250px; /* Fixed height for mobile category items */
-        filter: brightness(0.7); /* Slightly darker on mobile for readability */
+        grid-column: 1 / -1;
+        grid-row: auto;
+        height: 250px;
+        filter: brightness(0.7);
     }
 
     .hachetres {
-        font-size: 1.8rem; /* Larger and more prominent on mobile */
-        white-space: normal; /* Allow text to wrap on mobile */
-        padding: 0 10px; /* Add horizontal padding to text */
+        font-size: 1.8rem;
+        white-space: normal;
+        padding: 0 10px;
     }
 
     .image {
-        object-position: center; /* Ensure images are centered */
+        object-position: center;
+    }
+
+    /* --- ANIMATION CLASSES FOR MOBILE --- */
+    .gridItemAnimated {
+        /* Initial state for items outside the viewport */
+        opacity: 0;
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out, filter 0.3s ease; /* Smooth transitions */
+        /* Default transform for scroll-down (entering from bottom/sides) */
+        transform: translateY(50px) scale(0.9); /* Start slightly below and smaller */
+    }
+
+    .gridItemAnimated.hidden.scrollUp {
+        /* If scrolling up and hidden, move it down (exit downwards) */
+        transform: translateY(50px) scale(0.9);
+        opacity: 0;
+    }
+
+    .gridItemAnimated.hidden.scrollDown {
+        /* If scrolling down and hidden, move it up (exit upwards) */
+        transform: translateY(-50px) scale(0.9); /* Start above for exiting upwards */
+        opacity: 0;
+    }
+
+
+    .gridItemAnimated.visible {
+        /* Final state when item is visible in viewport */
+        opacity: 1;
+        transform: translateY(0) scale(1); /* Move to original position, full size */
+    }
+
+    /* Optional: Specific entrance from side for a more "flow-in" effect for some items */
+    /* Example: Left and Right items could come from respective sides */
+    .one.gridItemAnimated.hidden.scrollDown {
+        transform: translateX(-100px); /* Come from left when scrolling down */
+    }
+    .one.gridItemAnimated.visible {
+        transform: translateX(0);
+    }
+
+    .four.gridItemAnimated.hidden.scrollDown {
+        transform: translateX(100px); /* Come from right when scrolling down */
+    }
+    .four.gridItemAnimated.visible {
+        transform: translateX(0);
+    }
+
+    /* Reverse effect for scrollUp (exiting) */
+    .one.gridItemAnimated.hidden.scrollUp {
+        transform: translateX(0); /* For exiting, you want it to move away, not reset */
+        opacity: 0;
+    }
+
+    /* Fine-tune scroll up (exiting) animations based on direction */
+    .gridItemAnimated.hidden.scrollUp {
+        /* When scrolling UP and item becomes hidden (i.e., it moved *above* the viewport),
+           it should move *down* and fade out. */
+        opacity: 0;
+        transform: translateY(50px) scale(0.9); /* Move downwards as it leaves the top */
+    }
+
+    .gridItemAnimated.hidden.scrollDown {
+        /* When scrolling DOWN and item becomes hidden (i.e., it moved *below* the viewport),
+           it should move *up* and fade out. */
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9); /* Move upwards as it leaves the bottom */
+    }
+
+    /* When an item *becomes* visible: */
+    /* If scrolling down, it comes from the bottom */
+    .gridItemAnimated.visible.scrollDown {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    /* If scrolling up, it comes from the top (or re-enters from top) */
+    .gridItemAnimated.visible.scrollUp {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
+
 @media (max-width: 480px) {
-    /* For smaller phones, adjust heights and font sizes */
     .wrapper {
         gap: 10px;
     }
     .one, .two, .four, .five {
-        height: 200px; /* Reduce height further */
+        height: 200px;
     }
     .hachetres {
-        font-size: 1.5rem; /* Adjust font size again */
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 374px) {
     .one, .two, .four, .five {
-        height: 180px; /* Smaller height for very small screens */
+        height: 180px;
     }
     .hachetres {
         font-size: 1.3rem;
@@ -160,9 +237,9 @@
 
 @media (max-width: 320px) {
     .one, .two, .four, .five {
-        height: 150px; /* Smallest height */
+        height: 150px;
     }
     .hachetres {
         font-size: 1.1rem;
     }
-} 
+}

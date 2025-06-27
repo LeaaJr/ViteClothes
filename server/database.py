@@ -7,7 +7,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL") # Esta sería la variable de entorno principal
 
-print(f"DEBUG: DATABASE_URL cargada: {DATABASE_URL}") # ¡¡¡Añade esta línea!!!
+print(f"DEBUG: DATABASE_URL cargada: {DATABASE_URL}")
 
 def get_connection():
     # psycopg2.connect puede tomar una URL completa

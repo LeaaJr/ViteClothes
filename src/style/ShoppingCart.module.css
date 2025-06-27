@@ -1,6 +1,6 @@
 /* ShoppingCart.module.css */
 
-/* Core Dialog Structure - largely fine, but let's ensure full height */
+/* Core Dialog Structure - ensure full height for all parent containers */
 .outerContainer,
 .innerContainer,
 .panelContainer,
@@ -23,13 +23,13 @@
 .outerContainer {
     position: fixed;
     inset: 0;
-    overflow: hidden;
+    overflow: hidden; /* Important for containing sliding panel */
 }
 
 .innerContainer {
     position: absolute;
     inset: 0;
-    overflow: hidden;
+    overflow: hidden; /* Important for containing sliding panel */
 }
 
 .panelContainer {
@@ -39,7 +39,7 @@
     right: 0; /* Default: slides from right */
     display: flex;
     max-width: 100%;
-    padding-left: 2.5rem; /* pl-10 for desktop */
+    /* No padding-left here, it should be within .dialogPanel or .panelContent */
 }
 
 .dialogPanel {
@@ -49,46 +49,46 @@
     transform: translateX(0); /* Ensure it's visible by default for the open state */
     transition: transform 500ms ease-in-out;
     height: 100vh; /* Full viewport height */
+    /* Add border-radius and box-shadow here, as it's the actual panel */
+    border-radius: 0.5rem; /* Example radius */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Example shadow */
 }
 
+/* --- CRITICAL SECTION FOR LAYOUT --- */
 .panelContent {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: scroll; /* Scroll content if it overflows */
+    flex-direction: column; /* This is correct: stack header, list, subtotal vertically */
+    height: 100%; /* Make this div take full height of its parent (.dialogPanel) */
+    /* Remove overflow-y from here, it should be on the content or list itself */
     background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); -> Moved to .dialogPanel */
     -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+    overflow-y: hidden; /* Prevent panelContent from having its own scrollbar */
 }
 
 .content {
-    flex-grow: 1;
-    overflow-y: auto; /* Allows content within to scroll if individual section is too long */
+    flex-grow: 1; /* Allows the content area to take up all available space */
+    overflow-y: auto; /* THIS IS WHERE THE MAIN SCROLLING HAPPENS FOR CART ITEMS */
     padding: 1.5rem 1rem;
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack header and cartList */
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding-bottom: 1rem; /* Add padding below header */
-    border-bottom: 1px solid #e5e7eb; /* Add a subtle separator */
-    margin-bottom: 1.5rem; /* Space before cart items */
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .headerTitle {
-    font-size: 1.25rem; /* Slightly larger title for readability */
-    font-weight: 600; /* Bolder */
+    font-size: 1.25rem;
+    font-weight: 600;
     color: #1f2937;
 }
-
-/* No longer needed if close button is directly in header */
-/* .closeButtonContainer {
-    margin-left: 0.75rem;
-    display: flex;
-    height: 1.75rem;
-    align-items: center;
-} */
 
 .closeButton {
     padding: 0.5rem;
@@ -97,57 +97,52 @@
     background: none;
     border: none;
     cursor: pointer;
-    margin-left: 1rem; /* Space close button from title */
+    margin-left: 1rem;
 }
 
 .closeButton:hover {
     color: #6b7280;
 }
 
-/* Remove unused/redundant styles based on your JSX */
-/* .buttonInset { position: absolute; inset: -0.125rem; } */
-/* .srOnly { ... } */ /* If you're not explicitly using this in your JSX */
-
 .xMarkIcon {
-    width: 1.75rem; /* Make icon slightly larger */
+    width: 1.75rem;
     height: 1.75rem;
 }
 
 .cartList {
-    margin-top: 0; /* Adjust margin as header already provides spacing */
-    flex-grow: 1; /* Allow cart list to grow and fill space */
-    overflow-y: auto; /* Enable scrolling for the list itself */
+    margin-top: 0;
+    flex-grow: 1; /* Allow cart list to grow and fill remaining space in .content */
+    /* Remove overflow-y from here, it's handled by .content now */
     padding-right: 0.5rem; /* Add some padding for scrollbar */
 }
 
 .emptyCartText {
     color: #6b7280;
-    text-align: center; /* Center the empty cart message */
-    padding: 2rem 0; /* Add padding for visibility */
+    text-align: center;
+    padding: 2rem 0;
 }
 
 .cartItemsList {
     margin: 0;
     padding: 0;
     list-style: none;
-    /* border-top-width: 1px; This might be redundant if items have top border/padding */
     border-color: #e5e7eb;
 }
 
 .cartItem {
     display: flex;
-    padding: 1rem 0; /* Slightly reduced vertical padding for items */
-    border-bottom: 1px solid #e5e7eb; /* Better explicit border */
-    align-items: flex-start; /* Align items to the top */
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    align-items: flex-start;
 }
 
 .cartImage {
-    width: 5rem; /* Slightly smaller image */
+    width: 5rem;
     height: 5rem;
     border-radius: 0.375rem;
     border: 1px solid #d1d5db;
     overflow: hidden;
-    flex-shrink: 0; /* Prevent image from shrinking */
+    flex-shrink: 0;
 }
 
 .cartImageImg {
@@ -161,16 +156,16 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribute content */
+    justify-content: space-between;
 }
 
 .cartItemHeader {
     display: flex;
     justify-content: space-between;
-    font-size: 0.95rem; /* Slightly smaller text for item header */
-    font-weight: 600; /* Bolder product name */
+    font-size: 0.95rem;
+    font-weight: 600;
     color: #1f2937;
-    margin-bottom: 0.25rem; /* Space between header and details */
+    margin-bottom: 0.25rem;
 }
 
 .itemName {
@@ -178,33 +173,33 @@
 }
 
 .cartItemPrice {
-    margin-left: 0.5rem; /* Reduce margin */
+    margin-left: 0.5rem;
     font-weight: 500;
 }
 
 .itemDetails {
     display: flex;
-    flex-direction: column; /* Stack quantity and size vertically on small screens */
-    gap: 0.25rem; /* Smaller gap */
-    margin-top: 0.5rem; /* Keep margin */
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
 }
 
 .cartItemQuantity,
 .cartItemSize {
-    font-size: 0.8rem; /* Smaller text for quantity/size */
+    font-size: 0.8rem;
     color: #6b7280;
     margin: 0;
 }
 
 .cartItemSize {
     background-color: #f3f4f6;
-    padding: 0.15rem 0.4rem; /* Smaller padding for size badge */
+    padding: 0.15rem 0.4rem;
     border-radius: 0.2rem;
-    width: fit-content; /* Ensure it wraps content */
+    width: fit-content;
 }
 
 .removeButton {
-    margin-top: 0.75rem; /* More space from details */
+    margin-top: 0.75rem;
     font-weight: 500;
     color: #ef4444;
     background: none;
@@ -213,7 +208,7 @@
     transition: color 0.2s;
     padding: 0.25rem 0;
     text-align: left;
-    align-self: flex-start; /* Align to the left in column */
+    align-self: flex-start;
 }
 
 .removeButton:hover {
@@ -224,36 +219,35 @@
 .subtotal {
     border-top: 1px solid #e5e7eb;
     padding: 1.5rem 1rem;
-    flex-shrink: 0; /* Prevent subtotal from shrinking when content overflows */
+    flex-shrink: 0; /* IMPORTANT: Prevent subtotal from shrinking, keep it at the bottom */
+    background-color: white; /* Ensure background is white to cover content behind it */
+    z-index: 10; /* Ensure it stays above scrolling content if overlap happens */
 }
 
 .subtotalText {
     display: flex;
     justify-content: space-between;
-    font-size: 1.125rem; /* Slightly larger subtotal text */
-    font-weight: 600; /* Bolder */
+    font-size: 1.125rem;
+    font-weight: 600;
     color: #1f2937;
 }
 
 .shippingText {
     margin-top: 0.5rem;
-    font-size: 0.85rem; /* Slightly smaller */
+    font-size: 0.85rem;
     color: #6b7280;
-    text-align: center; /* Center the shipping text */
+    text-align: center;
 }
-
-/* Remove checkoutButtonContainer as Link handles its own styling */
-/* .checkoutButtonContainer { margin-top: 1.5rem; } */
 
 .checkoutButton {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 0.85rem 1.5rem; /* Slightly more padding */
-    margin-top: 1.5rem; /* Add margin to separate from shipping text */
-    font-size: 1.05rem; /* Slightly larger font */
-    font-weight: 600; /* Bolder */
+    padding: 0.85rem 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
     color: white;
     background-color: #e74c3c;
     border-radius: 0.375rem;
@@ -272,102 +266,100 @@
 
 @media (max-width: 768px) {
     .panelContainer {
-        /* On smaller screens, make the panel cover the full width */
         right: 0;
-        left: 0; /* This makes it span the full width */
-        padding-left: 0; /* Remove padding from the left */
-        justify-content: center; /* Center the panel if it has a max-width */
+        left: 0; /* This makes it span the full width on mobile */
+        padding-left: 0;
+        /* justify-content: center; Remove this as we want it full width */
     }
 
     .dialogPanel {
-        max-width: 100%; /* Ensure it can go full width */
-        width: 100vw; /* Take full viewport width */
-        border-radius: 0; /* Remove border-radius for full screen */
-        box-shadow: none; /* Remove shadow if it's full screen */
+        max-width: 100%;
+        width: 100vw;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     .content {
-        padding: 1rem 0.75rem; /* Reduce padding inside content area */
+        padding: 1rem 0.75rem;
     }
 
     .header {
-        padding-top: 0.5rem; /* Adjust header padding */
+        padding-top: 0.5rem;
         padding-bottom: 0.75rem;
         margin-bottom: 1rem;
     }
 
     .headerTitle {
-        font-size: 1.1rem; /* Smaller title for mobile */
+        font-size: 1.1rem;
     }
 
     .xMarkIcon {
-        width: 1.5rem; /* Back to original size */
+        width: 1.5rem;
         height: 1.5rem;
     }
 
     .cartItem {
-        padding: 0.75rem 0; /* Further reduce item padding */
+        padding: 0.75rem 0;
     }
 
     .cartImage {
-        width: 4.5rem; /* Smaller image on very small screens */
+        width: 4.5rem;
         height: 4.5rem;
     }
 
     .cartDetails {
-        margin-left: 0.75rem; /* Reduce margin */
+        margin-left: 0.75rem;
     }
     
     .cartItemHeader {
-        font-size: 0.9rem; /* Smaller font for item name/price */
+        font-size: 0.9rem;
     }
     .cartItemPrice {
-        margin-left: 0.25rem; /* Less space for price */
+        margin-left: 0.25rem;
     }
 
     .itemDetails {
         flex-direction: row; /* Keep quantity/size side-by-side if there's room */
         gap: 0.75rem;
-        margin-top: 0.25rem; /* Less margin */
+        margin-top: 0.25rem;
     }
 
     .cartItemQuantity,
     .cartItemSize {
-        font-size: 0.75rem; /* Even smaller font */
+        font-size: 0.75rem;
     }
 
     .removeButton {
-        margin-top: 0.5rem; /* Reduce margin */
-        font-size: 0.8rem; /* Smaller remove button text */
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
     }
 
     .subtotal {
-        padding: 1rem 0.75rem; /* Reduce subtotal padding */
+        padding: 1rem 0.75rem;
     }
 
     .subtotalText {
-        font-size: 1rem; /* Smaller subtotal text */
+        font-size: 1rem;
     }
 
     .shippingText {
-        font-size: 0.8rem; /* Smaller shipping text */
+        font-size: 0.8rem;
     }
 
     .checkoutButton {
-        padding: 0.75rem 1rem; /* Smaller button padding */
-        font-size: 0.95rem; /* Smaller button text */
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
         margin-top: 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    /* For smaller phones, ensure single column for item details */
     .itemDetails {
-        flex-direction: column; /* Stack quantity and size vertically again */
-        gap: 0.15rem; /* Very small gap */
+        flex-direction: column;
+        gap: 0.15rem;
     }
     .cartItemSize {
-        padding: 0.1rem 0.3rem; /* Even smaller padding for badge */
+        padding: 0.1rem 0.3rem;
         font-size: 0.7rem;
     }
 }
