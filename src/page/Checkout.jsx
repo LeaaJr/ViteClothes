@@ -168,7 +168,6 @@ const Checkout = () => {
               id="companyName"
               name="companyName"
               className={styles.input}
-              placeholder="Juan Pérez"
               value={formData.companyName}
               onChange={handleChange}
               required
@@ -183,7 +182,6 @@ const Checkout = () => {
               id="email"
               name="email"
               className={styles.input}
-              placeholder="you@email.com"
               value={formData.email}
               onChange={handleChange}
               required
@@ -198,7 +196,6 @@ const Checkout = () => {
               id="phone"
               name="phone"
               className={styles.input}
-              placeholder="1234567890"
               value={formData.phone}
               onChange={handleChange}
               required
@@ -213,7 +210,6 @@ const Checkout = () => {
               id="city"
               name="city"
               className={styles.input}
-              placeholder="Madrid"
               value={formData.city}
               onChange={handleChange}
               required
@@ -228,7 +224,6 @@ const Checkout = () => {
               id="strada"
               name="strada"
               className={styles.input}
-              placeholder="Main Street 123"
               value={formData.strada}
               onChange={handleChange}
               required
