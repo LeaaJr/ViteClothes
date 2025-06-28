@@ -1,6 +1,6 @@
 .sidebar {
   position: fixed;
-  top: 100px;
+  top: 72px;
   left: -300px; /* Oculto por defecto */
   width: 300px;
   height: 100vh;
@@ -23,7 +23,7 @@
   top: 70px;
   width: 40px;
   height: 40px;
-  background-color: #333;
+  background-color: transparent;
   color: white;
   border: none;
   border-radius: 0 6px 6px 0;
@@ -52,7 +52,7 @@
 
 /* Panel de filtros dentro del sidebar */
 .filterPanel {
-  padding: 20px;
+  padding: 10px;
   height: calc(100% - 40px);
   overflow-y: auto;
 }
@@ -107,6 +107,8 @@ body.sidebar-open {
   font-weight: 500;
   margin: 0 0 16px 0;
   color: black;
+  padding-left: 7rem;
+
 }
 .filterSection {
   margin-bottom: 20px;
@@ -288,4 +290,13 @@ body.sidebar-open {
 
 .clearButton:hover {
   background-color: #c0392b;
+}
+
+.chevron-icon {
+  background-color: #333;
+  transition: color 0.3s ease;
+}
+
+.chevron-icon:hover {
+  color: #555; /* o el color que desees en hover */
 }

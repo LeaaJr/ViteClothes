@@ -1,59 +1,61 @@
-  .container {
+/* Your CSS file (e.g., Checkout.module.css) */
+
+.container {
     display: flex;
     width: 100%;
-    height: 100%; /* <- Esto ocupa el 100% de la altura de la ventana, ignorando el navbar y el footer */
+    height: 100%;
     background-color: #f2f2f2;
-  }
+}
 
-  .formSection {
+.formSection {
     flex: 1;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     max-width: 500px;
-  }
+}
 
-  .logo {
+.logo {
     font-size: 3.5rem;
     font-weight: bold;
     margin-bottom: 2.5rem;
     font-family: 'Times New Roman', serif;
     letter-spacing: -1px;
-  }
-
-  .logo img {
-  max-width: 100%;
-  height: auto;
-  max-height: 120px;
 }
 
-  .title {
+.logo img {
+    max-width: 100%;
+    height: auto;
+    max-height: 120px;
+}
+
+.title {
     font-size: 0.9rem;
     font-weight: 400;
     margin-bottom: 2rem;
     letter-spacing: 1px;
-  }
+}
 
-  .form {
+.form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
+}
 
-  .inputGroup {
+.inputGroup {
     margin-bottom: 1.5rem;
     position: relative;
-  }
+}
 
-  .label {
+.label {
     font-size: 0.7rem;
     color: #999;
     margin-bottom: 0.25rem;
     display: block;
-  }
+}
 
-  .input {
+.input {
     width: 100%;
     border: none;
     border-bottom: 1px solid #ccc;
@@ -61,28 +63,28 @@
     font-size: 0.9rem;
     outline: none;
     background-color: transparent;
-  }
+}
 
-  .input:focus {
+.input:focus {
     border-bottom: 1px solid #000;
-  }
+}
 
-  .error {
+.error {
     color: #ff3860;
     font-size: 0.875rem;
     margin-top: 0.25rem;
-  }
+}
 
-  .summary {
+.summary {
     padding: 1rem;
     background-color: #f5f5f5;
     border-radius: 0.25rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 18rem;
-  }
+}
 
-  .submitButton {
+.submitButton {
     background: #000;
     color: white;
     border: none;
@@ -93,89 +95,127 @@
     width: 100%;
     margin-top: 1rem;
     border-radius: 7px;
-  }
+}
 
-  .submitButton:hover {
+.submitButton:hover {
     opacity: 0.9;
     background-color: #e74c3c;
-  }
+}
 
-  .submitButton:disabled {
+.submitButton:disabled {
     background: #cccccc;
     cursor: not-allowed;
-  }
+}
 
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
     .formSection {
-      padding: 4rem;
+        padding: 4rem;
     }
-  }
+}
 
-  .cardElement {
+.cardElement {
     padding: 10px 0;
     border-bottom: 1px solid #ccc;
-  }
+}
 
-  .successMessage {
+.successMessage {
     text-align: center;
     padding: 2rem;
     max-width: 500px;
     margin: 0 auto;
-  }
+}
 
-  .successMessage h2 {
+.successMessage h2 {
     color: #4BB543;
     margin-bottom: 1rem;
-  }
+}
 
-  .summaryItem {
+.summaryItem {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 0;
     border-bottom: 1px solid #eee;
-  }
+}
 
-  .summaryTotal {
+.summaryTotal {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
     margin-top: 1rem;
     padding-top: 0.5rem;
     border-top: 1px solid #ddd;
-  }
+}
 
-  .summaryList {
+.summaryList {
     list-style: none;
     padding: 0;
     margin: 1rem 0;
-  }
+}
 
-  .imageSection {
+.imageSection {
     flex: 1;
     overflow: hidden;
-    display: block; /* debe estar visible */
+    display: block; /* Visible by default on larger screens */
     background-size: cover;
     height: 100%;
-  }
+}
 
-  .fashionImage {
-  object-fit: cover;  /* La imagen cubrirá el contenedor sin distorsión */
-  width: 100%;
-  height: 100%;
-  object-position: center; /* Asegura que la imagen esté centrada */
-  filter: brightness(70%);  /* Puedes ajustar la luminosidad de la imagen */
-  transition: filter 0.3s ease;  /* Para un efecto suave si la imagen cambia */
+.fashionImage {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    filter: brightness(70%);
+    transition: filter 0.3s ease;
 }
 
 .imageSection:hover .fashionImage {
-  filter: brightness(50%); /* Puedes ajustar el filtro al pasar el mouse */
+    filter: brightness(50%);
 }
 
 @media (max-width: 768px) {
-  .imageSection {
-    height: auto;  /* En pantallas pequeñas, ajustamos la altura */
-  }
-  .fashionImage {
-    object-position: top;  /* Puedes cambiar la posición de la imagen para que se enfoque en la parte superior */
-  }
+    .imageSection {
+        display: none; /* <-- HIDE THE IMAGE SECTION ON MOBILE */
+    }
+
+    /* Adjust the formSection to take full width when image is hidden */
+    .formSection {
+        width: 100%;
+        max-width: 100%; /* Ensure it expands to full width */
+        padding: 1.5rem; /* Adjust padding for mobile form */
+    }
+
+    .container {
+        /* If formSection is the only flex item, container might need adjustment */
+        flex-direction: column; /* Stack form vertically if needed, though formSection is already 100% width */
+        height: auto; /* Allow height to adjust to content */
+    }
+
+    /* You might also want to center the formSection content if it's no longer filling space */
+    .formSection {
+        align-items: center; /* Center items horizontally within formSection */
+        text-align: center; /* Center text within formSection */
+    }
+
+    .logo {
+        margin-bottom: 1.5rem; /* Reduce margin for mobile */
+    }
+
+    .title {
+        text-align: center; /* Ensure title is centered */
+        margin-bottom: 1.5rem; /* Reduce margin for mobile */
+    }
+}
+
+/* You might want to adjust font sizes or padding for smaller mobile breakpoints too */
+@media (max-width: 480px) {
+    .formSection {
+        padding: 1rem;
+    }
+    .logo {
+        font-size: 3rem;
+    }
+    .title {
+        font-size: 0.85rem;
+    }
 }

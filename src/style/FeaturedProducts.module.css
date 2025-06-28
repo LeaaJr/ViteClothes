@@ -12,29 +12,29 @@
     color: #333;
   }
   
-  .carouselContainer {
+.carouselContainer {
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
-    
-  }
-  
-  .carousel {
+    /* On desktop, keep margin auto to center, but on mobile we'll adjust */
+}
+
+.carousel {
     display: flex;
     gap: 1.5rem;
-    padding: 0 1rem;
+    padding: 0 1rem; /* Keep some padding for the ends of the carousel */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    width: calc(100% - 100px);
-    width: 100%;
-  }
-  
-  .navButton {
+    width: 100%; /* Ensure the carousel itself takes full width */
+    /* On mobile, we might need to adjust this to ensure cards snap correctly */
+}
+
+.navButton {
     background: none;
     border: none;
     width: 50px;
@@ -45,22 +45,23 @@
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
-    padding-top: 35rem;
-    margin: -32rem;
-  }
-  
-  .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 460px; /* o el valor que te funcione */
-  background: #f2f2f2;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  min-width: 250px;
-  scroll-snap-align: start;
+    padding-top: 35rem; /* These seem very specific, confirm their purpose */
+    margin: -32rem; /* These also seem very specific, confirm their purpose */
 }
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 460px; /* or whatever height works */
+    background: #f2f2f2;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    min-width: 250px; /* Default min-width for desktop/larger screens */
+    scroll-snap-align: start; /* Each card will snap to the start of the scroll container */
+}
+
 
   
   .card:hover {
@@ -155,13 +156,101 @@
     color: #666;
   }
   
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
+    .carouselContainer {
+        /* Remove max-width here if it causes issues, allow it to take full width */
+        max-width: 100%;
+        /* If you have side navigation buttons that overlay, adjust carousel padding */
+        /* If nav buttons are outside, then carousel should just fill the space */
+    }
+
     .carousel {
-      width: calc(100% - 60px);
+        /* This is the key. Make sure the width is 100% of the parent,
+           and padding adjusts the viewable area. */
+        width: 100%; /* Takes full width of carouselContainer */
+        padding: 0 20px; /* Add padding to the sides of the carousel itself */
+        box-sizing: border-box; /* Include padding in the width calculation */
+        gap: 20px; /* Adjust gap between cards for mobile */
     }
-    
+
+    .card {
+        /* Calculate width to show ONLY ONE card, considering gap and padding */
+        /* Formula: (100% of viewport - 2 * padding_carousel - gap) */
+        /* Let's try `calc(100vw - 40px - 20px)` if carousel padding is 20px and gap is 20px */
+        /* Or, simpler: `calc(100% - 40px)` if padding is added to card directly, or just based on gap */
+        
+        /* The most common and effective way for one-at-a-time is: */
+        min-width: calc(100vw - (2 * 20px) - 20px); /* 100vw - (2 * carousel padding) - carousel gap */
+                                                  /* Adjust 20px for carousel padding and 20px for gap as needed */
+        
+        /* If your carouselContainer has padding instead of carousel: */
+        /* For example, if carouselContainer has 20px padding left/right,
+           and carousel has a 20px gap between cards,
+           then a card needs to be `100vw - 2*20px (container padding) - 20px (gap)` */
+        
+        /* Let's refine based on typical mobile widths */
+        min-width: calc(100vw - 60px); /* Assuming 20px padding on carousel and 20px gap */
+                                        /* 100vw - (2 * 20px padding) - 20px gap (for the next card's partial view) */
+        
+        height: 400px; /* Adjust card height for mobile */
+    }
+
+    /* Adjust nav buttons for mobile if they are present and still used */
     .navButton {
-      width: 40px;
-      height: 40px;
+        width: 30px;
+        height: 30px;
+        /* Reset any large desktop margins/paddings if they interfere */
+        padding-top: 0;
+        margin: 0;
+        position: absolute; /* Keep absolute if they float over the carousel */
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%);
     }
-  }
+    .navButton:first-child { /* Left button */
+        left: 5px; /* Adjust as needed */
+    }
+    .navButton:last-child { /* Right button */
+        right: 5px; /* Adjust as needed */
+    }
+
+    /* If you want to remove the nav buttons on very small screens, you can use: */
+    /* .navButton { display: none; } */
+}
+
+/* Specific adjustments for smaller mobile screens */
+@media (max-width: 480px) {
+    .carousel {
+        padding: 0 15px; /* Slightly less padding for smaller screens */
+        gap: 15px; /* Smaller gap */
+    }
+    .card {
+        min-width: calc(100vw - 45px); /* 100vw - (2*15px padding) - 15px gap */
+        height: 350px;
+    }
+}
+
+@media (max-width: 374px) {
+    .carousel {
+        padding: 0 10px;
+        gap: 10px;
+    }
+    .card {
+        min-width: calc(100vw - 30px); /* 100vw - (2*10px padding) - 10px gap */
+        height: 320px;
+    }
+}
+
+@media (max-width: 320px) {
+    .carousel {
+        padding: 0 5px;
+        gap: 5px;
+    }
+    .card {
+        min-width: calc(100vw - 15px); /* 100vw - (2*5px padding) - 5px gap */
+        height: 280px;
+    }
+    .navButton {
+        /* Optionally hide nav buttons on the smallest screens if space is critical */
+        display: none;
+    }
+}
