@@ -37,6 +37,14 @@ and on the other hand start the application normally
 
 ![image](https://github.com/user-attachments/assets/fc4f9bc3-58f8-42c4-833e-bb10d9eddb0d)
 
+![image](https://github.com/user-attachments/assets/6c52f1f2-ed9d-4c19-8a8c-970ca53052a7) ![image](https://github.com/user-attachments/assets/86100b34-4a80-474c-b896-20db24b8b972)
+![image](https://github.com/user-attachments/assets/63295976-1f17-4200-a552-0d963e9e35cd) ![image](https://github.com/user-attachments/assets/3ee6c518-a43f-46e8-a2a8-30499a0fc550)
+
+
+
+
+
+
 ## Interface
 
 ![image](https://github.com/user-attachments/assets/9dc02369-5aa1-4818-89dc-9d4e603b79f0)
