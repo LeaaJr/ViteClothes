@@ -133,6 +133,11 @@ const Navbar = () => {
                                     Admin Panel
                                 </Link>
                             )}
+                            {user && isAdmin && ( // Only show if user is logged in AND is an admin
+                                <Link to="/admin/products-list" className={styles.dropdownItem} onClick={() => setIsUserDropdownOpen(false)}>
+                                    Admin List
+                                </Link>
+                            )}
                             <div className={styles.dropdownDivider}></div>
                             <button onClick={handleLogout} className={`${styles.dropdownItem} ${styles.logout}`}>Cerrar sesión</button>
                         </div>
@@ -180,6 +185,11 @@ const Navbar = () => {
                         {user && isAdmin && ( // Only show if user is logged in AND is an admin
                             <Link to="/admin/add-product" className={styles.mobileNavLink} onClick={handleMobileNavLinkClick}>
                                 Admin Panel
+                            </Link>
+                        )}
+                        {user && isAdmin && ( // Only show if user is logged in AND is an admin
+                            <Link to="/admin/products-list" className={styles.mobileNavLink} onClick={handleMobileNavLinkClick}>
+                                Admin List
                             </Link>
                         )}
                         <button onClick={handleLogout} className={`${styles.mobileNavLink} ${styles.logout}`}>
