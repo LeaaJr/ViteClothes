@@ -1,0 +1,113 @@
+/* src/style/AdminProductListPage.module.css */
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.title {
+    text-align: left; /* Default for desktop */
+    margin-bottom: 20px;
+}
+
+.addButton {
+    margin-bottom: 20px;
+}
+
+.loadingContainer,
+.errorContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Adjust as needed, e.g., 80vh to account for navbar/footer */
+    text-align: center;
+    padding: 20px;
+}
+
+.errorContainer {
+    color: red;
+}
+
+/* --- Responsive Table Specific Styles --- */
+/* The TableContainer will be key for horizontal scrolling */
+.tableContainer {
+    overflow-x: auto; /* Allows horizontal scrolling when content overflows */
+    -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS devices */
+    /* Add any default styling for the paper component if needed */
+}
+
+/* Styles for table cells to adjust padding/font size on mobile */
+/* You might need to target specific Material-UI classes for more granular control,
+   but these general overrides often work. */
+.tableHeadCell {
+    font-size: 0.9rem; /* Smaller font for headers */
+    white-space: nowrap; /* Prevent headers from wrapping too much */
+}
+
+.tableBodyCell {
+    font-size: 0.85rem; /* Smaller font for body cells */
+    padding: 8px 10px; /* Reduced padding */
+    white-space: nowrap; /* Prevent content from wrapping unless explicitly allowed */
+}
+
+.actionButtons {
+    display: flex;
+    gap: 5px; /* Smaller gap between buttons */
+    justify-content: flex-end; /* Align actions to the right */
+}
+
+/* --- Media Queries for Mobile --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px; /* Slightly less padding on smaller screens */
+    }
+
+    .title {
+        font-size: 1.8rem; /* Adjust title size for mobile */
+        text-align: center; /* Center the title on mobile */
+        margin-bottom: 15px;
+    }
+
+    .addButton {
+        width: 100%; /* Make add button full width */
+        margin-bottom: 15px;
+    }
+
+    .tableHeadCell {
+        font-size: 0.8rem;
+        padding: 6px 8px; /* Further reduced padding */
+    }
+
+    .tableBodyCell {
+        font-size: 0.8rem;
+        padding: 6px 8px; /* Further reduced padding */
+    }
+    
+    /* Hide less important columns on smaller screens */
+    /* You'll need to add a class to the specific TableCell in JSX */
+    /* Example: .hideOnMobile { display: none; } */
+    /* Or specifically target cells by their order if no class is added: */
+    /*
+    .tableHeadCell:nth-child(1), .tableBodyCell:nth-child(1) { display: none; } // ID column
+    .tableHeadCell:nth-child(4), .tableBodyCell:nth-child(4) { display: none; } // Category
+    .tableHeadCell:nth-child(5), .tableBodyCell:nth-child(5) { display: none; } // Stock
+    */
+    /* For simplicity, we'll keep horizontal scroll. If you want to hide, you'd add classes to JSX. */
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .tableHeadCell,
+    .tableBodyCell {
+        font-size: 0.75rem;
+        padding: 5px 6px;
+    }
+}
