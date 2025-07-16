@@ -9,6 +9,7 @@ from auth.register import router as register_router
 from auth.login import router as login_router
 from psycopg2.extras import Json
 
+# en caso de modificar de sv solamente configurar los enpoints del .env
 
 app = FastAPI()
 
@@ -35,21 +36,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # =========================================================================
-# FIN DE LA CONFIGURACIÓN CRÍTICA DE CORS
+# END OF CRITICAL CORS CONFIGURATION
 # =========================================================================
 
 
 # =========================================================================
-# INCLUSIÓN DE ROUTERS (UNA SOLA VEZ Y CON PREFIJOS CLAROS)
+# INCLUSION OF ROUTERS (ONLY ONCE AND WITH CLEAR PREFIXES)
 # =========================================================================
-app.include_router(register_router, prefix="/api/auth") # este es el prefijo correcto
+app.include_router(register_router, prefix="/api/auth") # this is the correct prefix
 app.include_router(login_router)
 # =========================================================================
-# FIN DE INCLUSIÓN DE ROUTERS
+# END OF ROUTER INCLUSION
 # =========================================================================
 
 
-# Endpoint real para obtener productos (filtrado por categoría/subcategoría)
+# Endpoint to get products (filtered by category/subcategory)
 @app.get("/productos")
 def obtener_productos(categoria: str = None, subcategoria: str = None):
     conn = get_connection()
