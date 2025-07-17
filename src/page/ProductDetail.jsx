@@ -308,7 +308,7 @@ const ProductDetail = () => {
         <div className={styles.paymentIcons}>
           <img src="https://static.vecteezy.com/system/resources/previews/020/975/576/large_2x/visa-logo-visa-icon-transparent-free-png.png" alt="Visa" />
           <img src="https://salex.it/wp-content/uploads/MasterCard_Logo.svg_.png.webp" alt="MasterCard" />
-          <img src="https://www.citypng.com/public/uploads/preview/hd-amex-american-express-logo-png-701751694708970jttzjjyo6e.png" alt="American Express" />
+          <img src="https://js.stripe.com/v3/fingerprinted/img/amex-a49b82f46c5cd6a96a6e418a6ca1717c.svg" alt="American Express" />
           <img src="https://static.vecteezy.com/system/resources/previews/019/909/676/large_2x/paypal-transparent-paypal-free-free-png.png" alt="PayPal" />
           <img src="https://js.stripe.com/v3/fingerprinted/img/unionpay-8a10aefc7295216c338ba4e1224627a1.svg" alt="UniinPay" />
           <img src="https://js.stripe.com/v3/fingerprinted/img/jcb-271fd06e6e7a2c52692ffa91a95fb64f.svg" alt="JCB" />

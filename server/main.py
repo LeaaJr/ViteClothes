@@ -24,7 +24,7 @@ class Talle(BaseModel):
 # =========================================================================
 origins = [
     "http://localhost:5173",          #frontend Vite en desarrollo
-    "https://vite-clothes.vercel.app", 
+    "https://vite-clothes.vercel.app/", 
     "http://localhost:8000"           #se sirve desde 8000
 ]
 
