@@ -4,6 +4,7 @@ import styles from '../style/SignIn.module.css';
 import logolm from '../style/logos/lmw.png'
 import { useAuth } from '../auth/AuthContext';
 import { Alert } from '@mui/material';
+import fashionImage from "../../public/siginscreen.png";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -42,9 +43,9 @@ export const SignIn = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formSection}>
-        <div className={styles.logo}>
+        {/* <div className={styles.logo}>
            <img src={logolm} alt="Logo" />
-        </div>
+        </div> */}
         <h2 className={styles.title}>LOG IN</h2>
 
         {/* Alerta condicional */}
@@ -87,7 +88,7 @@ export const SignIn = () => {
       </div>
       <div className={styles.imageSection}>
         <img
-          src="https://static.zara.net/assets/public/f4a2/db52/cce048cbbde5/d6ba2d463363/image-desktop-398a24e0-3e15-48a2-bfec-82a6211fb5ad-default/image-desktop-398a24e0-3e15-48a2-bfec-82a6211fb5ad-default.jpg?ts=1746186282702&w=736"
+          src={fashionImage}
           alt="ZARA fashion model"
           className={styles.fashionImage}
         />

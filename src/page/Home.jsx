@@ -1,6 +1,6 @@
     import { useState, useEffect } from "react";
     import styles from "../style/Home.module.css"
-    import Header from "../components/Header";
+    import { Header } from "../components/Header";
     import FeaturedProducts from "../sections/FeaturedProducts";
     import { getProductos } from "../api/Productos";
     import { MobileApp } from "../sections/MobileApp";

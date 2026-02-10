@@ -1,7 +1,7 @@
 /* AdminProductForm.jsx */
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom'; // Import useParams
+import { useNavigate, useParams } from 'react-router-dom';
 import { Snackbar, Alert } from '@mui/material';
 
 // API
@@ -9,7 +9,11 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const AdminProductForm = () => {
     const navigate = useNavigate();
-    const { id } = useParams(); // Get product ID from URL (e.g., /admin/edit-product/123)
+    const { id } = useParams();
+
+    // Definir talles disponibles
+    const TALLES_ROPA = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    const TALLES_CALZADO = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46'];
 
     // Estado que tiene los datos del formulario
     const [formData, setFormData] = useState({
@@ -23,8 +27,8 @@ const AdminProductForm = () => {
         img2: '',
         img3: '',
         talles: {},
-        destacado: false, // Default to false
-        tendencia: false  // Default to false
+        destacado: false,
+        tendencia: false
     });
 
     // Estado de carga y error
@@ -37,13 +41,12 @@ const AdminProductForm = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
-    // --- NEW: Fetch product data if ID exists (for editing) ---
+    // Fetch product data if ID exists (for editing)
     useEffect(() => {
-        if (id) { // Only fetch if 'id' is present in the URL
+        if (id) {
             setLoading(true);
             axios.get(`${API_BASE_URL}/productos/${id}`)
                 .then(response => {
-                    // When fetching, talles might be null, ensure it's an object
                     const fetchedData = {
                         ...response.data,
                         talles: response.data.talles || {}
@@ -57,71 +60,43 @@ const AdminProductForm = () => {
                     setSnackbarSeverity('error');
                     setOpenSnackbar(true);
                     setLoading(false);
-                    // Optionally redirect if product not found or error
-                    // navigate('/admin/products-list'); 
                 });
         }
-    }, [id]); // Re-run effect if ID changes
+    }, [id]);
 
-    // Esto es para manejar los cambios en la entrada del formulario
+    // Manejar los cambios en la entrada del formulario
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target; // Added type and checked for checkboxes
+        const { name, value, type, checked } = e.target;
         setFormData(prevData => ({
             ...prevData,
-            [name]: type === 'checkbox' ? checked : value // Handle checkboxes correctly
+            [name]: type === 'checkbox' ? checked : value
         }));
     };
 
-    // Manejar cambios específicamente para tamaños (entrada dinámica)
-    const handleSizeChange = (sizeKey, newValue) => { // 'sizeKey' is the current key in formData.talles
-        setFormData(prevData => ({
-            ...prevData,
-            talles: {
-                ...prevData.talles,
-                [sizeKey]: parseInt(newValue, 10) || 0 // Ensure stock is an integer
-            }
-        }));
-    };
-    
-    // Update size key when user types in the size name input
-    const handleSizeNameChange = (oldSizeKey, newSizeName) => {
+    // Toggle de talle (activar/desactivar)
+    const handleSizeToggle = (sizeName) => {
         setFormData(prevData => {
-            const newTalles = {};
-            Object.entries(prevData.talles).forEach(([key, value]) => {
-                if (key === oldSizeKey) {
-                    newTalles[newSizeName] = value; // Assign old stock to new size name
-                } else {
-                    newTalles[key] = value;
-                }
-            });
+            const newTalles = { ...prevData.talles };
+            if (newTalles.hasOwnProperty(sizeName)) {
+                // Si existe, lo eliminamos
+                delete newTalles[sizeName];
+            } else {
+                // Si no existe, lo agregamos con stock 0
+                newTalles[sizeName] = 0;
+            }
             return { ...prevData, talles: newTalles };
         });
     };
 
-    // Agregar un nuevo campo de entrada de tamaño
-    const addSizeField = () => {
-        setFormData(prevData => {
-            const newKey = `newSize_${Object.keys(prevData.talles).length}_${Date.now()}`; // More robust unique key
-            return {
-                ...prevData,
-                talles: {
-                    ...prevData.talles,
-                    [newKey]: 0 
-                }
-            };
-        });
-    };
-
-    // Eliminar un campo de entrada de tamaño
-    const removeSizeField = (sizeToRemove) => {
-        setFormData(prevData => {
-            const newTalles = { ...prevData.talles };
-            delete newTalles[sizeToRemove];
-            return {
-                ...prevData,
-                talles: newTalles
-            };
-        });
+    // Cambiar stock de un talle específico
+    const handleSizeStockChange = (sizeName, newStock) => {
+        setFormData(prevData => ({
+            ...prevData,
+            talles: {
+                ...prevData.talles,
+                [sizeName]: parseInt(newStock, 10) || 0
+            }
+        }));
     };
 
     // Manejar el envío del formulario
@@ -130,10 +105,9 @@ const AdminProductForm = () => {
         setLoading(true);
         setError('');
         setSuccess('');
-        setOpenSnackbar(false); // Cerrar cualquier snackbar existente
+        setOpenSnackbar(false);
 
         try {
-            // Preparar los datos del producto
             const productData = {
                 ...formData,
                 precio: parseFloat(formData.precio),
@@ -141,26 +115,15 @@ const AdminProductForm = () => {
                 img1: formData.img1 || null,
                 img2: formData.img2 || null,
                 img3: formData.img3 || null,
-                // Clean up 'newSize_' temporary keys and only keep valid sizes
-                talles: Object.fromEntries(
-                    Object.entries(formData.talles)
-                          .filter(([sizeName, stockValue]) => sizeName && sizeName.trim() !== '') // Remove empty size names
-                          .map(([sizeName, stockValue]) => [
-                              sizeName.startsWith('newSize_') ? '' : sizeName, // Remove temp prefix for submission
-                              parseInt(stockValue, 10) || 0
-                          ])
-                          .filter(([sizeName, stockValue]) => sizeName && sizeName.trim() !== '') // Ensure size name is not empty after potential cleanup
-                )
+                talles: formData.talles
             };
 
             let response;
             if (id) {
-                // If ID exists, it's an update (PUT)
                 response = await axios.put(`${API_BASE_URL}/productos/${id}`, productData);
                 setSuccess('Product updated successfully!');
                 setSnackbarMessage('Product updated successfully!');
             } else {
-                // Otherwise, it's a new product (POST)
                 response = await axios.post(`${API_BASE_URL}/productos`, productData);
                 setSuccess('Product added successfully!');
                 setSnackbarMessage('Product added successfully!');
@@ -169,8 +132,7 @@ const AdminProductForm = () => {
             setSnackbarSeverity('success');
             setOpenSnackbar(true);
 
-            // Opcionalmente, restablezca el formulario o navegue
-            if (!id) { // Only clear form if it was a new product addition
+            if (!id) {
                 setFormData({
                     nombre: '',
                     precio: '',
@@ -186,10 +148,8 @@ const AdminProductForm = () => {
                     talles: {}
                 });
             }
-            // navigate('/productos'); // Descomentar para redirigir después del éxito (considerar dónde quieres redirigir)
         } catch (err) {
             console.error('Error processing product:', err.response?.data || err.message);
-
             setError(err.response?.data?.detail || 'Failed to process product.');
             setSnackbarMessage(err.response?.data?.detail || 'Failed to process product.');
             setSnackbarSeverity('error');
@@ -208,8 +168,7 @@ const AdminProductForm = () => {
 
     return (
         <div className="admin-product-form-container" style={{ padding: '20px', maxWidth: '800px', margin: 'auto', fontFamily: 'Arial, sans-serif' }}>
-            {/* Dynamic Title */}
-            <h2>{id ? 'Edit Product' : 'Add New Product'}</h2> 
+            <h2>{id ? 'Edit Product' : 'Add New Product'}</h2>
             <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                 <div style={{ gridColumn: '1 / -1' }}>
                     <label style={{ display: 'block', marginBottom: '5px' }}>Product Name:</label>
@@ -248,13 +207,13 @@ const AdminProductForm = () => {
                     <input type="url" name="img3" value={formData.img3} onChange={handleChange} style={{ width: '100%', padding: '8px', boxSizing: 'border-box', borderRadius: '8px' }} />
                 </div>
 
-                {/* New fields for destacado and tendencia */}
+                {/* Checkboxes para destacado y tendencia */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', gridColumn: '1 / -1' }}>
                     <input 
                         type="checkbox" 
                         name="destacado" 
                         checked={formData.destacado} 
-                        onChange={handleChange} // Use common handleChange for checkboxes too
+                        onChange={handleChange}
                         id="destacado"
                     />
                     <label htmlFor="destacado">Is Featured?</label>
@@ -264,40 +223,140 @@ const AdminProductForm = () => {
                         type="checkbox" 
                         name="tendencia" 
                         checked={formData.tendencia} 
-                        onChange={handleChange} // Use common handleChange for checkboxes too
+                        onChange={handleChange}
                         id="tendencia"
                     />
                     <label htmlFor="tendencia">Is Trending?</label>
                 </div>
                 
-                {/* Dynamic Size Inputs */}
+                {/* Nueva sección de talles con checkboxes */}
                 <div style={{ gridColumn: '1 / -1', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                    <h3 style={{ marginTop: '0' }}>Sizes and Stock</h3>
-                    {Object.entries(formData.talles).map(([sizeKey, stockValue]) => (
-                        <div key={sizeKey} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
-                            <input
-                                type="text"
-                                value={sizeKey.startsWith('newSize_') ? '' : sizeKey} // Clear temporary key for display
-                                onChange={(e) => handleSizeNameChange(sizeKey, e.target.value)} // New handler for size name
-                                placeholder="Size (e.g., S, M, L)"
-                                style={{ flex: 1, padding: '8px' }}
-                            />
-                            <input
-                                type="number"
-                                value={stockValue} // Use stockValue from map directly
-                                onChange={(e) => handleSizeChange(sizeKey, e.target.value)} // Use sizeKey to update correct entry
-                                placeholder="Stock"
-                                style={{ width: '80px', padding: '8px' }}
-                            />
-                            <button type="button" onClick={() => removeSizeField(sizeKey)} style={{ background: 'salmon', color: 'white', border: 'none', padding: '8px 12px', cursor: 'pointer' }}>Remove</button>
+                    <h3 style={{ marginTop: '0', marginBottom: '15px' }}>Sizes and Stock</h3>
+                    
+                    {/* Talles de Ropa */}
+                    <div style={{ marginBottom: '20px' }}>
+                        <h4 style={{ marginBottom: '10px', color: '#555' }}>Clothing Sizes</h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
+                            {TALLES_ROPA.map(size => (
+                                <div 
+                                    key={size} 
+                                    style={{ 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        gap: '8px',
+                                        padding: '8px',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '6px',
+                                        background: formData.talles.hasOwnProperty(size) ? '#e3f2fd' : '#f9f9f9'
+                                    }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id={`size-${size}`}
+                                        checked={formData.talles.hasOwnProperty(size)}
+                                        onChange={() => handleSizeToggle(size)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                    <label 
+                                        htmlFor={`size-${size}`} 
+                                        style={{ 
+                                            fontWeight: '500', 
+                                            minWidth: '30px',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {size}
+                                    </label>
+                                    {formData.talles.hasOwnProperty(size) && (
+                                        <input
+                                            type="number"
+                                            value={formData.talles[size]}
+                                            onChange={(e) => handleSizeStockChange(size, e.target.value)}
+                                            placeholder="Stock"
+                                            min="0"
+                                            style={{ 
+                                                width: '70px', 
+                                                padding: '4px 8px',
+                                                border: '1px solid #ccc',
+                                                borderRadius: '4px'
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                    <button type="button" onClick={addSizeField} style={{ background: '#007bff', color: 'white', border: 'none', padding: '10px 15px', cursor: 'pointer', marginTop: '10px' }}>Add Size</button>
+                    </div>
+
+                    {/* Talles de Calzado */}
+                    <div>
+                        <h4 style={{ marginBottom: '10px', color: '#555' }}>Shoe Sizes</h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
+                            {TALLES_CALZADO.map(size => (
+                                <div 
+                                    key={size} 
+                                    style={{ 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        gap: '8px',
+                                        padding: '8px',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '6px',
+                                        background: formData.talles.hasOwnProperty(size) ? '#e3f2fd' : '#f9f9f9'
+                                    }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id={`size-${size}`}
+                                        checked={formData.talles.hasOwnProperty(size)}
+                                        onChange={() => handleSizeToggle(size)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                    <label 
+                                        htmlFor={`size-${size}`} 
+                                        style={{ 
+                                            fontWeight: '500', 
+                                            minWidth: '30px',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {size}
+                                    </label>
+                                    {formData.talles.hasOwnProperty(size) && (
+                                        <input
+                                            type="number"
+                                            value={formData.talles[size]}
+                                            onChange={(e) => handleSizeStockChange(size, e.target.value)}
+                                            placeholder="Stock"
+                                            min="0"
+                                            style={{ 
+                                                width: '70px', 
+                                                padding: '4px 8px',
+                                                border: '1px solid #ccc',
+                                                borderRadius: '4px'
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div style={{ gridColumn: '1 / -1', textAlign: 'center', marginTop: '20px' }}>
-                    <button type="submit" disabled={loading} style={{ padding: '10px 20px', fontSize: '16px', background: loading ? '#ccc' : '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                        {loading ? 'Processing...' : (id ? 'Update Product' : 'Add Product')} {/* Dynamic button text */}
+                    <button 
+                        type="submit" 
+                        disabled={loading} 
+                        style={{ 
+                            padding: '10px 20px', 
+                            fontSize: '16px', 
+                            background: loading ? '#ccc' : '#28a745', 
+                            color: 'white', 
+                            border: 'none', 
+                            borderRadius: '5px', 
+                            cursor: 'pointer' 
+                        }}
+                    >
+                        {loading ? 'Processing...' : (id ? 'Update Product' : 'Add Product')}
                     </button>
                 </div>
             </form>

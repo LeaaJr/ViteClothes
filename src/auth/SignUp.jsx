@@ -4,6 +4,8 @@ import logolm from '../style/logos/lmw.png'
 import { ChevronDownIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Snackbar } from '@mui/material';
+import fashionImage from "../../public/signupscreen.png";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -142,9 +144,6 @@ export function SignUp() {
   return (
     <div className={styles.container}>
       <div className={styles.formSection}>
-        <div className={styles.logo}>
-          <img src={logolm} alt="Logo" />
-        </div>
         <h2 className={styles.title}>PERSONAL DATA</h2>
         
         {/* Snackbar para mostrar alertas */}
@@ -258,7 +257,7 @@ export function SignUp() {
 
       <div
         className={styles.imageSection}
-        style={{ backgroundImage: `url('https://static.zara.net/assets/public/06ea/2796/673d4e18bd14/fcf0c8366205/image-desktop-94190a8f-74ad-468b-9cec-31ed9517ee39-default/image-desktop-94190a8f-74ad-468b-9cec-31ed9517ee39-default.jpg?ts=1746186312208&w=1582')` }}
+        style={{ backgroundImage: `url(${fashionImage})` }}
       ></div>
     </div>
   );

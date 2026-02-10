@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background-color: white; /* Fondo blanco para un look más limpio */
+  background-color: #e3e7ea;
 }
 
 .formSection {

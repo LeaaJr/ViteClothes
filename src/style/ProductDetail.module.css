@@ -3,7 +3,7 @@
 .container {
     display: flex;
     min-height: 100vh; /* Keep for desktop */
-    background-color: #f2f2f2;
+    background-color: #e3e7ea;
     color: #333;
     padding: 2rem; /* Desktop padding */
     flex-direction: row; /* Default for desktop */
@@ -27,7 +27,7 @@
     height: 70px;
     border-radius: 4px;
     border: 1px solid #30363d;
-    background-color: #f2f2f2;
+    background-color: #e3e7ea;
     overflow: hidden;
     cursor: pointer;
     transition: border-color 0.2s;
@@ -49,7 +49,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f2f2f2;
+    background-color: #e3e7ea;
     border-radius: 8px;
     padding: 1rem;
     height: 600px; /* Desktop height */
@@ -160,7 +160,7 @@
 }
 
 .cartButton {
-    background-color: #f2f2f2;
+    background-color: #e3e7ea;
     color: black;
     border: none;
 }
@@ -168,7 +168,7 @@
 /* Payment Methods */
 .paymentMethods {
     margin-top: 1.5rem;
-    background-color: #f2f2f2;
+    background-color: #e3e7ea;
     padding: 1rem;
     text-align: center;
 }
