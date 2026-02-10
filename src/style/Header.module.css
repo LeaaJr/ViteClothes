@@ -1,304 +1,163 @@
 /* Header.module.css */
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
-.Header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 662px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #e3e7ea;
+  color: #000000;
+  font-family: 'IBM Plex Mono', monospace;
+  overflow: hidden;
 }
 
-.Left {
-    flex: 1;
-    color: #333;
+.leftPanel {
+  flex: 0 0 45%;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.rightPanel {
+  flex: 1;
+  position: relative;
+  background-color: #e3e7ea;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Typography elements */
+.number {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+}
+
+.heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 10vw; /* Responsive large text */
+  font-weight: 700;
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin: 4rem 0;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 400px;
+  margin-top: 2rem;
+}
+
+/* Navigation Overlay */
+.nav {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.navLink {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000000; /* Assuming dark text on the image or white if image is dark. Using black based on screenshot context usually needing contrast or mix-blend-mode */
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.navLink:hover {
+  opacity: 1;
+}
+
+/* Caption Overlay */
+.caption {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem; /* Changed to left based on visual balance, or could be right */
+  z-index: 10;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: #000000;
+}
+
+/* Specific alignment from screenshot: Caption is actually bottom-left of the IMAGE area usually, or bottom right. 
+   Looking at the screenshot: "UNTITLED.05" is at the bottom of the image area. */
+.captionContainer {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding-left: 20px;
+    gap: 0.25rem;
 }
 
-.Left h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    line-height: 1.2;
+.captionTitle {
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
-.typingContainer {
-    width: 20rem; /* Fixed width for desktop */
-    margin-top: 1rem;
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .heading {
+    font-size: 120px;
+  }
 }
-
-.Center {
-    flex: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.ImageContainer {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.Image {
-    width: 80%;
-    height: 90%;
-    object-fit: cover;
-    object-position: center;
-    position: absolute;
-    opacity: 0;
-    transform: scale(1.05);
-    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-    border-radius: 8px;
-    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); */
-}
-
-.Image.active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.Right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 20px;
-}
-
-.BtnComprar {
-    padding: 12px 25px;
-    background-color: #000000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-right: 7rem;
-    white-space: nowrap;
-}
-
-.BtnComprar:hover {
-    background-color: #333333;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* --- Media Queries for Mobile --- */
 
 @media (max-width: 768px) {
-    .Header {
-        flex-direction: column;
-        height: auto;
-        padding: 1.5rem;
-        min-height: 85vh;
-        justify-content: center;
-    }
+  .container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
 
-    .Left, .Center, .Right {
-        flex: none;
-        width: 100%;
-        text-align: center;
-        padding: 0.5rem 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+  .leftPanel {
+    flex: none;
+    width: 100%;
+    padding: 2rem;
+    min-height: 50vh;
+  }
 
-    .Left h1 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
+  .rightPanel {
+    flex: none;
+    width: 100%;
+    height: 50vh;
+  }
 
-    .typingContainer {
-        width: 90%;
-        max-width: 300px;
-        margin-bottom: 1rem;
-        /* --- REVISED MIN-HEIGHT VALUES AND ADDED OVERFLOW --- */
-        min-height: 6.5em; /* Increased slightly for more buffer */
-        overflow: hidden; /* Crucial: Hides any overflow, prevents expanding container */
-        /* Temporary background for debugging */
-        /* background-color: rgba(255, 0, 0, 0.2); */
-    }
-
-    .typingText {
-        font-size: 1.3rem;
-        text-align: center;
-        /* Ensure the text itself fits within the container's height */
-        line-height: 1.4; /* Slightly reduced line-height to help fit */
-        /* No fixed height here, let the text flow within the constrained typingContainer */
-    }
-    .typingText::after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .ImageContainer {
-        height: 320px;
-        width: 90%;
-        margin: 1.5rem 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .Image {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(1.05);
-        object-fit: cover;
-        object-position: center;
-        box-shadow: none;
-    }
-
-    .Image.active {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    .BtnComprar {
-        margin-right: 0;
-        margin-top: 1rem;
-        font-size: 1rem;
-        padding: 10px 30px;
-    }
-}
-
-/* Adjustments for specific tablet/desktop ranges */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .Header {
-        height: 500px;
-        padding: 15px;
-    }
-
-    .Left h1 {
-        font-size: 2rem;
-    }
-
-    .typingContainer {
-        width: 16rem;
-    }
-
-    .typingText {
-        font-size: 1.5rem;
-    }
-
-    .ImageContainer {
-        height: 450px;
-    }
-
-    .Image {
-        width: 85%;
-        height: 95%;
-        position: absolute;
-        opacity: 0;
-        transform: scale(1.05);
-        transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-    }
-
-    .Image.active {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    .BtnComprar {
-        margin-right: 2rem;
-        font-size: 1rem;
-        padding: 8px 16px;
-    }
-}
-
-@media (min-width: 1025px) and (max-width: 1200px) {
-    .Header {
-        height: 580px;
-    }
-
-    .Image {
-        width: 80%;
-        height: 90%;
-    }
-
-    .BtnComprar {
-        margin-right: 4rem;
-    }
-}
-
-/* Smaller mobile devices (425px, 374px, 320px) */
-@media (max-width: 425px) {
-    .Left h1 {
-        font-size: 1.8rem;
-    }
-
-    .typingContainer {
-        width: 95%;
-        max-width: 280px;
-        min-height: 7.5em; /* Increased this one too */
-    }
-
-    .typingText {
-        font-size: 1.1rem;
-    }
-
-    .ImageContainer {
-        height: 250px;
-    }
-
-    .BtnComprar {
-        font-size: 0.95rem;
-        padding: 8px 25px;
-    }
-}
-
-@media (max-width: 374px) {
-    .Left h1 {
-        font-size: 1.6rem;
-    }
-
-    .typingContainer {
-        min-height: 8em; /* Adjusted for very small screens */
-    }
-
-    .typingText {
-        font-size: 1rem;
-    }
-
-    .ImageContainer {
-        height: 220px;
-    }
-}
-
-@media (max-width: 320px) {
-    .Left h1 {
-        font-size: 1.4rem;
-    }
-
-    .typingContainer {
-        min-height: 9em; /* Even more for tiny screens */
-    }
-
-    .typingText {
-        font-size: 0.9rem;
-    }
-
-    .ImageContainer {
-        height: 180px;
-    }
+  .number {
+    top: 2rem;
+    left: 2rem;
+  }
+  
+  .heading {
+    font-size: 4rem; /* Smaller on mobile */
+    margin: 3rem 0 2rem 0;
+  }
+  
+  .nav {
+    top: 1rem;
+    right: 1rem;
+  }
 }

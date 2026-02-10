@@ -40,13 +40,9 @@ function App() {
 
                     {/* Ruta protegida para agregar productos */}
                     <Route 
-              path="/admin/add-product" 
-              element={
-                <ProtectedRoute adminOnly={true}>
-                  <AdminProductForm />
-                </ProtectedRoute>
-              } 
-            />
+                      path="/admin/add-product" 
+                      element={<AdminProductForm />} 
+                  />
             <Route 
               path="/admin/edit-product/:id" 
               element={

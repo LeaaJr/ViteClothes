@@ -1,7 +1,7 @@
 .featuredSection {
     padding: 2rem 0;
     margin: 2rem 0;
-    background-color: #f2f2f2;
+    background-color: #e3e7ea;
     width: 100%;
   }
   
@@ -54,7 +54,7 @@
     flex-direction: column;
     justify-content: space-between;
     height: 460px; /* or whatever height works */
-    background: #f2f2f2;
+    background: #e3e7ea;
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease;

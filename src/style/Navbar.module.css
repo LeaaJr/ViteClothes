@@ -96,7 +96,7 @@
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    background: #f2f2f2;
+    background: #e3e7ea;
     border-radius: 8px;
     z-index: 1000;
     min-width: 130px;

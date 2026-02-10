@@ -81,7 +81,7 @@ export function ParallaxSection({ id = "ParallaxSection" }) {
         <div className={styles.mediaContainer}>
           <img
             className={styles.media}
-            src="https://image.hm.com/content/dam/global_campaigns/season_01/men/start-page-assets/w14/edits/MS21E5-Edits-16x9-w14.jpg"
+            src="https://static.zara.net/assets/public/55a3/d5b3/260c4486af29/e4db2f4a5efb/img15-64bfef25-eb1d-4441-9b8b-899df7d0e28d_0/img15-64bfef25-eb1d-4441-9b8b-899df7d0e28d_0.jpg?ts=1770230795389&w=566"
             alt="Summer Trend Outfit"
           />
         </div>
