@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../style/Footer.module.css'
-import logolm from '../style/logos/lm.png'
+import logolm from '../../public/Logo.png'
 
 export const Footer = ({ id }) => {
   return (
